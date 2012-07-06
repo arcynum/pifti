@@ -1,20 +1,16 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block page_class %}home-page{% endblock %}
+{% block page_class %}View Post{% endblock %}
 
 {% block content %}
-  {% if post_list %}
+  {% if post %}
       <div class="post">
-      {% for post in post_list %}
           <div class="post_title"><h2>{{ post.title }}</h2></div>
           <div class="post_body">{{ post.body }}</div>
           
           {% for comment in post.comment_set.all %}
             <div class="comment">{{ comment.body }}</div>
           {% endfor %}
-      {% endfor %}
       </div>
-  {% else %}
-      <p>No posts are available.</p>
   {% endif %}
 {% endblock %}
