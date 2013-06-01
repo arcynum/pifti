@@ -7,10 +7,12 @@
       <div class="post">
       {% for post in post_list %}
           <div class="post_title"><h2>{{ post.title }}</h2></div>
+          <div class="post_username">{{ post.user.username }}</div>
           <div class="post_body">{{ post.body }}</div>
           
           {% for comment in post.comment_set.all %}
-            <div class="comment">{{ comment.body }}</div>
+            <div class="comment_username">{{ comment.user.username }}</div>
+            <div class="comment_body">{{ comment.body }}</div>
           {% endfor %}
       {% endfor %}
       </div>
