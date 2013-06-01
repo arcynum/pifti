@@ -13,3 +13,6 @@ class Comment(models.Model):
 	user = models.ForeignKey(User)
  	post = models.ForeignKey(Post)
  	body = models.TextField()
+
+ 	def __unicode__(self):
+ 		return 'Comment for: %s' % self.post.title

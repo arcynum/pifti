@@ -1,26 +1,29 @@
 from imageboard.models import Post, Comment
 from django.contrib import admin
 
-class CommentInline(admin.TabularInline):
-  	model = Comment
-  	fields = ('body',)
-  	extra = 1
+from django.core.exceptions import ObjectDoesNotExist
 
 class PostAdmin(admin.ModelAdmin):
-  	fields = ('title', 'body',)
-  	inlines = [CommentInline]
+  	fields = ['title', 'body']
 
 	def save_model(self, request, obj, form, change): 
-	    obj.user = request.user
-	    obj.save()
+		try:
+			obj.user
+		except ObjectDoesNotExist:
+			obj.user = request.user
 
-	def save_formset(self, request, form, formset, change): 
-	    if formset.model == Comment:
-	        instances = formset.save(commit = False)
-	        for instance in instances:
-	            instance.user = request.user
-	            instance.save()
-	    else:
-	        formset.save()
+		obj.save()
+
+class CommentAdmin(admin.ModelAdmin):
+  	fields = ['body']
+
+	def save_model(self, request, obj, form, change):
+		try:
+			obj.user
+		except ObjectDoesNotExist:
+			obj.user = request.user
+
+		obj.save()
 
 admin.site.register(Post, PostAdmin)
+admin.site.register(Comment, CommentAdmin)
