@@ -1,4 +1,5 @@
-pifti
+PIfti
 =====
 
-Python / Django IFTI
+Python / Django IFTI.
+Fixing up the repo for shared building.
