@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block page_class %}Add Post{% endblock %}
+
+{% block content %}
+    <form action="add_post" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>{{ form.non_field_errors }}</p>
+        <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+        <p>
+            {{ form.docfile.errors }}
+            {{ form.docfile }}
+        </p>
+        {{ form.as_p }}
+        <p><input type="submit" value="Upload" /></p>
+    </form>
+{% endblock %}
