@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from django.conf import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 admin.autodiscover()
 
@@ -12,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^post/add/', 'imageboard.views.add_post', name='add_post'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
+    url(r'^logout/$', 'imageboard.views.logout_view', name='logout'),
 )
 
 
@@ -20,3 +22,4 @@ if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': settings.MEDIA_ROOT}))
+    urlpatterns += staticfiles_urlpatterns()

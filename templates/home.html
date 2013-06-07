@@ -1,26 +1,40 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block page_class %}home-page{% endblock %}
+{% load thumbnail %}
+{% block page_class %}index-page{% endblock %}
 
 {% block content %}
-  <a href="{% url 'add_post' %}">Add Post</a>
+<h1>i'm from the internet.</h1>
   {% if post_list %}
-      <div class="post">
-      {% for post in post_list %}
-          <div class="post_title"><h2>{{ post.title }}</h2></div>
-          <div class="post_username">{{ post.user.username }}</div>
-          <div class="post_body">{{ post.body }}</div>
-          {% if post.image %}
-            <div class="post_image"><img src="{{ post.image.url }}" /></div>
-          {% endif %}
-          
-          {% for comment in post.comment_set.all %}
-            <div class="comment_username">{{ comment.user.username }}</div>
-            <div class="comment_body">{{ comment.body }}</div>
-          {% endfor %}
-      {% endfor %}
+  <div id="posts">
+    {% for post in post_list %}
+    <div class="post clearfix">
+      <div class="image">
+        {% if post.image %}
+        <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
+        {% endif %}
       </div>
+      <div class="post_content">
+        <div class="title">
+          <div class="post_number inline">#{{ post.id }}</div>
+          <div class="post_title inline">{{ post.title|safe }}</div>
+          <div class="post_information inline">by {{ post.user.username }} on {{ post.created }}</div>
+        </div>
+        <div class="text">
+          {{ post.body|safe }}
+        </div>
+        <div class="actions">
+          <ul>
+            <li><a href="http://codebin.me">Comment</a></li>
+            <li><a href="http://codebin.me">Edit</a></li>
+            <li><a href="http://codebin.me">Delete</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
   {% else %}
-      <p>No posts are available.</p>
+  <p>No posts are available.</p>
   {% endif %}
 {% endblock %}

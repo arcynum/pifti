@@ -1,37 +1,101 @@
 <!doctype html>
 {% load i18n %}
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>{% block page_title %}{% trans "I'm From the Internet" %}{% endblock %}</title>
-    
-    <meta name="description" content="{% block meta_description %}{% endblock %}" />
-    <meta name="author" content="{% block meta_author %}{% endblock %}" />
-    <meta name="viewport" content="width=device-width" />
-    {% block css %}{% endblock %}
-</head>
+{% load staticfiles %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>{% block page_title %}{% trans "i'm from the internet" %}{% endblock %}</title>
+        <meta name="description" content="{% block meta_description %}{% endblock %}" />
+        <meta name="author" content="{% block meta_author %}{% endblock %}" />
+        <meta name="viewport" content="width=device-width" />
 
-<body class="{% block body_class %}{% endblock %}">
-{% block body %}
-    <header>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{% static "css/normalize.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/fonts.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}">
+    </head>
+    <body class="{% block body_class %}{% endblock %}">
+        {% block body %}
+        <div id="navigation" class="absolute">
+            <div id="user">
+                {% if user.is_authenticated %}
+                {{ user.username }}
+                {% else %}
+                Nope.
+                {% endif %}
+            </div>
+            <div id="menu">
+                <h2 class="first">Menu</h2>
+                <ul>
+                    {% if user.is_authenticated %}
+                    <li><a class="active" href="{% url 'index' %}"><span class="menu_link">Posts</span></a></li>
+                    <li><a href="{% url 'add_post' %}"><span class="menu_link">New Post</span></a></li>
+                    {% if user.is_staff %}
+                    <li><a href="{% url 'admin:index' %}"><span class="menu_link">Admin</span></a></li>
+                    {% endif %}
+                    <li><a href="{% url 'logout' %}"><span class="menu_link">Logout</span></a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}"><span class="menu_link">Login</span></a></li>
+                    {% endif %}
+                </ul>
 
-    </header>
-    <div role="main">
-        {% block content %}{% endblock content %}
-    </div>
-    <footer>
-
-    </footer>
-    
-    
-    {% if debug %}{% include 'includes/debug.html' %}{% endif %}
-
-    {% block javascript_library %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    {% endblock %}
-
-    {% block javascript %}{% endblock %}
-
-{% endblock %}
-</body>
+                {% if post_list %}
+                <h2>Pagination</h2>
+                    <ul class="pagination clearfix">
+                        <li>
+                            <a href="?page=1">
+                                <span class="menu_link"><<</span>
+                            </a>
+                        </li>
+                        <li>
+                            {% if post_list.has_previous %}
+                            <a href="?page={{ post_list.previous_page_number }}">
+                                <span class="menu_link"><</span>
+                            </a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            {% if post_list.has_previous %}
+                            <a href="?page={{ post_list.previous_page_number }}">
+                                <span class="menu_link">{{ post_list.previous_page_number }}</span>
+                            </a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            <a class="active" href="?page={{ post_list.number }}">
+                                <span class="menu_link">{{ post_list.number }}</span>
+                            </a>
+                        </li>                        
+                        <li>
+                            {% if post_list.has_next %}
+                            <a href="?page={{ post_list.next_page_number }}">
+                                <span class="menu_link">{{ post_list.next_page_number }}</span>
+                            </a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            {% if post_list.has_next %}
+                            <a href="?page={{ post_list.next_page_number }}">
+                                <span class="menu_link">></span>
+                            </a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            <a href="?page={{ post_list.paginator.num_pages }}">
+                                <span class="menu_link">>></span>
+                            </a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+        <div id="content">
+            <div id="container">
+                {% block content %}{% endblock content %}
+            </div>
+        </div>
+        {% if debug %}{% include 'includes/debug.html' %}{% endif %}
+        {% endblock %}
+    </body>
 </html>
