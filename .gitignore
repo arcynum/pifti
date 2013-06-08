@@ -5,3 +5,4 @@
 local_settings.py
 settings.py
 media/
+imageboard/static/

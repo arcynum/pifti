@@ -8,28 +8,51 @@
   {% if post_list %}
   <div id="posts">
     {% for post in post_list %}
-    <div class="post clearfix">
-      <div class="image">
-        {% if post.image %}
-        <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
-        {% endif %}
-      </div>
-      <div class="post_content">
-        <div class="title">
-          <div class="post_number inline">#{{ post.id }}</div>
-          <div class="post_title inline">{{ post.title|safe }}</div>
-          <div class="post_information inline">by {{ post.user.username }} on {{ post.created }}</div>
+    <div class="post">
+      <div class="post_content clearfix">
+        <div class="image">
+          {% if post.image %}
+          <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
+          {% endif %}
         </div>
-        <div class="text">
-          {{ post.body|safe }}
+        <div class="bump">
+          <div class="title">
+            <div class="post_number inline">#{{ post.id }}</div>
+            <div class="post_title inline">{{ post.title|safe }}</div>
+            <div class="post_information inline">by {{ post.user.username }} on {{ post.created }}</div>
+          </div>
+          <div class="text">
+            {{ post.body|safe|linebreaksbr }}
+          </div>
         </div>
         <div class="actions">
           <ul>
-            <li><a href="http://codebin.me">Comment</a></li>
-            <li><a href="http://codebin.me">Edit</a></li>
-            <li><a href="http://codebin.me">Delete</a></li>
+            <li><a href="{% url 'add_comment' post.id %}"><img title="Comment" src="{{ STATIC_URL }}comment_alt2_fill.svg" /></a></li>
+            {% if user.is_staff %}
+            <li><a href=""><img title="Edit" src="{{ STATIC_URL }}wrench.svg" /></a></li>
+            <li><a href=""><img title="Delete" src="{{ STATIC_URL }}x_alt.svg" /></a></li>
+            {% endif %}
           </ul>
         </div>
+      </div>
+      <div class="comments">
+        {% for comment in post.comment_set.all %}
+        <div class="comment clearfix">
+          <div class="image">
+            {% if comment.image %}
+            <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
+            {% endif %}
+          </div>
+          <div class="bump">
+            <div class="title">
+              <div class="comment_information inline">{{ comment.user.username }} on {{ comment.created }}</div>
+            </div>
+            <div class="text">
+              {{ comment.body|safe|linebreaksbr }}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
   {% endfor %}

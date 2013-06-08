@@ -9,13 +9,14 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'imageboard.views.index', name='index'),
-    url(r'^post/(?P<post_id>\d+)/$', 'imageboard.views.view_post', name='view_post'),
     url(r'^post/add/', 'imageboard.views.add_post', name='add_post'),
+    url(r'^post/(?P<post_id>\d+)/comment/$', 'imageboard.views.add_comment', name='add_comment'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout/$', 'imageboard.views.logout_view', name='logout'),
 )
 
+# url(r'^post/(?P<post_id>\d+)/$', 'imageboard.views.view_post', name='view_post'),
 
 # User for serving local files while in debug mode.
 if settings.DEBUG:

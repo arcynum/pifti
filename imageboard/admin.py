@@ -15,7 +15,7 @@ class PostAdmin(admin.ModelAdmin):
 		obj.save()
 
 class CommentAdmin(admin.ModelAdmin):
-  	fields = ['body']
+  	fields = ['post', 'body']
 
 	def save_model(self, request, obj, form, change):
 		try:
