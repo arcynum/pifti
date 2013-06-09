@@ -14,7 +14,7 @@
 
 body {
 	font: 14px/18px 'RobotoRegular', Arial, sans-serif;
-	background: none repeat scroll 0 0 #F5F5F5;
+	background: url('../fabric_of_squares_gray.png') repeat 0 0;
 	min-width: 960px;
 }
 .absolute {
@@ -152,8 +152,11 @@ body {
 }
 
 #content div.post {
-	margin: 0 0 15px 0;
-	border-bottom: 1px solid #CCCCCC;
+	box-shadow: 0 0 5px 2px #CCCCCC;
+	margin: 0 0 30px 0;
+}
+#content div.post div.post_content {
+	position: relative;
 }
 
 #content div.post div.inline {
@@ -163,33 +166,37 @@ body {
 #content div.post div.image {
 	text-align: left;
 	width: 150px;
-	margin: 0 10px 10px 0;
+	margin: 10px;
 	float: left;
 	line-height: 0;
 }
-#content div.post div.image img {
-	box-shadow: 0 0 1px 1px #000000;
+#content div.post div.bump {
+	margin: 0 0 0 180px;
+	padding: 10px 0;
 }
 
-#content div.post div.post_content {
-	margin: 0 0 0 180px;
-}
 #content div.post div.title {
 	font-size: 16px;
 	margin-bottom: 10px;
 }
-#content div.post div.text {
-	margin-bottom: 10px;
-}
-#content div.post div.actions {
-	margin-bottom: 10px;
+
+#content div.comment {
+	border-top: 1px solid #DDDDDD;
 }
 
-#content div.post div.actions ul {
+#content div.actions {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+}
+#content div.actions ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
-#content div.post div.actions li {
-	display: inline;
+#content div.actions li {
+	float: left;
+	margin: 0 0 0 8px;
+	width: 16px;
+	height: 16px;
 }

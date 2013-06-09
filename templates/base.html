@@ -31,6 +31,7 @@
                     {% if user.is_authenticated %}
                     <li><a class="active" href="{% url 'index' %}"><span class="menu_link">Posts</span></a></li>
                     <li><a href="{% url 'add_post' %}"><span class="menu_link">New Post</span></a></li>
+                    <li><a href="{% url 'gallery' %}"><span class="menu_link">Gallery</span></a></li>
                     {% if user.is_staff %}
                     <li><a href="{% url 'admin:index' %}"><span class="menu_link">Admin</span></a></li>
                     {% endif %}
