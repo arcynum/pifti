@@ -93,6 +93,11 @@ def add_comment(request, post_id):
 
 	return render(request, 'comment/add.html', { 'form': form })
 
+@login_required
+def gallery(request):
+	post_list = Post.objects.all().order_by('-id')
+	return render(request, 'home.html', { 'post_list': post_list })
+
 def logout_view(request):
     return logout_then_login(request, reverse('login'))
     # Redirect to a success page.
