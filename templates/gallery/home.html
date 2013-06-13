@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% block page_class %}Gallery{% endblock %}
+
+{% block content %}
+<h1>i'm from the internet.</h1>
+  {% if gallery_list %}
+  <div id="gallery" class="clearfix">
+  {% for gallery_item in gallery_list %}
+
+    {% if gallery_item.image %}
+    <div class="gallery_item">
+      <a target="_blank" href="{{ gallery_item.image.url }}"><img src="{{ gallery_item.image.avatar.url }}" /></a>
+    </div>
+    {% endif %}
+
+    {% for comment in gallery_item.comment_set.all %}
+    <div class="gallery_item">
+      <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
+    </div>
+    {% endfor %}
+
+  {% endfor %}
+  </div>
+  {% else %}
+  <p>No images are available.</p>
+  {% endif %}
+{% endblock %}

@@ -1,6 +1,7 @@
 <!doctype html>
 {% load i18n %}
 {% load staticfiles %}
+
 <html>
     <head>
         <meta charset="utf-8">
@@ -17,7 +18,7 @@
     </head>
     <body class="{% block body_class %}{% endblock %}">
         {% block body %}
-        <div id="navigation" class="absolute">
+        <div id="navigation" class="fixed">
             <div id="user">
                 {% if user.is_authenticated %}
                 {{ user.username }}
@@ -29,7 +30,7 @@
                 <h2 class="first">Menu</h2>
                 <ul>
                     {% if user.is_authenticated %}
-                    <li><a class="active" href="{% url 'index' %}"><span class="menu_link">Posts</span></a></li>
+                    <li><a href="{% url 'index' %}"><span class="menu_link">Posts</span></a></li>
                     <li><a href="{% url 'add_post' %}"><span class="menu_link">New Post</span></a></li>
                     <li><a href="{% url 'gallery' %}"><span class="menu_link">Gallery</span></a></li>
                     {% if user.is_staff %}

@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from imageboard.models import Post, Comment
-from imageboard.forms import PostForm, CommentForm
+from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm
 import hashlib
 
 @login_required
@@ -22,11 +22,6 @@ def index(request):
 		post_list_paginated = paginator.page(paginator.num_pages)
 
 	return render(request, 'home.html', { 'post_list': post_list_paginated })
-  
-@login_required
-def view_post(request, post_id):
-	p = get_object_or_404(Post, pk = post_id)
-	return render(request, 'post/view.html', { 'post': p })
 
 @login_required
 def add_post(request):
@@ -59,6 +54,38 @@ def add_post(request):
 		form = PostForm()
 
 	return render(request, 'post/add.html', { 'form': form })
+
+@login_required
+def edit_post(request, post_id):
+	p = get_object_or_404(Post, pk = post_id)
+
+	if request.method == 'POST':
+		form = PostEditForm(request.POST, instance = p)
+		form.save()
+
+		return HttpResponseRedirect(reverse('index'))
+
+	else:
+		if p.user.is_superuser or p.user.is_staff:
+			form = PostEditForm(instance = p)
+		else:
+			return HttpResponseRedirect(reverse('index'))
+
+	return render(request, 'post/edit.html', { 'form': form })
+
+@login_required
+def delete_post(request, post_id):
+	p = get_object_or_404(Post, pk = post_id)
+	comments = Comment.objects.select_related().filter(post = p.id)
+
+	for comment in comments:
+		delete_specific_comment(comment.id)
+
+	p.image.delete()
+	p.image.delete_thumbnails()
+	p.delete()
+
+	return HttpResponseRedirect(reverse('index'))
 
 @login_required
 def add_comment(request, post_id):
@@ -94,9 +121,39 @@ def add_comment(request, post_id):
 	return render(request, 'comment/add.html', { 'form': form })
 
 @login_required
+def edit_comment(request, post_id, comment_id):
+	c = get_object_or_404(Comment, pk = comment_id)
+
+	if request.method == 'POST':
+		form = CommentEditForm(request.POST, instance = c)
+		form.save()
+
+		return HttpResponseRedirect(reverse('index'))
+
+	else:
+		form = PostEditForm(instance = c)
+
+	return render(request, 'comment/edit.html', { 'form': form })
+
+@login_required
+def delete_comment(request, post_id, comment_id):
+	c = get_object_or_404(Comment, pk = comment_id)
+	c.image.delete()
+	c.image.delete_thumbnails()
+	c.delete()
+
+	return HttpResponseRedirect(reverse('index'))
+
+def delete_specific_comment(comment_id):
+	c = get_object_or_404(Comment, pk = comment_id)
+	c.image.delete()
+	c.image.delete_thumbnails()
+	return
+
+@login_required
 def gallery(request):
-	post_list = Post.objects.all().order_by('-id')
-	return render(request, 'home.html', { 'post_list': post_list })
+	gallery_list = Post.objects.prefetch_related('comment_set').all().order_by('-id').exclude(image = '')
+	return render(request, 'gallery/home.html', { 'gallery_list': gallery_list })
 
 def logout_view(request):
     return logout_then_login(request, reverse('login'))

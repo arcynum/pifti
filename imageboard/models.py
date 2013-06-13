@@ -11,6 +11,12 @@ class Post(models.Model):
   
   	def __unicode__(self):
   		return self.title
+
+	class Meta:
+		permissions = (
+			('can_edit_own', 'Can edit own posts'),
+			('can_delete_own', 'Can delete own posts')
+		)
   
 class Comment(models.Model):
 	user = models.ForeignKey(User)
@@ -21,3 +27,9 @@ class Comment(models.Model):
 
  	def __unicode__(self):
  		return 'Comment for: %s' % self.post.title
+
+ 	class Meta:
+		permissions = (
+			('can_edit_own', 'Can edit own comments'),
+			('can_delete_own', 'Can delete own comments')
+		)
