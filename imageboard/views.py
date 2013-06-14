@@ -4,6 +4,7 @@ from django.contrib.auth.views import logout_then_login
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 from imageboard.models import Post, Comment
 from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm
 import hashlib
@@ -49,6 +50,8 @@ def add_post(request):
 				post.image = image
 
 			post.save()
+			messages.success(request, 'Post Successful.')
+
 			return HttpResponseRedirect(reverse('index'))
 	else:
 		form = PostForm()
@@ -59,31 +62,41 @@ def add_post(request):
 def edit_post(request, post_id):
 	p = get_object_or_404(Post, pk = post_id)
 
+	if request.user.is_superuser is False:
+		if request.user != p.user:
+			messages.info(request, 'You do not own this object.')
+			return HttpResponseRedirect(reverse('index'))
+
 	if request.method == 'POST':
 		form = PostEditForm(request.POST, instance = p)
 		form.save()
+		messages.success(request, 'Post Successfully Edited.')
 
 		return HttpResponseRedirect(reverse('index'))
 
 	else:
-		if p.user.is_superuser or p.user.is_staff:
-			form = PostEditForm(instance = p)
-		else:
-			return HttpResponseRedirect(reverse('index'))
+		form = PostEditForm(instance = p)
 
 	return render(request, 'post/edit.html', { 'form': form })
 
 @login_required
 def delete_post(request, post_id):
 	p = get_object_or_404(Post, pk = post_id)
+
+	if request.user.is_superuser is False:
+		if request.user != p.user:
+			messages.info(request, 'You do not own this object.')
+			return HttpResponseRedirect(reverse('index'))
+
 	comments = Comment.objects.select_related().filter(post = p.id)
 
 	for comment in comments:
-		delete_specific_comment(comment.id)
+		_delete_specific_comment(comment.id)
 
 	p.image.delete()
 	p.image.delete_thumbnails()
 	p.delete()
+	messages.success(request, 'Post Successfully Deleted.')
 
 	return HttpResponseRedirect(reverse('index'))
 
@@ -114,6 +127,7 @@ def add_comment(request, post_id):
 				comment.image = image
 
 			comment.save()
+			messages.success(request, 'Comment Successful.')
 			return HttpResponseRedirect(reverse('index'))
 	else:
 		form = CommentForm()
@@ -124,9 +138,15 @@ def add_comment(request, post_id):
 def edit_comment(request, post_id, comment_id):
 	c = get_object_or_404(Comment, pk = comment_id)
 
+	if request.user.is_superuser is False:
+		if request.user != c.user:
+			messages.info(request, 'You do not own this object.')
+			return HttpResponseRedirect(reverse('index'))
+
 	if request.method == 'POST':
 		form = CommentEditForm(request.POST, instance = c)
 		form.save()
+		messages.success(request, 'Comment Successfully Edited.')
 
 		return HttpResponseRedirect(reverse('index'))
 
@@ -138,13 +158,20 @@ def edit_comment(request, post_id, comment_id):
 @login_required
 def delete_comment(request, post_id, comment_id):
 	c = get_object_or_404(Comment, pk = comment_id)
+
+	if request.user.is_superuser is False:
+		if request.user != c.user:
+			messages.info(request, 'You do not own this object.')
+			return HttpResponseRedirect(reverse('index'))
+
 	c.image.delete()
 	c.image.delete_thumbnails()
 	c.delete()
+	messages.success(request, 'Comment Successfully Deleted.')
 
 	return HttpResponseRedirect(reverse('index'))
 
-def delete_specific_comment(comment_id):
+def _delete_specific_comment(comment_id):
 	c = get_object_or_404(Comment, pk = comment_id)
 	c.image.delete()
 	c.image.delete_thumbnails()
@@ -156,5 +183,6 @@ def gallery(request):
 	return render(request, 'gallery/home.html', { 'gallery_list': gallery_list })
 
 def logout_view(request):
-    return logout_then_login(request, reverse('login'))
-    # Redirect to a success page.
+	messages.success(request, 'Successfully Logged Out.')
+	return logout_then_login(request, reverse('login'))
+	# Redirect to a success page.

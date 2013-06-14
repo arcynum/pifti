@@ -16,9 +16,11 @@
     {% endif %}
 
     {% for comment in gallery_item.comment_set.all %}
-    <div class="gallery_item">
-      <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
-    </div>
+      {% if comment.image %}
+      <div class="gallery_item">
+        <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
+      </div>
+      {% endif %}
     {% endfor %}
 
   {% endfor %}

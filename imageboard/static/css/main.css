@@ -204,9 +204,6 @@ body {
 }
 
 
-#gallery {
-
-}
 #gallery div.gallery_item {
 	background-color: rgba(255, 255, 255, 0.6);
 	text-align: center;
@@ -220,4 +217,19 @@ body {
 }
 #gallery div.gallery_item img {
     vertical-align: middle;
+}
+
+#messages {
+	width: 100%;
+	display: block;
+	position: fixed;
+	bottom: 0px;
+	text-align: center;
+	z-index: 12;
+	display: none;
+	padding: 10px;
+	margin: 0;
+	background: #28A6EB;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	color: #FFFFFF;
 }

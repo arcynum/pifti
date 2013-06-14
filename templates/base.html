@@ -12,6 +12,7 @@
         <meta name="viewport" content="width=device-width" />
 
         <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
+        <script type="text/javascript" src="{% static "js/pifti.custom.js" %}"></script>
         <link rel="stylesheet" type="text/css" href="{% static "css/normalize.css" %}">
         <link rel="stylesheet" type="text/css" href="{% static "css/fonts.css" %}">
         <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}">
@@ -97,7 +98,15 @@
                 {% block content %}{% endblock content %}
             </div>
         </div>
-        {% if debug %}{% include 'includes/debug.html' %}{% endif %}
+
+        {% if messages %}
+        <div id="messages">
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         {% endblock %}
     </body>
 </html>

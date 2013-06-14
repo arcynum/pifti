@@ -28,7 +28,7 @@
         <div class="actions">
           <ul>
             <li><a href="{% url 'add_comment' post.id %}"><img title="Comment" src="{{ STATIC_URL }}comment_alt2_fill.svg" /></a></li>
-            {% if user.is_staff %}
+            {% if user.is_superuser or user == post.user %}
             <li><a href="{% url 'edit_post' post.id %}"><img title="Edit" src="{{ STATIC_URL }}wrench.svg" /></a></li>
             <li><a href="{% url 'delete_post' post.id %}"><img title="Delete" src="{{ STATIC_URL }}x_alt.svg" /></a></li>
             {% endif %}
@@ -52,7 +52,7 @@
             </div>
             <div class="actions">
               <ul>
-                {% if user.is_staff %}
+                {% if user.is_superuser or user == comment.user %}
                 <li><a href="{% url 'edit_comment' post.id comment.id %}"><img title="Edit" src="{{ STATIC_URL }}wrench.svg" /></a></li>
                 <li><a href="{% url 'delete_comment' post.id comment.id %}"><img title="Delete" src="{{ STATIC_URL }}x_alt.svg" /></a></li>
                 {% endif %}
