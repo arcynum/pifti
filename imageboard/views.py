@@ -164,8 +164,10 @@ def delete_comment(request, post_id, comment_id):
 			messages.info(request, 'You do not own this object.')
 			return HttpResponseRedirect(reverse('index'))
 
-	c.image.delete()
-	c.image.delete_thumbnails()
+	if c.image:
+		c.image.delete()
+		c.image.delete_thumbnails()
+
 	c.delete()
 	messages.success(request, 'Comment Successfully Deleted.')
 
@@ -173,8 +175,9 @@ def delete_comment(request, post_id, comment_id):
 
 def _delete_specific_comment(comment_id):
 	c = get_object_or_404(Comment, pk = comment_id)
-	c.image.delete()
-	c.image.delete_thumbnails()
+	if c.image:
+		c.image.delete()
+		c.image.delete_thumbnails()
 	return
 
 @login_required

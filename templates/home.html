@@ -18,11 +18,11 @@
         <div class="bump">
           <div class="title">
             <div class="post_number inline">#{{ post.id }}</div>
-            <div class="post_title inline">{{ post.title|safe }}</div>
+            <div class="post_title inline">{{ post.title|safe|linebreaksbr|striptags }}</div>
             <div class="post_information inline">by {{ post.user.username }} on {{ post.created }}</div>
           </div>
           <div class="text">
-            {{ post.body|safe|linebreaksbr }}
+            {{ post.body|safe|linebreaksbr|striptags }}
           </div>
         </div>
         <div class="actions">
@@ -48,7 +48,7 @@
               <div class="comment_information inline">{{ comment.user.username }} on {{ comment.created }}</div>
             </div>
             <div class="text">
-              {{ comment.body|safe|linebreaksbr }}
+              {{ comment.body|safe|linebreaksbr|striptags }}
             </div>
             <div class="actions">
               <ul>
