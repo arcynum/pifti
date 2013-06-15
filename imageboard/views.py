@@ -12,7 +12,7 @@ import hashlib
 @login_required
 def index(request):
 	post_list = Post.objects.prefetch_related('comment_set').all().order_by('-id')
-	paginator = Paginator(post_list, 5)
+	paginator = Paginator(post_list, 10)
 
 	page = request.GET.get('page')
 	try:
@@ -93,8 +93,10 @@ def delete_post(request, post_id):
 	for comment in comments:
 		_delete_specific_comment(comment.id)
 
-	p.image.delete()
-	p.image.delete_thumbnails()
+	if p.image:
+		p.image.delete()
+		p.image.delete_thumbnails()
+		
 	p.delete()
 	messages.success(request, 'Post Successfully Deleted.')
 
