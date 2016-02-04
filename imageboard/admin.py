@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 
 class PostAdmin(admin.ModelAdmin):
-  	fields = ['title', 'body']
+	fields = ['title', 'body']
 
 	def save_model(self, request, obj, form, change): 
 		try:
@@ -15,7 +15,7 @@ class PostAdmin(admin.ModelAdmin):
 		obj.save()
 
 class CommentAdmin(admin.ModelAdmin):
-  	fields = ['post', 'body']
+	fields = ['post', 'body']
 
 	def save_model(self, request, obj, form, change):
 		try:

@@ -12,10 +12,10 @@
         <meta name="viewport" content="width=device-width" />
 
         <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
-        <script type="text/javascript" src="{% static "js/pifti.custom.js" %}"></script>
-        <link rel="stylesheet" type="text/css" href="{% static "css/normalize.css" %}">
-        <link rel="stylesheet" type="text/css" href="{% static "css/fonts.css" %}">
-        <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}">
+        <script type="text/javascript" src="{% static 'js/pifti.custom.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/fonts.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     </head>
     <body class="{% block body_class %}{% endblock %}">
         {% block body %}
@@ -31,15 +31,15 @@
                 <h2 class="first">Menu</h2>
                 <ul>
                     {% if user.is_authenticated %}
-                    <li><a href="{% url 'index' %}"><span class="menu_link">Posts</span></a></li>
-                    <li><a href="{% url 'add_post' %}"><span class="menu_link">New Post</span></a></li>
-                    <li><a href="{% url 'gallery' %}"><span class="menu_link">Gallery</span></a></li>
+                    <li><a href="{% url 'imageboard:index' %}"><span class="menu_link">Posts</span></a></li>
+                    <li><a href="{% url 'imageboard:add_post' %}"><span class="menu_link">New Post</span></a></li>
+                    <li><a href="{% url 'imageboard:gallery' %}"><span class="menu_link">Gallery</span></a></li>
                     {% if user.is_staff %}
                     <li><a href="{% url 'admin:index' %}"><span class="menu_link">Admin</span></a></li>
                     {% endif %}
-                    <li><a href="{% url 'logout' %}"><span class="menu_link">Logout</span></a></li>
+                    <li><a href="{% url 'imageboard:logout' %}"><span class="menu_link">Logout</span></a></li>
                     {% else %}
-                    <li><a href="{% url 'login' %}"><span class="menu_link">Login</span></a></li>
+                    <li><a href="{% url 'imageboard:login' %}"><span class="menu_link">Login</span></a></li>
                     {% endif %}
                 </ul>
 

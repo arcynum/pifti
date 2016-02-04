@@ -8,27 +8,27 @@ class Post(models.Model):
 	image = ThumbnailerImageField(upload_to = 'up', blank = False)
 	body = models.TextField()
 	created = models.DateTimeField(auto_now_add = True)
-  
-  	def __unicode__(self):
-  		return self.title
+
+	def __str__(self):
+		return self.title
 
 	class Meta:
 		permissions = (
 			('can_edit_own', 'Can edit own posts'),
 			('can_delete_own', 'Can delete own posts')
 		)
-  
+
 class Comment(models.Model):
 	user = models.ForeignKey(User)
- 	post = models.ForeignKey(Post)
- 	image = ThumbnailerImageField(upload_to='up')
- 	body = models.TextField()
- 	created = models.DateTimeField(auto_now_add = True)
+	post = models.ForeignKey(Post)
+	image = ThumbnailerImageField(upload_to='up')
+	body = models.TextField()
+	created = models.DateTimeField(auto_now_add = True)
 
- 	def __unicode__(self):
- 		return 'Comment for: %s' % self.post.title
+	def __str__(self):
+		return 'Comment for: %s' % self.post.title
 
- 	class Meta:
+	class Meta:
 		permissions = (
 			('can_edit_own', 'Can edit own comments'),
 			('can_delete_own', 'Can delete own comments')

@@ -1,12 +1,14 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.views import logout_then_login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from imageboard.models import Post, Comment
 from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 import hashlib
 
 @login_required
@@ -52,7 +54,7 @@ def add_post(request):
 			post.save()
 			messages.success(request, 'Post Successful.')
 
-			return HttpResponseRedirect(reverse('index'))
+			return redirect('imageboard:index')
 	else:
 		form = PostForm()
 
@@ -65,14 +67,14 @@ def edit_post(request, post_id):
 	if request.user.is_superuser is False:
 		if request.user != p.user:
 			messages.info(request, 'You do not own this object.')
-			return HttpResponseRedirect(reverse('index'))
+			return redirect('imageboard:index')
 
 	if request.method == 'POST':
 		form = PostEditForm(request.POST, instance = p)
 		form.save()
 		messages.success(request, 'Post Successfully Edited.')
 
-		return HttpResponseRedirect(reverse('index'))
+		return redirect('imageboard:index')
 
 	else:
 		form = PostEditForm(instance = p)
@@ -86,7 +88,7 @@ def delete_post(request, post_id):
 	if request.user.is_superuser is False:
 		if request.user != p.user:
 			messages.info(request, 'You do not own this object.')
-			return HttpResponseRedirect(reverse('index'))
+			return redirect('imageboard:index')
 
 	comments = Comment.objects.select_related().filter(post = p.id)
 
@@ -100,7 +102,7 @@ def delete_post(request, post_id):
 	p.delete()
 	messages.success(request, 'Post Successfully Deleted.')
 
-	return HttpResponseRedirect(reverse('index'))
+	return redirect('imageboard:index')
 
 @login_required
 def add_comment(request, post_id):
@@ -130,7 +132,7 @@ def add_comment(request, post_id):
 
 			comment.save()
 			messages.success(request, 'Comment Successful.')
-			return HttpResponseRedirect(reverse('index'))
+			return redirect('imageboard:index')
 	else:
 		form = CommentForm()
 
@@ -143,14 +145,14 @@ def edit_comment(request, post_id, comment_id):
 	if request.user.is_superuser is False:
 		if request.user != c.user:
 			messages.info(request, 'You do not own this object.')
-			return HttpResponseRedirect(reverse('index'))
+			return redirect('imageboard:index')
 
 	if request.method == 'POST':
 		form = CommentEditForm(request.POST, instance = c)
 		form.save()
 		messages.success(request, 'Comment Successfully Edited.')
 
-		return HttpResponseRedirect(reverse('index'))
+		return redirect('imageboard:index')
 
 	else:
 		form = PostEditForm(instance = c)
@@ -164,7 +166,7 @@ def delete_comment(request, post_id, comment_id):
 	if request.user.is_superuser is False:
 		if request.user != c.user:
 			messages.info(request, 'You do not own this object.')
-			return HttpResponseRedirect(reverse('index'))
+			return redirect('imageboard:index')
 
 	if c.image:
 		c.image.delete()
@@ -173,7 +175,7 @@ def delete_comment(request, post_id, comment_id):
 	c.delete()
 	messages.success(request, 'Comment Successfully Deleted.')
 
-	return HttpResponseRedirect(reverse('index'))
+	return redirect('imageboard:index')
 
 def _delete_specific_comment(comment_id):
 	c = get_object_or_404(Comment, pk = comment_id)
@@ -187,7 +189,23 @@ def gallery(request):
 	gallery_list = Post.objects.prefetch_related('comment_set').all().order_by('-id').exclude(image = '')
 	return render(request, 'gallery/home.html', { 'gallery_list': gallery_list })
 
+def login_view(request):
+	if request.method == 'POST':
+		username = request.POST['username']
+		password = request.POST['password']
+		user = authenticate(username = username, password = password)
+		if user is not None:
+			if user.is_active:
+				login(request, user)
+				messages.success(request, 'You were successfully logged in.')
+				return redirect('imageboard:index')
+			else:
+				messages.error(request, 'Your account is currently disabled.')
+		else:
+			messages.error(request, 'Login failed, please check your credentials and try again.')
+
+	return render(request, 'registration/login.html', { 'form': AuthenticationForm() })
+
 def logout_view(request):
-	messages.success(request, 'Successfully Logged Out.')
-	return logout_then_login(request, reverse('login'))
-	# Redirect to a success page.
+	logout(request)
+	return redirect('imageboard:index')

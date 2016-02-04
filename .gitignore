@@ -6,3 +6,6 @@ local_settings.py
 settings.py
 media/
 *.htaccess
+up/
+*.sqlite3
+imageboard/migrations/
