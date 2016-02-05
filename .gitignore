@@ -3,7 +3,6 @@
 *.pyc
 *.DS_Store
 local_settings.py
-settings.py
 media/
 *.htaccess
 up/

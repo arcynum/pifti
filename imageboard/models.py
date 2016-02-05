@@ -5,7 +5,7 @@ from easy_thumbnails.fields import ThumbnailerImageField
 class Post(models.Model):
 	user = models.ForeignKey(User)
 	title = models.CharField(max_length = 200)
-	image = ThumbnailerImageField(upload_to = 'up', blank = False)
+	image = ThumbnailerImageField(upload_to = 'uploads', blank = False)
 	body = models.TextField()
 	created = models.DateTimeField(auto_now_add = True)
 
@@ -21,7 +21,7 @@ class Post(models.Model):
 class Comment(models.Model):
 	user = models.ForeignKey(User)
 	post = models.ForeignKey(Post)
-	image = ThumbnailerImageField(upload_to='up')
+	image = ThumbnailerImageField(upload_to='uploads')
 	body = models.TextField()
 	created = models.DateTimeField(auto_now_add = True)
 
