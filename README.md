@@ -1,5 +1,4 @@
-PIfti
+Python based IFTI.
 =====
 
-Python / Django IFTI.
-Fixing up the repo for shared building.
+This is a private imageboard written in python, using django.
