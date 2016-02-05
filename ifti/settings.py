@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'imageboard',
-    'easy_thumbnails'
+    'easy_thumbnails',
+    'embed_video'
 ]
 
 MIDDLEWARE_CLASSES = [

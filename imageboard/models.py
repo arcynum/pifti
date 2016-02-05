@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from easy_thumbnails.fields import ThumbnailerImageField
+from embed_video.fields import EmbedVideoField
 
 class Post(models.Model):
 	user = models.ForeignKey(User)
 	title = models.CharField(max_length = 200)
 	image = ThumbnailerImageField(upload_to = 'uploads', blank = False)
+	media = EmbedVideoField(blank = True)
 	body = models.TextField()
 	created = models.DateTimeField(auto_now_add = True)
 

@@ -3,6 +3,7 @@ from imageboard.models import Post, Comment
 
 class PostForm(forms.Form):
 	title = forms.CharField()
+	media = forms.CharField()
 	image = forms.FileField(label = 'Select an image', required = True)
 	body = forms.CharField(widget = forms.Textarea)
 

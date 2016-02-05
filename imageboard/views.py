@@ -1,14 +1,11 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponseRedirect
-from django.contrib.auth.views import logout_then_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from imageboard.models import Post, Comment
 from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 import hashlib
 
 @login_required
@@ -33,6 +30,7 @@ def add_post(request):
 		if form.is_valid():
 			post = Post()
 			post.title = form.cleaned_data['title']
+			post.media = form.cleaned_data['media']
 			post.body = form.cleaned_data['body']
 			post.user = request.user
 
