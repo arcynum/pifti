@@ -25,7 +25,7 @@
           <div class="text">
             {% if post.media %}
               <div class="media_embed">
-              {% video post.media 'small' %}
+              {% video post.media 'tiny' %}
               </div>
             {% endif %}
             {{ post.body|safe|linebreaksbr|striptags }}
@@ -54,6 +54,9 @@
               <div class="comment_information inline">{{ comment.user.username }} on {{ comment.created }}</div>
             </div>
             <div class="text">
+              <div class="media_embed">
+              {% video post.media 'tiny' %}
+              </div>
               {{ comment.body|safe|linebreaksbr|striptags }}
             </div>
             <div class="actions">

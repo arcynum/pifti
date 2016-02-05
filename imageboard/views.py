@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from imageboard.models import Post, Comment
 from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm
+from imageboard.storage import MediaFileStorage
 from django.contrib.auth.forms import AuthenticationForm
 import hashlib
 
@@ -28,30 +29,10 @@ def add_post(request):
 	if request.method == 'POST':
 		form = PostForm(request.POST, request.FILES)
 		if form.is_valid():
-			post = Post()
-			post.title = form.cleaned_data['title']
-			post.media = form.cleaned_data['media']
-			post.body = form.cleaned_data['body']
+			post = form.save(commit=False)
 			post.user = request.user
-
-			if 'image' in request.FILES:
-				image = request.FILES['image']
-				md5 = hashlib.md5()
-				while True:
-					data = image.read(128)
-					if not data:
-						break
-					md5.update(data)
-				image_hash = md5.hexdigest()
-
-				image_extension = image.name.split('.')[-1]
-				image_name = image_hash + '.' + image_extension
-				image.name = image_name
-				post.image = image
-
 			post.save()
 			messages.success(request, 'Post Successful.')
-
 			return redirect('imageboard:index')
 	else:
 		form = PostForm()
@@ -88,15 +69,6 @@ def delete_post(request, post_id):
 			messages.info(request, 'You do not own this object.')
 			return redirect('imageboard:index')
 
-	comments = Comment.objects.select_related().filter(post = p.id)
-
-	for comment in comments:
-		_delete_specific_comment(comment.id)
-
-	if p.image:
-		p.image.delete()
-		p.image.delete_thumbnails()
-		
 	p.delete()
 	messages.success(request, 'Post Successfully Deleted.')
 
@@ -107,27 +79,10 @@ def add_comment(request, post_id):
 	if request.method == 'POST':
 		form = CommentForm(request.POST, request.FILES)
 		if form.is_valid():
-			comment = Comment()
+			comment = form.save(commit=False)
 			post = get_object_or_404(Post, pk = post_id)
 			comment.post = post
-			comment.body = form.cleaned_data['body']
 			comment.user = request.user
-
-			if 'image' in request.FILES:
-				image = request.FILES['image']
-				md5 = hashlib.md5()
-				while True:
-					data = image.read(128)
-					if not data:
-						break
-					md5.update(data)
-				image_hash = md5.hexdigest()
-
-				image_extension = image.name.split('.')[-1]
-				image_name = image_hash + '.' + image_extension
-				image.name = image_name
-				comment.image = image
-
 			comment.save()
 			messages.success(request, 'Comment Successful.')
 			return redirect('imageboard:index')
@@ -165,22 +120,10 @@ def delete_comment(request, post_id, comment_id):
 		if request.user != c.user:
 			messages.info(request, 'You do not own this object.')
 			return redirect('imageboard:index')
-
-	if c.image:
-		c.image.delete()
-		c.image.delete_thumbnails()
-
-	c.delete()
+			
 	messages.success(request, 'Comment Successfully Deleted.')
 
 	return redirect('imageboard:index')
-
-def _delete_specific_comment(comment_id):
-	c = get_object_or_404(Comment, pk = comment_id)
-	if c.image:
-		c.image.delete()
-		c.image.delete_thumbnails()
-	return
 
 @login_required
 def gallery(request):
