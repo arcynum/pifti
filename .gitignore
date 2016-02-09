@@ -8,3 +8,5 @@ media/
 up/
 *.sqlite3
 imageboard/migrations/
+post_comment_data.sql
+ifti/settings.py
