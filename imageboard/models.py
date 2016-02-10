@@ -8,7 +8,7 @@ import hashlib
 class Post(models.Model):
 	user = models.ForeignKey(User)
 	title = models.CharField(max_length=200)
-	image = ThumbnailerImageField(upload_to='uploads', storage=MediaFileStorage(), blank=False)
+	image = ThumbnailerImageField(storage=MediaFileStorage(), blank=False)
 	media = EmbedVideoField(blank=True, null=True)
 	body = models.TextField()
 	created = models.DateTimeField(auto_now_add=True)
@@ -34,7 +34,7 @@ class Post(models.Model):
 class Comment(models.Model):
 	user = models.ForeignKey(User)
 	post = models.ForeignKey(Post, on_delete=models.CASCADE)
-	image = ThumbnailerImageField(upload_to='uploads', storage=MediaFileStorage(), blank=True)
+	image = ThumbnailerImageField(storage=MediaFileStorage(), blank=True)
 	media = EmbedVideoField(blank=True, null=True)
 	body = models.TextField()
 	created = models.DateTimeField(auto_now_add=True)

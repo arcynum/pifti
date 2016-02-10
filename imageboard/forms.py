@@ -9,7 +9,7 @@ class PostForm(forms.ModelForm):
 class PostEditForm(forms.ModelForm):
 	class Meta:
 		model = Post
-		fields = ['body']
+		fields = ['body',]
 
 class CommentForm(forms.ModelForm):
 	class Meta:
@@ -19,4 +19,4 @@ class CommentForm(forms.ModelForm):
 class CommentEditForm(forms.ModelForm):
 	class Meta:
 		model = Post
-		fields = ['body']
+		fields = ['body',]
