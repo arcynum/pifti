@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-{% load thumbnail %}
-{% load staticfiles %}
-{% load embed_video_tags %}
+{% load i18n thumbnail staticfiles embed_video_tags %}
 {% block page_class %}Home{% endblock %}
 
 {% block content %}
@@ -23,12 +21,12 @@
             <div class="post_information inline">by {{ post.user.username }} on {{ post.created }}</div>
           </div>
           <div class="text">
+            <div>{{ post.body|linebreaksbr }}</div>
             {% if post.media and post.media != "" %}
               <div class="media_embed">
               {% video post.media 'tiny' %}
               </div>
             {% endif %}
-            {{ post.body }}
           </div>
         </div>
         <div class="actions">
