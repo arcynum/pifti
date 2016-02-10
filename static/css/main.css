@@ -1,15 +1,15 @@
 /* For modern browsers */
 .clearfix:before,
 .clearfix:after {
-    content: "";
-    display: table;
+	content: "";
+	display: table;
 }
 .clearfix:after {
-    clear: both;
+	clear: both;
 }
 /* For IE 6/7 (trigger hasLayout) */
 .clearfix {
-    zoom: 1;
+	zoom: 1;
 }
 
 body {
@@ -30,12 +30,12 @@ body {
 	height: 20px;
 	font-weight: normal;
 	background-color: #2A2A2A;
-    border-bottom: 1px solid #000000;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-    color: #AAAAAA;
-    overflow: hidden;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-    text-decoration: none;
+	border-bottom: 1px solid #000000;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+	color: #AAAAAA;
+	overflow: hidden;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	text-decoration: none;
 }
 #navigation {
 	width: 245px;
@@ -47,33 +47,33 @@ body {
 	box-shadow: 3px 0 6px -2px #000000;
 }
 #navigation a {
-    background-color: #1E1E1E;
-    border-bottom: 1px solid #000000;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-    color: #AAAAAA;
-    cursor: pointer;
-    display: block;
-    line-height: 34px;
-    overflow: hidden;
-    position: relative;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-    text-decoration: none;
-    width: 100%;
+	background-color: #1E1E1E;
+	border-bottom: 1px solid #000000;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+	color: #AAAAAA;
+	cursor: pointer;
+	display: block;
+	line-height: 34px;
+	overflow: hidden;
+	position: relative;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	text-decoration: none;
+	width: 100%;
 }
 #navigation a.active {
-    background-color: #28A6EB;
-    color: #FFFFFF;
-    text-decoration: none;
+	background-color: #28A6EB;
+	color: #FFFFFF;
+	text-decoration: none;
 }
 #navigation a:hover {
-    background-color: #232323;
-    color: #EEEEEE;
-    text-decoration: none;
+	background-color: #232323;
+	color: #EEEEEE;
+	text-decoration: none;
 }
 #navigation a.active:hover {
-    background-color: #28A6EB;
-    color: #FFFFFF;
-    text-decoration: none;
+	background-color: #28A6EB;
+	color: #FFFFFF;
+	text-decoration: none;
 }
 
 #navigation #user {
@@ -216,7 +216,7 @@ body {
 	padding: 10px;
 }
 #gallery div.gallery_item img {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 #messages {

@@ -42,7 +42,7 @@
                     {% endif %}
                 </ul>
 
-                {% if post_list %}
+                {% if pagination_list %}
                 <h2>Pagination</h2>
                     <ul class="pagination clearfix">
                         <li>
@@ -51,40 +51,40 @@
                             </a>
                         </li>
                         <li>
-                            {% if post_list.has_previous %}
-                            <a href="?page={{ post_list.previous_page_number }}">
+                            {% if pagination_list.has_previous %}
+                            <a href="?page={{ pagination_list.previous_page_number }}">
                                 <span class="menu_link"><</span>
                             </a>
                             {% endif %}
                         </li>
                         <li>
-                            {% if post_list.has_previous %}
-                            <a href="?page={{ post_list.previous_page_number }}">
-                                <span class="menu_link">{{ post_list.previous_page_number }}</span>
+                            {% if pagination_list.has_previous %}
+                            <a href="?page={{ pagination_list.previous_page_number }}">
+                                <span class="menu_link">{{ pagination_list.previous_page_number }}</span>
                             </a>
                             {% endif %}
                         </li>
                         <li>
-                            <a class="active" href="?page={{ post_list.number }}">
-                                <span class="menu_link">{{ post_list.number }}</span>
+                            <a class="active" href="?page={{ pagination_list.number }}">
+                                <span class="menu_link">{{ pagination_list.number }}</span>
                             </a>
                         </li>                        
                         <li>
-                            {% if post_list.has_next %}
-                            <a href="?page={{ post_list.next_page_number }}">
-                                <span class="menu_link">{{ post_list.next_page_number }}</span>
+                            {% if pagination_list.has_next %}
+                            <a href="?page={{ pagination_list.next_page_number }}">
+                                <span class="menu_link">{{ pagination_list.next_page_number }}</span>
                             </a>
                             {% endif %}
                         </li>
                         <li>
-                            {% if post_list.has_next %}
-                            <a href="?page={{ post_list.next_page_number }}">
+                            {% if pagination_list.has_next %}
+                            <a href="?page={{ pagination_list.next_page_number }}">
                                 <span class="menu_link">></span>
                             </a>
                             {% endif %}
                         </li>
                         <li>
-                            <a href="?page={{ post_list.paginator.num_pages }}">
+                            <a href="?page={{ pagination_list.paginator.num_pages }}">
                                 <span class="menu_link">>></span>
                             </a>
                         </li>

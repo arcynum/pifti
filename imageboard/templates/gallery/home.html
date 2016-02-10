@@ -5,9 +5,9 @@
 
 {% block content %}
 <h1>i'm from the internet.</h1>
-  {% if gallery_list %}
+  {% if pagination_list %}
   <div id="gallery" class="clearfix">
-  {% for gallery_item in gallery_list %}
+  {% for gallery_item in pagination_list %}
 
     {% if gallery_item.image %}
     <div class="gallery_item">

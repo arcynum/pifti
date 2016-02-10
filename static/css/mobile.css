@@ -1,0 +1,174 @@
+/* For modern browsers */
+.clearfix:before,
+.clearfix:after {
+	content: "";
+	display: table;
+}
+.clearfix:after {
+	clear: both;
+}
+/* For IE 6/7 (trigger hasLayout) */
+.clearfix {
+	zoom: 1;
+}
+
+body {
+	font: 14px/18px 'RobotoRegular', Arial, sans-serif;
+	background: url('../fabric_of_squares_gray.png') repeat 0 0;
+}
+
+#user {
+	color: #AAAAAA;
+	font-weight: normal;
+	background-color: #2A2A2A;
+	border-bottom: 1px solid #000000;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	text-decoration: none;
+	padding: 10px;
+	font-size: 21px;
+	margin: 0;
+}
+#navigation {
+	background: none repeat scroll 0 0 #1E1E1E;
+}
+#navigation h2 {
+	display: none;
+}
+#navigation a {
+	background-color: #1E1E1E;
+	border-bottom: 1px solid #000000;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+	color: #AAAAAA;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	text-decoration: none;
+}
+#navigation a.active {
+	background-color: #28A6EB;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+#navigation a:hover {
+	background-color: #232323;
+	color: #EEEEEE;
+	text-decoration: none;
+}
+#navigation a.active:hover {
+	background-color: #28A6EB;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+#menu ul {
+	margin: 0;
+	padding: 0;
+}
+#menu ul li {
+	list-style: none;
+}
+#menu ul li a {
+	display: block;
+	padding: 10px;
+}
+
+#menu ul.pagination li {
+	width: 13%;
+	display: inline-block;
+	text-align: center;
+}
+
+#content {
+}
+#content a {
+	color: #28A6EB;
+	text-decoration: none;
+}
+
+#container {
+	padding: 10px;
+}
+
+#content h1 {
+	margin: 0 0 30px 0;
+}
+
+#content div.post {
+	display: block;
+	box-shadow: 0 0 5px 2px #CCCCCC;
+	margin: 0 0 30px 0;
+	padding: 0;
+	background-color: rgba(255, 255, 255, 0.6);
+}
+#content div.post div.post_content {
+	position: relative;
+	padding: 0 0 30px 0;
+}
+
+#content div.post div.inline {
+	display: inline;
+}
+
+#content div.post div.image {
+	text-align: left;
+	margin: 10px;
+	line-height: 0;
+}
+#content div.post div.bump {
+	margin: 0;
+	padding: 10px;
+}
+
+#content div.post div.title {
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+#content div.comment {
+	border-top: 1px solid #DDDDDD;
+	position: relative;
+	padding: 0 0 30px 0;
+}
+
+#content div.actions {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+}
+#content div.actions ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+#content div.actions li {
+	display: inline-block;
+	margin: 0 0 0 8px;
+	width: 16px;
+	height: 16px;
+}
+
+
+#gallery div.gallery_item {
+	background-color: rgba(255, 255, 255, 0.6);
+	text-align: center;
+	line-height: 150px;
+	width: 150px;
+	height: 150px;
+	box-shadow: 0 0 5px 2px #CCCCCC;
+	margin: 0 15px 15px 0;
+	padding: 10px;
+}
+#gallery div.gallery_item img {
+	vertical-align: middle;
+}
+
+#messages {
+	display: none;
+	position: fixed;
+	bottom: 0px;
+	text-align: center;
+	z-index: 12;
+	padding: 10px;
+	margin: 0;
+	background: #28A6EB;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	color: #FFFFFF;
+}

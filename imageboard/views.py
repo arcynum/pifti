@@ -9,8 +9,6 @@ from imageboard.storage import MediaFileStorage
 from django.contrib.auth.forms import AuthenticationForm
 import hashlib
 
-from embed_video.backends import detect_backend, VideoDoesntExistException, UnknownBackendException
-
 @login_required
 def index(request):
 	post_list = Post.objects.prefetch_related('comment_set').all().order_by('-id')
@@ -24,7 +22,7 @@ def index(request):
 	except EmptyPage:
 		post_list_paginated = paginator.page(paginator.num_pages)
 
-	return render(request, 'home.html', { 'post_list': post_list_paginated })
+	return render(request, 'home.html', { 'pagination_list': post_list_paginated })
 
 @login_required
 def add_post(request):
@@ -130,7 +128,17 @@ def delete_comment(request, post_id, comment_id):
 @login_required
 def gallery(request):
 	gallery_list = Post.objects.prefetch_related('comment_set').all().order_by('-id').exclude(image = '')
-	return render(request, 'gallery/home.html', { 'gallery_list': gallery_list })
+	paginator = Paginator(gallery_list, 40)
+
+	page = request.GET.get('page')
+	try:
+		gallery_list_paginated = paginator.page(page)
+	except PageNotAnInteger:
+		gallery_list_paginated = paginator.page(1)
+	except EmptyPage:
+		gallery_list_paginated = paginator.page(paginator.num_pages)
+
+	return render(request, 'gallery/home.html', { 'pagination_list': gallery_list_paginated })
 
 def login_view(request):
 	if request.method == 'POST':

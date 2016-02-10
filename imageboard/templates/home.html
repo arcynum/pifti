@@ -4,9 +4,9 @@
 
 {% block content %}
 <h1>i'm from the internet.</h1>
-  {% if post_list %}
+  {% if pagination_list %}
   <div id="posts">
-    {% for post in post_list %}
+    {% for post in pagination_list %}
     <div class="post">
       <div class="post_content clearfix">
         <div class="image">
