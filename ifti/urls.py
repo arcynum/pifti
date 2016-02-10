@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls)
 ]
 
+
 # The additional section with the static method needs to be removed in production.
 # The static and media files will be hosted on a traditional web server, not through python.
