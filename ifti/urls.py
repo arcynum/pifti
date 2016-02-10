@@ -20,9 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'^imageboard/', include('imageboard.urls')),
+    url(r'^/', include('imageboard.urls')),
     url(r'^admin/', admin.site.urls)
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
 # The additional section with the static method needs to be removed in production.
 # The static and media files will be hosted on a traditional web server, not through python.
