@@ -21,7 +21,7 @@
             <div class="post_information inline">by {{ post.user.username }} on {{ post.created }}</div>
           </div>
           <div class="text">
-            <div>{{ post.body|linebreaksbr }}</div>
+            <div>{{ post.body|linebreaksbr|urlize }}</div>
             {% if post.media and post.media != "" %}
               <div class="media_embed">
               {% video post.media 'tiny' %}
@@ -57,7 +57,7 @@
                 {% video comment.media 'tiny' %}
                 </div>
               {% endif %}
-              {{ comment.body }}
+              {{ comment.body|linebreaksbr|urlize }}
             </div>
             <div class="actions">
               <ul>
