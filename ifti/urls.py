@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'', include('imageboard.urls')),
+    url(r'^$', include('imageboard.urls')),
     url(r'^admin/', admin.site.urls)
 ]
 
