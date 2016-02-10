@@ -9,6 +9,8 @@ from imageboard.storage import MediaFileStorage
 from django.contrib.auth.forms import AuthenticationForm
 import hashlib
 
+from embed_video.backends import detect_backend, VideoDoesntExistException, UnknownBackendException
+
 @login_required
 def index(request):
 	post_list = Post.objects.prefetch_related('comment_set').all().order_by('-id')

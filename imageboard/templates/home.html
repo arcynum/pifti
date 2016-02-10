@@ -19,16 +19,16 @@
         <div class="bump">
           <div class="title">
             <div class="post_number inline">#{{ post.id }}</div>
-            <div class="post_title inline">{{ post.title|safe|linebreaksbr|striptags }}</div>
+            <div class="post_title inline">{{ post.title }}</div>
             <div class="post_information inline">by {{ post.user.username }} on {{ post.created }}</div>
           </div>
           <div class="text">
-            {% if post.media %}
+            {% if post.media and post.media != "" %}
               <div class="media_embed">
               {% video post.media 'tiny' %}
               </div>
             {% endif %}
-            {{ post.body|safe|linebreaksbr|striptags }}
+            {{ post.body }}
           </div>
         </div>
         <div class="actions">
@@ -54,10 +54,12 @@
               <div class="comment_information inline">{{ comment.user.username }} on {{ comment.created }}</div>
             </div>
             <div class="text">
-              <div class="media_embed">
-              {% video post.media 'tiny' %}
-              </div>
-              {{ comment.body|safe|linebreaksbr|striptags }}
+              {% if comment.media and comment.media != "" %}
+                <div class="media_embed">
+                {% video comment.media 'tiny' %}
+                </div>
+              {% endif %}
+              {{ comment.body }}
             </div>
             <div class="actions">
               <ul>
