@@ -52,12 +52,12 @@
               <div class="comment_information inline">{{ comment.user.username }} on {{ comment.created }}</div>
             </div>
             <div class="text">
+              <div>{{ comment.body|linebreaksbr|urlize }}</div>
               {% if comment.media and comment.media != "" %}
                 <div class="media_embed">
                 {% video comment.media 'tiny' %}
                 </div>
               {% endif %}
-              {{ comment.body|linebreaksbr|urlize }}
             </div>
             <div class="actions">
               <ul>
