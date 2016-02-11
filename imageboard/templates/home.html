@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="comments">
-        {% for comment in post.comment_set.all %}
+        {% for comment in post.comment_set.all reversed %}
         <div class="comment clearfix">
           <div class="image">
             {% if comment.image %}
