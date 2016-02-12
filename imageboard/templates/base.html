@@ -51,9 +51,9 @@
                             </a>
                         </li>
                         <li>
-                            {% if pagination_list.has_previous %}
-                            <a href="?page={{ pagination_list.previous_page_number }}">
-                                <span class="menu_link"><</span>
+                            {% if previous_previous_page_number_exists %}
+                            <a href="?page={{ previous_previous_page_number }}">
+                                <span class="menu_link">{{ previous_previous_page_number }}</span>
                             </a>
                             {% endif %}
                         </li>
@@ -77,9 +77,9 @@
                             {% endif %}
                         </li>
                         <li>
-                            {% if pagination_list.has_next %}
-                            <a href="?page={{ pagination_list.next_page_number }}">
-                                <span class="menu_link">></span>
+                            {% if next_next_page_number_exists %}
+                            <a href="?page={{ next_next_page_number }}">
+                                <span class="menu_link">{{ next_next_page_number }}</span>
                             </a>
                             {% endif %}
                         </li>

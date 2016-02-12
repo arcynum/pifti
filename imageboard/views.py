@@ -9,6 +9,8 @@ from imageboard.storage import MediaFileStorage
 from django.contrib.auth.forms import AuthenticationForm
 import hashlib
 
+from pprint import pprint
+
 @login_required
 def index(request):
 	post_list = Post.objects.prefetch_related('comment_set').all().order_by('-id')
@@ -22,7 +24,27 @@ def index(request):
 	except EmptyPage:
 		post_list_paginated = paginator.page(paginator.num_pages)
 
-	return render(request, 'home.html', { 'pagination_list': post_list_paginated })
+	# Adjusting the paginator rendering results for quicker paging.
+	previous_previous_page_number_exists = False
+	next_next_page_number_exists = False
+	previous_previous_page_number = None
+	next_next_page_number = None
+
+	if post_list_paginated.number > 2:
+		previous_previous_page_number_exists = True
+		previous_previous_page_number = post_list_paginated.previous_page_number() - 1
+
+	if post_list_paginated.number < paginator.num_pages - 1:
+		next_next_page_number_exists = True
+		next_next_page_number = post_list_paginated.next_page_number() + 1
+
+	return render(request, 'home.html', {
+		'pagination_list': post_list_paginated,
+		'previous_previous_page_number_exists': previous_previous_page_number_exists,
+		'previous_previous_page_number': previous_previous_page_number,
+		'next_next_page_number_exists': next_next_page_number_exists,
+		'next_next_page_number': next_next_page_number
+	})
 
 @login_required
 def add_post(request):
