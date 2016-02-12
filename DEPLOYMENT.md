@@ -1,3 +1,10 @@
+Install nginx
+Install apache2
+Install postgres
+
+Setup apache to bind to alternate ports
+Setup nginx to reverse proxy through to apache on the alternate port
+
 Upload settings
 Adjust settings to production value
 Create media folder
