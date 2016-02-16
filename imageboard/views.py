@@ -142,7 +142,8 @@ def delete_comment(request, post_id, comment_id):
 		if request.user != c.user:
 			messages.info(request, 'You do not own this object.')
 			return redirect('imageboard:index')
-			
+	
+	c.delete()
 	messages.success(request, 'Comment Successfully Deleted.')
 
 	return redirect('imageboard:index')
