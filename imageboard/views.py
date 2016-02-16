@@ -149,7 +149,7 @@ def gallery(request):
 
 	extras = _generateExtraPagination(paginator, gallery_list_paginated)
 
-	return render(request, 'home.html', {
+	return render(request, 'gallery/home.html', {
 		'pagination_list': gallery_list_paginated,
 		'previous_previous_page_number_exists': extras['previous_previous_page_number_exists'],
 		'previous_previous_page_number': extras['previous_previous_page_number'],
