@@ -9,8 +9,6 @@ from imageboard.storage import MediaFileStorage
 from django.contrib.auth.forms import AuthenticationForm
 import hashlib
 
-from pprint import pprint
-
 @login_required
 def index(request):
 	post_list = Post.objects.prefetch_related('comment_set').all().order_by('-id')
@@ -24,26 +22,14 @@ def index(request):
 	except EmptyPage:
 		post_list_paginated = paginator.page(paginator.num_pages)
 
-	# Adjusting the paginator rendering results for quicker paging.
-	previous_previous_page_number_exists = False
-	next_next_page_number_exists = False
-	previous_previous_page_number = None
-	next_next_page_number = None
-
-	if post_list_paginated.number > 2:
-		previous_previous_page_number_exists = True
-		previous_previous_page_number = post_list_paginated.previous_page_number() - 1
-
-	if post_list_paginated.number < paginator.num_pages - 1:
-		next_next_page_number_exists = True
-		next_next_page_number = post_list_paginated.next_page_number() + 1
+	extras = _generateExtraPagination(paginator, post_list_paginated)
 
 	return render(request, 'home.html', {
 		'pagination_list': post_list_paginated,
-		'previous_previous_page_number_exists': previous_previous_page_number_exists,
-		'previous_previous_page_number': previous_previous_page_number,
-		'next_next_page_number_exists': next_next_page_number_exists,
-		'next_next_page_number': next_next_page_number
+		'previous_previous_page_number_exists': extras['previous_previous_page_number_exists'],
+		'previous_previous_page_number': extras['previous_previous_page_number'],
+		'next_next_page_number_exists': extras['next_next_page_number_exists'],
+		'next_next_page_number': extras['next_next_page_number']
 	})
 
 @login_required
@@ -161,7 +147,15 @@ def gallery(request):
 	except EmptyPage:
 		gallery_list_paginated = paginator.page(paginator.num_pages)
 
-	return render(request, 'gallery/home.html', { 'pagination_list': gallery_list_paginated })
+	extras = _generateExtraPagination(paginator, gallery_list_paginated)
+
+	return render(request, 'home.html', {
+		'pagination_list': gallery_list_paginated,
+		'previous_previous_page_number_exists': extras['previous_previous_page_number_exists'],
+		'previous_previous_page_number': extras['previous_previous_page_number'],
+		'next_next_page_number_exists': extras['next_next_page_number_exists'],
+		'next_next_page_number': extras['next_next_page_number']
+	})
 
 def login_view(request):
 	if request.method == 'POST':
@@ -183,3 +177,23 @@ def login_view(request):
 def logout_view(request):
 	logout(request)
 	return redirect('imageboard:index')
+
+def _generateExtraPagination(paginator, page_list):
+	# Adjusting the paginator rendering results for quicker paging.
+	extras = {}
+
+	extras['previous_previous_page_number_exists'] = False
+	extras['next_next_page_number_exists'] = False
+	extras['previous_previous_page_number'] = None
+	extras['next_next_page_number'] = None
+
+	if page_list.number > 2:
+		extras['previous_previous_page_number_exists'] = True
+		extras['previous_previous_page_number'] = page_list.previous_page_number() - 1
+
+	if page_list.number < paginator.num_pages - 1:
+		extras['next_next_page_number_exists'] = True
+		extras['next_next_page_number'] = page_list.next_page_number() + 1
+
+	return extras
+
