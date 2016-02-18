@@ -14,7 +14,8 @@
         <script type="text/javascript" src="{% static 'js/pifti.custom.js' %}"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/fonts.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" media="only screen and (min-width: 769px)">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/mobile.css' %}" media="only screen and (max-width: 768px)">
     </head>
     <body class="{% block body_class %}{% endblock %}">
         {% block body %}
