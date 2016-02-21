@@ -7,7 +7,7 @@
   {% if pagination_list %}
   <div id="posts">
     {% for post in pagination_list %}
-    <div class="post">
+    <div class="post" id="{{ post.id }}">
       <div class="post_content clearfix">
         <div class="image">
           {% if post.image %}

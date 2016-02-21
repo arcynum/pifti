@@ -2,11 +2,13 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from imageboard.models import Post, Comment
 from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm
 from imageboard.storage import MediaFileStorage
 from django.contrib.auth.forms import AuthenticationForm
+from math import ceil
 import hashlib
 
 @login_required
@@ -61,7 +63,9 @@ def edit_post(request, post_id):
 		form.save()
 		messages.success(request, 'Post Successfully Edited.')
 
-		return redirect('imageboard:index')
+		return redirect(reverse('imageboard:index')
+						+ '?page=' + _getPostPage(post_id)
+						+ '#' + post_id)
 
 	else:
 		form = PostEditForm(instance = p)
@@ -93,7 +97,10 @@ def add_comment(request, post_id):
 			comment.user = request.user
 			comment.save()
 			messages.success(request, 'Comment Successful.')
-			return redirect('imageboard:index')
+
+			return redirect(reverse('imageboard:index')
+						+ '?page=' + _getPostPage(post_id)
+						+ '#' + post_id)
 	else:
 		form = CommentForm()
 
@@ -113,7 +120,9 @@ def edit_comment(request, post_id, comment_id):
 		form.save()
 		messages.success(request, 'Comment Successfully Edited.')
 
-		return redirect('imageboard:index')
+		return redirect(reverse('imageboard:index')
+						+ '?page=' + _getPostPage(post_id)
+						+ '#' + post_id)
 
 	else:
 		form = PostEditForm(instance = c)
@@ -196,4 +205,9 @@ def _generateExtraPagination(paginator, page_list):
 		extras['next_next_page_number'] = page_list.next_page_number() + 1
 
 	return extras
+
+def _getPostPage(post_id):
+	# Retrieve the page number for a specific post
+	post_list = Post.objects.filter(id__gt=post_id) # Posts with ID greater than post_id
+	return str(ceil((post_list.count() + 1) / 10)) # Pagination filter
 
