@@ -141,7 +141,9 @@ def delete_comment(request, post_id, comment_id):
 	c.delete()
 	messages.success(request, 'Comment Successfully Deleted.')
 
-	return redirect('imageboard:index')
+	return redirect(reverse('imageboard:index')
+						+ '?page=' + _getPostPage(post_id)
+						+ '#' + post_id)
 
 @login_required
 def gallery(request):
@@ -208,6 +210,6 @@ def _generateExtraPagination(paginator, page_list):
 
 def _getPostPage(post_id):
 	# Retrieve the page number for a specific post
-	post_list = Post.objects.filter(id__gt=post_id) # Posts with ID greater than post_id
-	return str(ceil((post_list.count() + 1) / 10)) # Pagination filter
+	post_list = Post.objects.filter(id__gte=post_id) # Posts with ID greater than post_id
+	return str(ceil(post_list.count() / 10)) # Pagination filter
 
