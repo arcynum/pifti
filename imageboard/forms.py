@@ -1,5 +1,5 @@
 from django import forms
-from imageboard.models import Post, Comment
+from imageboard.models import Post, Comment, UserProfile
 
 class PostForm(forms.ModelForm):
 	class Meta:
@@ -20,3 +20,11 @@ class CommentEditForm(forms.ModelForm):
 	class Meta:
 		model = Post
 		fields = ['body',]
+
+class ProfileEditForm(forms.ModelForm):
+	class Meta:
+		model = UserProfile
+		fields = ['pagination',]
+		labels = {
+            'pagination': 'Posts Per Page:'
+        }

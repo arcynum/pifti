@@ -76,6 +76,14 @@ body {
 	text-align: center;
 }
 
+#menu ul.activity {
+	display: none;
+}
+
+#activity {
+	display: none;
+}
+
 #content {
 }
 #content a {
@@ -85,10 +93,6 @@ body {
 
 #container {
 	padding: 10px;
-}
-
-#content h1 {
-	margin: 0 0 30px 0;
 }
 
 #content div.post {

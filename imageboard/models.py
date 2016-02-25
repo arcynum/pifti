@@ -1,9 +1,18 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from easy_thumbnails.fields import ThumbnailerImageField
 from embed_video.fields import EmbedVideoField
 from imageboard.storage import MediaFileStorage
 import hashlib
+
+PAGINATION_CHOICES = (
+	( 5, '5' ),
+	( 10, '10' ),
+	( 15, '15' ),
+	( 20, '20' )
+)
 
 class Post(models.Model):
 	user = models.ForeignKey(User)
@@ -56,3 +65,16 @@ class Comment(models.Model):
 			self.image.name = image_name
 
 		super(Comment, self).save(*args, **kwargs)
+
+class UserProfile(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	pagination = models.PositiveSmallIntegerField(default=10, blank=False, choices=PAGINATION_CHOICES)
+
+	def __str__(self):
+		return 'Profile of user: %s' % self.user.username
+
+	# Create a UserProfile for the new user upon account creation
+	@receiver(post_save, sender=User)
+	def create_user_profile(sender, instance, created, **kwargs):
+		if created:
+			UserProfile.objects.create(user=instance)

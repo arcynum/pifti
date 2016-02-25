@@ -4,17 +4,19 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from imageboard.models import Post, Comment
-from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm
-from imageboard.storage import MediaFileStorage
+from imageboard.models import Post, Comment, UserProfile
+from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm, ProfileEditForm
 from django.contrib.auth.forms import AuthenticationForm
+
 from math import ceil
-import hashlib
+from itertools import chain
+from operator import attrgetter
 
 @login_required
 def index(request):
-	post_list = Post.objects.prefetch_related('comment_set').all().order_by('-id')
-	paginator = Paginator(post_list, 10)
+	post_list = Post.objects.prefetch_related('comment_set').order_by('-created')
+
+	paginator = Paginator(post_list, UserProfile.objects.get(id=request.user.id).pagination)
 
 	page = request.GET.get('page')
 	try:
@@ -25,13 +27,15 @@ def index(request):
 		post_list_paginated = paginator.page(paginator.num_pages)
 
 	extras = _generateExtraPagination(paginator, post_list_paginated)
+	activity = _getActivity(request)
 
 	return render(request, 'home.html', {
 		'pagination_list': post_list_paginated,
 		'previous_previous_page_number_exists': extras['previous_previous_page_number_exists'],
 		'previous_previous_page_number': extras['previous_previous_page_number'],
 		'next_next_page_number_exists': extras['next_next_page_number_exists'],
-		'next_next_page_number': extras['next_next_page_number']
+		'next_next_page_number': extras['next_next_page_number'],
+		'latest_activity': activity
 	})
 
 @login_required
@@ -64,7 +68,7 @@ def edit_post(request, post_id):
 		messages.success(request, 'Post Successfully Edited.')
 
 		return redirect(reverse('imageboard:index')
-						+ '?page=' + _getPostPage(post_id)
+						+ '?page=' + _getPostPage(post_id, request.user.id)
 						+ '#' + post_id)
 
 	else:
@@ -99,7 +103,7 @@ def add_comment(request, post_id):
 			messages.success(request, 'Comment Successful.')
 
 			return redirect(reverse('imageboard:index')
-						+ '?page=' + _getPostPage(post_id)
+						+ '?page=' + _getPostPage(post_id, request.user.id)
 						+ '#' + post_id)
 	else:
 		form = CommentForm()
@@ -121,7 +125,7 @@ def edit_comment(request, post_id, comment_id):
 		messages.success(request, 'Comment Successfully Edited.')
 
 		return redirect(reverse('imageboard:index')
-						+ '?page=' + _getPostPage(post_id)
+						+ '?page=' + _getPostPage(post_id, request.user.id)
 						+ '#' + post_id)
 
 	else:
@@ -142,7 +146,7 @@ def delete_comment(request, post_id, comment_id):
 	messages.success(request, 'Comment Successfully Deleted.')
 
 	return redirect(reverse('imageboard:index')
-						+ '?page=' + _getPostPage(post_id)
+						+ '?page=' + _getPostPage(post_id, request.user.id)
 						+ '#' + post_id)
 
 @login_required
@@ -159,14 +163,32 @@ def gallery(request):
 		gallery_list_paginated = paginator.page(paginator.num_pages)
 
 	extras = _generateExtraPagination(paginator, gallery_list_paginated)
+	activity = _getActivity(request)
 
 	return render(request, 'gallery/home.html', {
 		'pagination_list': gallery_list_paginated,
 		'previous_previous_page_number_exists': extras['previous_previous_page_number_exists'],
 		'previous_previous_page_number': extras['previous_previous_page_number'],
 		'next_next_page_number_exists': extras['next_next_page_number_exists'],
-		'next_next_page_number': extras['next_next_page_number']
+		'next_next_page_number': extras['next_next_page_number'],
+		'latest_activity': activity
 	})
+
+@login_required
+def profile(request):
+	u = get_object_or_404(UserProfile, id=request.user.id)
+
+	if request.method == 'POST':
+		form = ProfileEditForm(request.POST, instance = u)
+		form.save()
+		messages.success(request, 'Profile Successfully Updated.')
+
+		return redirect('imageboard:index')
+
+	else:
+		form = ProfileEditForm(instance = u)
+
+	return render(request, 'profile/home.html', { 'form': form })
 
 def login_view(request):
 	if request.method == 'POST':
@@ -208,8 +230,16 @@ def _generateExtraPagination(paginator, page_list):
 
 	return extras
 
-def _getPostPage(post_id):
-	# Retrieve the page number for a specific post
-	post_list = Post.objects.filter(id__gte=post_id) # Posts with ID greater than post_id
-	return str(ceil(post_list.count() / 10)) # Pagination filter
+def _getActivity(request):
+	# Retrieves the latest posts and comments
+	latest_posts = Post.objects.all().order_by('-id')[:10] # 10 Newest posts
+	latest_comments = Comment.objects.all().order_by('-id')[:10] # 10 Latest comments
 
+	# Returns sorted list of latest items
+	return sorted(chain(latest_posts, latest_comments), key=attrgetter('created'), reverse=True)[:10]
+
+
+def _getPostPage(post_id, user_id):
+	# Retrieve the appropriate page number for a specific post
+	post_list = Post.objects.filter(id__gte=post_id) # Posts with ID greater than post_id
+	return str(ceil(post_list.count() / UserProfile.objects.get(id=user_id).pagination))

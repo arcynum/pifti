@@ -34,6 +34,7 @@
                     <li><a href="{% url 'imageboard:index' %}"><span class="menu_link">Posts</span></a></li>
                     <li><a href="{% url 'imageboard:add_post' %}"><span class="menu_link">New Post</span></a></li>
                     <li><a href="{% url 'imageboard:gallery' %}"><span class="menu_link">Gallery</span></a></li>
+                    <li><a href="{% url 'imageboard:profile' %}"><span class="menu_link">Profile</span></a></li>
                     {% if user.is_staff %}
                     <li><a href="{% url 'admin:index' %}"><span class="menu_link">Admin</span></a></li>
                     {% endif %}
@@ -89,6 +90,26 @@
                                 <span class="menu_link">>></span>
                             </a>
                         </li>
+                    </ul>
+                {% endif %}
+
+                {% if latest_activity %}
+                    <h2>Latest Activity</h2>
+                    <ul class="activity clearfix">
+                    {% for i in latest_activity %}
+                        {% if i.post_id %}
+                        <li>
+                            <span class="history">{{ i.user.username }} commented on {{ i.post.title }}</span>
+                            <span class="delta">{{ i.created|timesince }} ago</span>
+                        </li>
+                        {% else %}
+                        <li>
+                            <span class="history">{{ i.user.username }} posted {{ i.title }}</span>
+                            <span class="delta">{{ i.created|timesince }} ago</span>
+                        </li>
+                        {% endif %}
+                    {% empty %}
+                    {% endfor %}
                     </ul>
                 {% endif %}
             </div>
