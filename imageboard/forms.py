@@ -24,7 +24,8 @@ class CommentEditForm(forms.ModelForm):
 class ProfileEditForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
-		fields = ['pagination',]
+		fields = ['pagination', 'activity']
 		labels = {
-            'pagination': 'Posts Per Page:'
+            'pagination': 'Posts Per Page:',
+			'activity': 'Items In Latest Activity:'
         }

@@ -15,7 +15,6 @@ from operator import attrgetter
 @login_required
 def index(request):
 	post_list = Post.objects.prefetch_related('comment_set').order_by('-created')
-
 	paginator = Paginator(post_list, UserProfile.objects.get(id=request.user.id).pagination)
 
 	page = request.GET.get('page')
@@ -232,11 +231,13 @@ def _generateExtraPagination(paginator, page_list):
 
 def _getActivity(request):
 	# Retrieves the latest posts and comments
-	latest_posts = Post.objects.all().order_by('-id')[:10] # 10 Newest posts
-	latest_comments = Comment.objects.all().order_by('-id')[:10] # 10 Latest comments
+	latest_posts = Post.objects.all().order_by('-id')[:20] # 20 Newest posts
+	latest_comments = Comment.objects.all().order_by('-id')[:20] # 20 Newest comments
 
 	# Returns sorted list of latest items
-	return sorted(chain(latest_posts, latest_comments), key=attrgetter('created'), reverse=True)[:10]
+	return sorted(chain(latest_posts, latest_comments),
+				  		key=attrgetter('created'),
+				  		reverse=True)[:UserProfile.objects.get(id=request.user.id).activity]
 
 
 def _getPostPage(post_id, user_id):

@@ -13,6 +13,11 @@ PAGINATION_CHOICES = (
 	( 15, '15' ),
 	( 20, '20' )
 )
+ACTIVITY_CHOICES = (
+	( 0, 'Disabled' ),
+	( 10, '10' ),
+	( 20, '20' )
+)
 
 class Post(models.Model):
 	user = models.ForeignKey(User)
@@ -69,6 +74,7 @@ class Comment(models.Model):
 class UserProfile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	pagination = models.PositiveSmallIntegerField(default=10, blank=False, choices=PAGINATION_CHOICES)
+	activity = models.PositiveSmallIntegerField(default=10, blank=False, choices=ACTIVITY_CHOICES)
 
 	def __str__(self):
 		return 'Profile of user: %s' % self.user.username

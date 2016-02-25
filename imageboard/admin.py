@@ -26,7 +26,7 @@ class CommentAdmin(admin.ModelAdmin):
 		obj.save()
 
 class ProfileAdmin(admin.ModelAdmin):
-	fields = ['pagination',]
+	fields = ['pagination', 'activity']
 
 	def save_model(self, request, obj, form, change):
 		try:
