@@ -228,23 +228,24 @@ def _generateExtraPagination(paginator, page_list):
 	return extras
 
 def _getActivity(request):
+	activity_count = UserProfile.objects.get(id=request.user.id).activity
+
 	# Retrieves the latest posts and comments
-	latest_posts = Post.objects.all().order_by('-id')[:20] # 20 Newest posts
-	latest_comments = Comment.objects.all().order_by('-id')[:20] # 20 Newest comments
-	activity = sorted(chain(latest_posts, latest_comments),
-				  		key=attrgetter('created'),
-				  		reverse=True)[:UserProfile.objects.get(id=request.user.id).activity]
+	latest_posts = Post.objects.all().order_by('-id')[:activity_count]
+	latest_comments = Comment.objects.all().order_by('-id')[:activity_count]
+
+	# Sort both lists together, via latest date
+	activity = sorted(chain(latest_posts, latest_comments), key=attrgetter('created'), reverse=True)[:activity_count]
 
 	for a in activity:
-		if hasattr(a, 'post_id'): # Get post id for comments
+		if hasattr(a, 'post_id'): # Get parent post_id for comment
 			post = a.post_id
-		else:
+		else: # Else use posts id
 			post = a.id
 
-		a.link = _getPostPage(post, request.user.id)
+		a.post_page = _getPostPage(post, request.user.id)
 
-	# Returns sorted list of latest items
-	return activity
+	return activity # Return sorted list of latest items
 
 
 def _getPostPage(post_id, user_id):
