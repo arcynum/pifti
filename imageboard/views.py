@@ -162,15 +162,13 @@ def gallery(request):
 		gallery_list_paginated = paginator.page(paginator.num_pages)
 
 	extras = _generateExtraPagination(paginator, gallery_list_paginated)
-	activity = _getActivity(request)
 
 	return render(request, 'gallery/home.html', {
 		'pagination_list': gallery_list_paginated,
 		'previous_previous_page_number_exists': extras['previous_previous_page_number_exists'],
 		'previous_previous_page_number': extras['previous_previous_page_number'],
 		'next_next_page_number_exists': extras['next_next_page_number_exists'],
-		'next_next_page_number': extras['next_next_page_number'],
-		'latest_activity': activity
+		'next_next_page_number': extras['next_next_page_number']
 	})
 
 @login_required
@@ -233,11 +231,20 @@ def _getActivity(request):
 	# Retrieves the latest posts and comments
 	latest_posts = Post.objects.all().order_by('-id')[:20] # 20 Newest posts
 	latest_comments = Comment.objects.all().order_by('-id')[:20] # 20 Newest comments
-
-	# Returns sorted list of latest items
-	return sorted(chain(latest_posts, latest_comments),
+	activity = sorted(chain(latest_posts, latest_comments),
 				  		key=attrgetter('created'),
 				  		reverse=True)[:UserProfile.objects.get(id=request.user.id).activity]
+
+	for a in activity:
+		if hasattr(a, 'post_id'): # Get post id for comments
+			post = a.post_id
+		else:
+			post = a.id
+
+		a.link = _getPostPage(post, request.user.id)
+
+	# Returns sorted list of latest items
+	return activity
 
 
 def _getPostPage(post_id, user_id):

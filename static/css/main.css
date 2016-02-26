@@ -165,6 +165,10 @@ body {
 	overflow: hidden;
 	white-space: nowrap;
 }
+#menu ul.activity a {
+	line-height: 0px;
+	border-bottom: 0px;
+}
 
 
 #content {

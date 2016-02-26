@@ -99,13 +99,17 @@
                     {% for i in latest_activity %}
                         {% if i.post_id %}
                         <li>
-                            <span class="history">{{ i.user.username }} commented on {{ i.post.title }}</span>
-                            <span class="delta">{{ i.created|timesince }} ago</span>
+                            <a href="?page={{ i.link }}#{{ i.post_id }}">
+                                <span class="history">{{ i.user.username }} commented on {{ i.post.title }}</span>
+                                <span class="delta">{{ i.created|timesince }} ago</span>
+                            </a>
                         </li>
                         {% else %}
                         <li>
-                            <span class="history">{{ i.user.username }} posted {{ i.title }}</span>
-                            <span class="delta">{{ i.created|timesince }} ago</span>
+                            <a href="?page={{ i.link }}#{{ i.id }}">
+                                <span class="history">{{ i.user.username }} posted {{ i.title }}</span>
+                                <span class="delta">{{ i.created|timesince }} ago</span>
+                            </a>
                         </li>
                         {% endif %}
                     {% empty %}
