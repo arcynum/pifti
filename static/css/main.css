@@ -16,6 +16,7 @@ body {
 	font: 14px/18px 'RobotoRegular', Arial, sans-serif;
 	background: url('../fabric_of_squares_gray.png') repeat 0 0;
 	min-width: 960px;
+	text-rendering: optimizeLegibility;
 }
 .fixed {
 	position: fixed;
@@ -83,11 +84,11 @@ body {
 	height: 80px;
 	line-height: 80px;
 	text-align: center;
-
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
 }
+
 
 #menu ul {
 	margin: 0;
@@ -109,7 +110,6 @@ body {
 	overflow: hidden;
 	white-space: nowrap;
 }
-
 
 #menu ul.pagination {
 	margin: 0;
@@ -145,7 +145,6 @@ body {
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 	color: #AAAAAA;
 	display: block;
-	line-height: 0px;
 	overflow: hidden;
 	position: relative;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
@@ -163,6 +162,9 @@ body {
 	color: #888888;
 	display: block;
 	padding: 10px 10px 14px 10px;
+	line-height: 0px;
+	font-size: small;
+	text-transform: capitalize;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
@@ -184,6 +186,7 @@ body {
 	text-decoration: none;
 }
 
+
 #container {
 	padding: 30px;
 }
@@ -200,11 +203,9 @@ body {
 #content div.post div.post_content {
 	position: relative;
 }
-
 #content div.post div.inline {
 	display: inline;
 }
-
 #content div.post div.image {
 	text-align: left;
 	width: 150px;
@@ -260,6 +261,7 @@ body {
 	vertical-align: middle;
 }
 
+
 #messages {
 	width: 100%;
 	display: block;
@@ -274,6 +276,7 @@ body {
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 	color: #FFFFFF;
 }
+
 
 div.media_embed {
 	margin-top: 10px;

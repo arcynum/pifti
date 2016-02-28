@@ -1,12 +1,12 @@
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
-from django.contrib import messages
-from imageboard.models import Post, Comment, UserProfile
+from django.shortcuts import get_object_or_404, render, redirect
 from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm, ProfileEditForm
-from django.contrib.auth.forms import AuthenticationForm
+from imageboard.models import Post, Comment, UserProfile
 
 from math import ceil
 from itertools import chain
@@ -237,15 +237,17 @@ def _getActivity(request):
 	# Sort both lists together, via latest date
 	activity = sorted(chain(latest_posts, latest_comments), key=attrgetter('created'), reverse=True)[:activity_count]
 
+	# Find post page for activity items
 	for a in activity:
-		if hasattr(a, 'post_id'): # Get parent post_id for comment
+		if hasattr(a, 'post_id'): # Use parent post_id for comment
 			post = a.post_id
 		else: # Else use posts id
 			post = a.id
 
+		# Add post page number to activity item
 		a.post_page = _getPostPage(post, request.user.id)
 
-	return activity # Return sorted list of latest items
+	return activity
 
 
 def _getPostPage(post_id, user_id):
