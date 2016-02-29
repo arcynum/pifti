@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% block page_class %}Add Comment{% endblock %}
+{% block page_class %}Edit Profile{% endblock %}
 
 {% block content %}
-    <h1>New Comment.</h1>
+    <h1>User Profile.</h1>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <p>{{ form.non_field_errors }}</p>
@@ -13,6 +13,6 @@
             {{ form.docfile }}
         </p>
         {{ form.as_p }}
-        <p><input type="submit" value="Submit" /></p>
+        <p><input type="submit" value="Save" /></p>
     </form>
 {% endblock %}

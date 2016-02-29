@@ -41,34 +41,43 @@
       </div>
       <div class="comments">
         {% for comment in post.comment_set.all reversed %}
-        <div class="comment clearfix">
-          <div class="image">
-            {% if comment.image %}
-            <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
-            {% endif %}
-          </div>
-          <div class="bump">
-            <div class="title">
-              <div class="comment_information inline">{{ comment.user.username }} on {{ comment.created }}</div>
-            </div>
-            <div class="text">
-              <div>{{ comment.body|linebreaksbr|urlize }}</div>
-              {% if comment.media and comment.media != "" %}
-                <div class="media_embed">
-                {% video comment.media 'tiny' %}
-                </div>
-              {% endif %}
-            </div>
-            <div class="actions">
-              <ul>
-                {% if user.is_superuser or user == comment.user %}
-                <li><a href="{% url 'imageboard:edit_comment' post.id comment.id %}"><img title="Edit" src="{% static 'wrench.svg' %}" /></a></li>
-                <li><a href="{% url 'imageboard:delete_comment' post.id comment.id %}"><img title="Delete" src="{% static 'x_alt.svg' %}" /></a></li>
+            {% if forloop.counter|add:user.userprofile.comment_filter <= post.comment_set.all|length %}
+                {% if forloop.first %}
+                    <div class="comments-hidden">
                 {% endif %}
-              </ul>
+            {% endif %}
+            <div class="comment clearfix">
+              <div class="image">
+                {% if comment.image %}
+                <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
+                {% endif %}
+              </div>
+              <div class="bump">
+                <div class="title">
+                  <div class="comment_information inline">{{ comment.user.username }} on {{ comment.created }}</div>
+                </div>
+                <div class="text">
+                  <div>{{ comment.body|linebreaksbr|urlize }}</div>
+                  {% if comment.media and comment.media != "" %}
+                    <div class="media_embed">
+                    {% video comment.media 'tiny' %}
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="actions">
+                  <ul>
+                    {% if user.is_superuser or user == comment.user %}
+                    <li><a href="{% url 'imageboard:edit_comment' post.id comment.id %}"><img title="Edit" src="{% static 'wrench.svg' %}" /></a></li>
+                    <li><a href="{% url 'imageboard:delete_comment' post.id comment.id %}"><img title="Delete" src="{% static 'x_alt.svg' %}" /></a></li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+            {% if forloop.counter|add:user.userprofile.comment_filter == post.comment_set.all|length %}
+                </div>
+                <div class="comments-expand">Show Hidden Comments</div>
+            {% endif %}
         {% endfor %}
       </div>
     </div>
