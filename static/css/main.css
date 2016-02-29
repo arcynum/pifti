@@ -228,6 +228,20 @@ body {
 	position: relative;
 }
 
+#content div.comments-expand {
+	background-color: rgba(255, 255, 255, 0);
+	border-top: 1px solid #DDDDDD;
+	padding: 10px 0px;
+	text-align: center;
+}
+#content div.comments-expand:hover {
+	background-color: rgba(255, 255, 255, 1);
+	cursor: pointer;
+}
+#content div.comments-hidden {
+	display: none;
+}
+
 #content div.actions {
 	position: absolute;
 	bottom: 10px;
