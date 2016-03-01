@@ -185,6 +185,9 @@ body {
 	color: #28A6EB;
 	text-decoration: none;
 }
+#content a.mobile-top {
+	display: none;
+}
 
 
 #container {
