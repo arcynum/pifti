@@ -15,7 +15,9 @@ from operator import attrgetter
 @login_required
 def index(request):
 	post_list = Post.objects.prefetch_related('comment_set').order_by('-created')
-	paginator = Paginator(post_list, UserProfile.objects.get(id=request.user.id).pagination)
+	profile, created = UserProfile.objects.get_or_create(id=request.user.id, user_id=request.user.id)
+	
+	paginator = Paginator(post_list, profile.pagination)
 
 	page = request.GET.get('page')
 	try:
