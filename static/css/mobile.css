@@ -15,6 +15,7 @@
 body {
 	font: 14px/18px 'RobotoRegular', Arial, sans-serif;
 	background: url('../fabric_of_squares_gray.png') repeat 0 0;
+	min-width: 320px;
 }
 
 #user {
@@ -86,10 +87,23 @@ body {
 	color: #28A6EB;
 	text-decoration: none;
 }
+#content a.mobile-top {
+	display: block;
+	margin-bottom: 2em;
+	text-align: center;
+}
+
+#content h1 {
+	margin: 0.67em;
+}
+
+#content form {
+	margin: 0.67em;
+}
 
 #content div.post {
 	display: block;
-	box-shadow: 0 0 5px 2px #CCCCCC;
+	box-shadow: 0 0 6px 2px #BBBBBB;
 	margin: 0 0 30px 0;
 	padding: 0;
 	background-color: rgba(255, 255, 255, 0.6);
@@ -181,4 +195,11 @@ body {
 	background: #28A6EB;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 	color: #FFFFFF;
+}
+
+div.media_embed {
+	margin-top: 10px;
+}
+div.media_embed iframe {
+	width: 100%;
 }

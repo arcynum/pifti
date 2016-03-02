@@ -69,7 +69,7 @@ def edit_post(request, post_id):
 		messages.success(request, 'Post Successfully Edited.')
 
 		return redirect(reverse('imageboard:index')
-						+ '?page=' + _getPostPage(post_id, request.user.id)
+						+ '?page=' + str(_getPostPage(post_id, request.user.id))
 						+ '#' + post_id)
 
 	else:
@@ -104,7 +104,7 @@ def add_comment(request, post_id):
 			messages.success(request, 'Comment Successful.')
 
 			return redirect(reverse('imageboard:index')
-						+ '?page=' + _getPostPage(post_id, request.user.id)
+						+ '?page=' + str(_getPostPage(post_id, request.user.id))
 						+ '#' + post_id)
 	else:
 		form = CommentForm()
@@ -126,7 +126,7 @@ def edit_comment(request, post_id, comment_id):
 		messages.success(request, 'Comment Successfully Edited.')
 
 		return redirect(reverse('imageboard:index')
-						+ '?page=' + _getPostPage(post_id, request.user.id)
+						+ '?page=' + str(_getPostPage(post_id, request.user.id))
 						+ '#' + post_id)
 
 	else:
@@ -147,7 +147,7 @@ def delete_comment(request, post_id, comment_id):
 	messages.success(request, 'Comment Successfully Deleted.')
 
 	return redirect(reverse('imageboard:index')
-						+ '?page=' + _getPostPage(post_id, request.user.id)
+						+ '?page=' + str(_getPostPage(post_id, request.user.id))
 						+ '#' + post_id)
 
 @login_required
@@ -255,4 +255,4 @@ def _getActivity(request):
 def _getPostPage(post_id, user_id):
 	# Retrieve the appropriate page number for a specific post
 	post_list = Post.objects.filter(id__gte=post_id) # Posts with ID greater than post_id
-	return str(ceil(post_list.count() / UserProfile.objects.get(id=user_id).pagination))
+	return ceil(post_list.count() / UserProfile.objects.get(id=user_id).pagination)
