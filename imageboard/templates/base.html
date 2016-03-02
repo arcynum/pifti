@@ -99,14 +99,22 @@
                     {% for i in latest_activity %}
                         {% if i.post_id %}
                         <li>
+                            {% if i.post_page == pagination_list.number %}
+                            <a href="#{{ i.post_id }}">
+                            {% else %}
                             <a href="?page={{ i.post_page }}#{{ i.post_id }}">
+                            {% endif %}
                                 <span class="history">{{ i.user.username }} commented on: {{ i.post.title }}</span>
                                 <span class="delta">{{ i.created|timesince }} ago</span>
                             </a>
                         </li>
                         {% else %}
                         <li>
+                            {% if i.post_page == pagination_list.number %}
+                            <a href="#{{ i.id }}">
+                            {% else %}
                             <a href="?page={{ i.post_page }}#{{ i.id }}">
+                            {% endif %}
                                 <span class="history">{{ i.user.username }} posted: {{ i.title }}</span>
                                 <span class="delta">{{ i.created|timesince }} ago</span>
                             </a>

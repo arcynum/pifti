@@ -103,7 +103,7 @@ body {
 
 #content div.post {
 	display: block;
-	box-shadow: 0 0 5px 2px #CCCCCC;
+	box-shadow: 0 0 6px 2px #BBBBBB;
 	margin: 0 0 30px 0;
 	padding: 0;
 	background-color: rgba(255, 255, 255, 0.6);
