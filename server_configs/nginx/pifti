@@ -23,7 +23,7 @@ server {
 	ssl_prefer_server_ciphers on;
 
 	server_name ifti.com.au;
-	root /var/ww/pifti;
+	root /var/www/pifti;
 
 	location /static/ {
 		root /var/www/pifti;
