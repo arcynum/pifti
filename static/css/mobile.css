@@ -125,6 +125,7 @@ body {
 #content div.post div.bump {
 	margin: 0;
 	padding: 10px;
+	word-wrap: break-word;
 }
 
 #content div.post div.title {

@@ -219,6 +219,7 @@ body {
 #content div.post div.bump {
 	margin: 0 0 0 180px;
 	padding: 10px 10px 10px 0;
+	word-wrap: break-word;
 }
 
 #content div.post div.title {
