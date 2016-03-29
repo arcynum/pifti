@@ -25,6 +25,10 @@ ACTIVITY_CHOICES = (
 	( 10, '10' ),
 	( 20, '20' )
 )
+NIGHTMODE_CHOICES = (
+	( False, 'Off'),
+	( True, 'On' )
+)
 
 
 class Post(models.Model):
@@ -105,6 +109,7 @@ class UserProfile(models.Model):
 	pagination = models.PositiveSmallIntegerField(default=10, blank=False, choices=PAGINATION_CHOICES)
 	comment_filter = models.PositiveSmallIntegerField(default=10, blank=False, choices=COMMENT_FILTER_CHOICES)
 	activity = models.PositiveSmallIntegerField(default=10, blank=False, choices=ACTIVITY_CHOICES)
+	nightmode = models.BooleanField(default=False, blank=False, choices=NIGHTMODE_CHOICES)
 
 	def __str__(self):
 		return 'Profile of user: %s' % self.user.username

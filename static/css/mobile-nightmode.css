@@ -14,13 +14,21 @@
 
 body {
 	font: 14px/18px 'RobotoRegular', Arial, sans-serif;
-	background: url('../fabric_of_squares_gray.png') repeat 0 0;
+	background: url('../fabric_of_squares_black.png') repeat 0 0;
+    color: #AAAAAA;
 	min-width: 320px;
-	text-rendering: optimizeLegibility;
+    text-rendering: optimizeLegibility;
+}
+
+input, textarea {
+    background-color: #1E1E1E;
+    border: 1px solid #333333;
+    color: #AAAAAA;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 #user {
-	color: #AAAAAA;
+	color: #BBBBBB;
 	font-weight: normal;
 	background-color: #2A2A2A;
 	border-bottom: 1px solid #000000;
@@ -51,7 +59,7 @@ body {
 }
 #navigation a:hover {
 	background-color: #232323;
-	color: #EEEEEE;
+	color: #FFFFFF;
 	text-decoration: none;
 }
 #navigation a.active:hover {
@@ -95,6 +103,7 @@ body {
 }
 
 #content h1 {
+    font-family: 'RobotoThin', Arial, sans-serif;
 	margin: 0.67em;
 }
 
@@ -104,10 +113,11 @@ body {
 
 #content div.post {
 	display: block;
-	box-shadow: 0 0 6px 2px #BBBBBB;
+	box-shadow: 0 0 6px 2px #000000;
 	margin: 0 0 30px 0;
 	padding: 0;
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: #1E1E1E;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 #content div.post div.post_content {
 	position: relative;
@@ -130,25 +140,28 @@ body {
 }
 
 #content div.post div.title {
+    color: #BBBBBB;
 	font-size: 16px;
 	margin-bottom: 10px;
 }
 
 #content div.comment {
-	border-top: 1px solid #DDDDDD;
+	border-top: 2px groove #333333;
 	position: relative;
 	padding: 0 0 30px 0;
 }
 
 #content div.comments-expand {
-	background-color: rgba(255, 255, 255, 0);
-	border-top: 1px solid #DDDDDD;
+	background-color: #1E1E1E;
+	border-top: 2px groove #333333;
 	padding: 10px 0px;
 	text-align: center;
 }
 #content div.comments-expand:hover {
-	background-color: rgba(255, 255, 255, 1);
-	cursor: pointer;
+	background-color: #232323;
+	color: #FFFFFF;
+    cursor: pointer;
+	text-decoration: none;
 }
 #content div.comments-hidden {
 	display: none;
@@ -173,13 +186,13 @@ body {
 
 
 #gallery div.gallery_item {
-	background-color: rgba(255, 255, 255, 0.6);
+	background-color: #1E1E1E;
 	text-align: center;
 	line-height: 150px;
 	width: 150px;
 	height: 150px;
-	float: left;
-	box-shadow: 0 0 5px 2px #CCCCCC;
+    float: left;
+	box-shadow: 0px 0 6px 2px #000000;
 	margin: 10px;
 	padding: 10px;
 }

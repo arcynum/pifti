@@ -41,7 +41,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-	fields = ['pagination', 'comment_filter', 'activity']
+	fields = ['pagination', 'comment_filter', 'activity', 'nightmode']
 
 	def save_model(self, request, obj, form, change):
 		try:

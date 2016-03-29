@@ -24,9 +24,10 @@ class CommentEditForm(forms.ModelForm):
 class ProfileEditForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
-		fields = ['pagination', 'comment_filter', 'activity']
+		fields = ['pagination', 'comment_filter', 'activity', 'nightmode']
 		labels = {
             'pagination': 'Posts Per Page:',
-			'comment_filter': 'Comments Per Post',
-			'activity': 'Items In Latest Activity:'
+			'comment_filter': 'Comments Per Post:',
+			'activity': 'Items In Latest Activity:',
+			'nightmode': 'Night Mode:'
         }
