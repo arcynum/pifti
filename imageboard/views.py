@@ -7,14 +7,14 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm, ProfileEditForm
 from imageboard.models import Post, Comment, UserProfile
-
 from math import ceil
 from itertools import chain
 from operator import attrgetter
 
+
 @login_required
 def index(request):
-	post_list = Post.objects.prefetch_related('comment_set').order_by('-created')
+	post_list = Post.objects.prefetch_related('comment_set').order_by('-modified', '-id')
 	profile, created = UserProfile.objects.get_or_create(id=request.user.id, user_id=request.user.id)
 	
 	paginator = Paginator(post_list, profile.pagination)
@@ -230,16 +230,27 @@ def _generateExtraPagination(paginator, page_list):
 	return extras
 
 def _getActivity(request):
+	""" Retrieve the activity list
+
+	List length is defined by the users activity_count
+
+	Args:
+	    request: sender request
+
+	Returns:
+	    A list of the latest posts and comments
+	"""
+
 	activity_count = UserProfile.objects.get(id=request.user.id).activity
 
-	# Retrieves the latest posts and comments
+	# Retrieve the latest posts and comments
 	latest_posts = Post.objects.all().order_by('-id')[:activity_count]
 	latest_comments = Comment.objects.all().order_by('-id')[:activity_count]
 
 	# Sort both lists together, via latest date
 	activity = sorted(chain(latest_posts, latest_comments), key=attrgetter('created'), reverse=True)[:activity_count]
 
-	# Find post page for activity items
+	# Find the post page for each activity item
 	for a in activity:
 		if hasattr(a, 'post_id'): # Use parent post_id for comment
 			post = a.post_id
@@ -251,8 +262,16 @@ def _getActivity(request):
 
 	return activity
 
-
 def _getPostPage(post_id, user_id):
-	# Retrieve the appropriate page number for a specific post
-	post_list = Post.objects.filter(id__gte=post_id) # Posts with ID greater than post_id
+	""" Retrieve the page number for a post
+
+	Args:
+	    post_id: integer number of the post ID
+	    user_id: integer number of the user ID
+
+	Returns:
+	    An integer representing the page number for a given post
+	"""
+
+	post_list = Post.objects.filter(modified__gte=Post.objects.get(id=post_id).modified)
 	return ceil(post_list.count() / UserProfile.objects.get(id=user_id).pagination)

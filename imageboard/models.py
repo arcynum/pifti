@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 from easy_thumbnails.fields import ThumbnailerImageField
 from embed_video.fields import EmbedVideoField
 from imageboard.storage import MediaFileStorage
@@ -25,6 +26,7 @@ ACTIVITY_CHOICES = (
 	( 20, '20' )
 )
 
+
 class Post(models.Model):
 	user = models.ForeignKey(User)
 	title = models.CharField(max_length=200)
@@ -32,6 +34,7 @@ class Post(models.Model):
 	media = EmbedVideoField(blank=True, null=True)
 	body = models.TextField()
 	created = models.DateTimeField(auto_now_add=True)
+	modified = models.DateTimeField(editable=False, db_index=True, default=now)
 
 	def __str__(self):
 		return self.title
@@ -50,6 +53,7 @@ class Post(models.Model):
 			self.image.name = image_name
 
 		super(Post, self).save(*args, **kwargs)
+
 
 class Comment(models.Model):
 	user = models.ForeignKey(User)
@@ -75,7 +79,26 @@ class Comment(models.Model):
 			image_name = image_hash + '.' + image_extension
 			self.image.name = image_name
 
+		if not self.created: # New Comment
+			self.post.modified = now()
+			self.post.save()
+
 		super(Comment, self).save(*args, **kwargs)
+
+	def delete(self, *args, **kwargs):
+		# Change modified on parent Post
+		p = self.post
+		if p.comment_set: # Post has comments
+			c = p.comment_set.exclude(id=self.id).last()
+			if c: # Last comment
+				p.modified = c.created
+				p.save()
+			else: # No comments after deletion
+				p.modified = p.created
+				p.save()
+
+		super(Comment, self).delete(*args, **kwargs)
+
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -91,4 +114,3 @@ class UserProfile(models.Model):
 	def create_user_profile(sender, instance, created, **kwargs):
 		if created:
 			UserProfile.objects.create(user=instance)
-
