@@ -71,7 +71,7 @@ input, textarea {
 	width: 100%;
 }
 #navigation a.active {
-	background-color: #28A6EB;
+	background-color: #4183C4;
 	color: #FFFFFF;
 	text-decoration: none;
 }
@@ -81,7 +81,7 @@ input, textarea {
 	text-decoration: none;
 }
 #navigation a.active:hover {
-	background-color: #28A6EB;
+	background-color: #4183C4;
 	color: #FFFFFF;
 	text-decoration: none;
 }
@@ -191,7 +191,7 @@ input, textarea {
 	position: relative;
 }
 #content a {
-	color: #28A6EB;
+	color: #4183C4;
 	text-decoration: none;
 }
 #content a.mobile-top {
@@ -241,12 +241,14 @@ input, textarea {
 }
 
 #content div.comment {
-	border-top: 2px groove #333333;
+	border-top: 1px solid #000000;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 	position: relative;
 }
 
 #content div.comments-expand {
-	border-top: 2px groove #333333;
+	border-top: 1px solid #000000;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 	padding: 10px 0px;
 	text-align: center;
 }
@@ -304,7 +306,7 @@ input, textarea {
 	display: none;
 	padding: 10px;
 	margin: 0;
-	background: #28A6EB;
+	background: #4183C4;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 	color: #FFFFFF;
 }
