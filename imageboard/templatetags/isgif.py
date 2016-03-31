@@ -14,7 +14,7 @@ def isgif(image):
         Otherwise returns False
     """
 
-    if not os.path.isfile(image.path):
+    if not os.path.exists(image.path):
         return False
 
     image.open()
