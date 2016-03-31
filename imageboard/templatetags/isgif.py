@@ -1,5 +1,6 @@
 from django import template
 from PIL import Image
+import os.path
 
 register = template.Library()
 
@@ -12,6 +13,9 @@ def isgif(image):
         True if the filename ends with .gif and has frames
         Otherwise returns False
     """
+
+    if not os.path.isfile(image.path):
+        return False
 
     image.open()
     gif = Image.open(image)
