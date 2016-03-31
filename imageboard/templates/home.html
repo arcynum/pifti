@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n thumbnail staticfiles embed_video_tags %}
+{% load i18n thumbnail staticfiles embed_video_tags isgif %}
 {% block page_class %}Home{% endblock %}
 
 {% block content %}
@@ -11,7 +11,18 @@
       <div class="post_content clearfix">
         <div class="image">
           {% if post.image %}
-          <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
+            <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
+            <div class="imagetype">
+              <ul>
+                {% if post.image|isgif %}
+                  {% if user.userprofile.nightmode %}
+                  <li><img src="{% static 'gif_nightmode_p.png' %}" /></li>
+                  {% else %}
+                  <li><img src="{% static 'gif_p.png' %}" /></li>
+                  {% endif %}
+                {% endif %}
+              </ul>
+            </div>
           {% endif %}
         </div>
         <div class="bump">
@@ -50,6 +61,17 @@
           <div class="image">
             {% if comment.image %}
             <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
+            <div class="imagetype">
+              <ul>
+                {% if comment.image|isgif %}
+                  {% if user.userprofile.nightmode %}
+                  <li><img src="{% static 'gif_nightmode_c.png' %}" /></li>
+                  {% else %}
+                  <li><img src="{% static 'gif_c.png' %}" /></li>
+                  {% endif %}
+                {% endif %}
+              </ul>
+            </div>
             {% endif %}
           </div>
           <div class="bump">
@@ -64,7 +86,8 @@
                 </div>
               {% endif %}
             </div>
-            <div class="actions">
+          </div>
+          <div class="actions">
               <ul>
                 {% if forloop.last and forloop.counter > 1 %}
                 <li><a href="{% url 'imageboard:add_comment' post.id %}"><img title="Comment" src="{% static 'comment_alt2_fill.svg' %}" /></a></li>
@@ -75,7 +98,6 @@
                 {% endif %}
               </ul>
             </div>
-          </div>
         </div>
         {% if forloop.counter|add:user.userprofile.comment_filter == post.comment_set.all|length %}
           </div>

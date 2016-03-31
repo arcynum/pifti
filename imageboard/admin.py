@@ -7,7 +7,7 @@ class PostAdmin(admin.ModelAdmin):
 	fields = ['title', 'body']
 	actions = ['update_modified']
 
-	list_display = ('id', '__str__', 'created', 'modified')
+	list_display = ('id', 'user', '__str__', 'created', 'modified')
 
 	def save_model(self, request, obj, form, change): 
 		try:
@@ -23,10 +23,10 @@ class PostAdmin(admin.ModelAdmin):
 		for p in obj:
 			if p.comment_set.count() > 0:  # Post has comments
 				p.modified = p.comment_set.last().created
-				p.save()
+				p.save(update_fields=['modified'])
 			else:  # Post has no comments
 				p.modified = p.created
-				p.save()
+				p.save(update_fields=['modified'])
 
 		if obj.count() == 1:
 			message = "1 post was"
@@ -42,7 +42,7 @@ class CommentAdmin(admin.ModelAdmin):
 	fields = ['post', 'body']
 	actions = ['delete_selected']
 
-	list_display = ('id', 'post', 'body', 'created')
+	list_display = ('id', 'user', 'post', 'body', 'created')
 
 	def save_model(self, request, obj, form, change):
 		try:

@@ -33,7 +33,6 @@ body {
 	background-color: #2A2A2A;
 	border-bottom: 1px solid #000000;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-	color: #AAAAAA;
 	overflow: hidden;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 	text-decoration: none;
@@ -162,7 +161,7 @@ body {
 	color: #888888;
 	display: block;
 	padding: 10px 10px 14px 10px;
-	line-height: 0px;
+	line-height: 0;
 	font-size: small;
 	text-transform: capitalize;
 	text-overflow: ellipsis;
@@ -170,8 +169,8 @@ body {
 	white-space: nowrap;
 }
 #menu ul.activity a {
-	line-height: 0px;
-	border-bottom: 0px;
+	line-height: 0;
+	border-bottom: 0;
 }
 
 
@@ -236,7 +235,7 @@ body {
 #content div.comments-expand {
 	background-color: rgba(255, 255, 255, 0);
 	border-top: 1px solid #DDDDDD;
-	padding: 10px 0px;
+	padding: 10px 0;
 	text-align: center;
 }
 #content div.comments-expand:hover {
@@ -264,6 +263,23 @@ body {
 	height: 16px;
 }
 
+#content div.imagetype {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	pointer-events: none;
+}
+#content div.imagetype ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+#content div.imagetype li {
+	float: right;
+	width: 30px;
+	height: 12px;
+}
+
 
 #gallery div.gallery_item {
 	background-color: rgba(255, 255, 255, 0.6);
@@ -275,17 +291,20 @@ body {
 	box-shadow: 0 0 5px 2px #CCCCCC;
 	margin: 0 15px 15px 0;
 	padding: 10px;
+	position: relative;
 }
 #gallery div.gallery_item img {
 	vertical-align: middle;
+}
+#gallery div.gallery_item div.imagetype img {
+	vertical-align: top;
 }
 
 
 #messages {
 	width: 100%;
-	display: block;
 	position: fixed;
-	bottom: 0px;
+	bottom: 0;
 	text-align: center;
 	z-index: 12;
 	display: none;

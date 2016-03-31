@@ -40,7 +40,7 @@ input, textarea {
 }
 #navigation {
 	background: none repeat scroll 0 0 #1E1E1E;
-	box-shadow: 0px 0px 6px 2px #000000;
+	box-shadow: 0 0 6px 2px #000000;
 }
 #navigation h2 {
 	display: none;
@@ -157,7 +157,7 @@ input, textarea {
 #content div.comments-expand {
 	border-top: 1px solid #000000;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-	padding: 10px 0px;
+	padding: 10px 0;
 	text-align: center;
 }
 #content div.comments-expand:hover {
@@ -187,6 +187,23 @@ input, textarea {
 	height: 16px;
 }
 
+#content div.imagetype {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	pointer-events: none;
+}
+#content div.imagetype ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+#content div.imagetype li {
+	float: right;
+	width: 30px;
+	height: 12px;
+}
+
 
 #gallery div.gallery_item {
 	background-color: #1E1E1E;
@@ -195,18 +212,22 @@ input, textarea {
 	width: 150px;
 	height: 150px;
     float: left;
-	box-shadow: 0px 0 6px 2px #000000;
+	box-shadow: 0 0 6px 2px #000000;
 	margin: 10px;
 	padding: 10px;
+	position: relative;
 }
 #gallery div.gallery_item img {
 	vertical-align: middle;
+}
+#gallery div.gallery_item div.imagetype img {
+	vertical-align: top;
 }
 
 #messages {
 	display: none;
 	position: fixed;
-	bottom: 0px;
+	bottom: 0;
 	text-align: center;
 	z-index: 12;
 	padding: 10px;
