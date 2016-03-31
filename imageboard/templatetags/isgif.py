@@ -14,6 +14,7 @@ def isgif(image):
     """
 
     if image.name.endswith('.gif'):
+        image.open()
         gif = Image.open(image)
         try:
             gif.seek(1)
