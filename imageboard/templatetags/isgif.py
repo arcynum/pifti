@@ -13,14 +13,11 @@ def isgif(image):
         Otherwise returns False
     """
 
-    if image.name.endswith('.gif'):
-        image.open()
-        gif = Image.open(image)
-        try:
-            gif.seek(1)
-        except EOFError:
-            return False
-        else:
-            return True
-    else:
+    image.open()
+    gif = Image.open(image)
+    try:
+        gif.seek(1)
+    except EOFError:
         return False
+    else:
+        return True

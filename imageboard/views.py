@@ -152,7 +152,7 @@ def delete_comment(request, post_id, comment_id):
 
 @login_required
 def gallery(request):
-	gallery_list = Post.objects.prefetch_related('comment_set').all().order_by('-id').exclude(image = '')
+	gallery_list = Post.objects.prefetch_related('comment_set').all().order_by('-modified', '-id').exclude(image = '')
 	paginator = Paginator(gallery_list, 40)
 
 	page = request.GET.get('page')
