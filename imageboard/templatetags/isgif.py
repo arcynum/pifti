@@ -1,6 +1,6 @@
 from django import template
 from PIL import Image
-import os.path
+from os.path import exists
 
 register = template.Library()
 
@@ -14,7 +14,7 @@ def isgif(image):
         Otherwise returns False
     """
 
-    if not os.path.exists(image.path):
+    if not exists(image.path):
         return False
 
     image.open()

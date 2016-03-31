@@ -8,28 +8,6 @@ from embed_video.fields import EmbedVideoField
 from imageboard.storage import MediaFileStorage
 import hashlib
 
-PAGINATION_CHOICES = (
-	( 5, '5' ),
-	( 10, '10' ),
-	( 15, '15' ),
-	( 20, '20' )
-)
-COMMENT_FILTER_CHOICES = (
-	( 5, '5' ),
-	( 10, '10' ),
-	( 20, '20' ),
-	( 50, '50' )
-)
-ACTIVITY_CHOICES = (
-	( 0, 'Disabled' ),
-	( 10, '10' ),
-	( 20, '20' )
-)
-NIGHTMODE_CHOICES = (
-	( False, 'Off'),
-	( True, 'On' )
-)
-
 
 class Post(models.Model):
 	user = models.ForeignKey(User)
@@ -44,7 +22,11 @@ class Post(models.Model):
 		return self.title
 
 	def save(self, *args, **kwargs):
-		if self.image:
+		"""
+		Hash image name
+		"""
+
+		if self.image and not self.id: # New Post
 			md5 = hashlib.md5()
 			while True:
 				data = self.image.read(128)
@@ -71,7 +53,11 @@ class Comment(models.Model):
 		return 'Comment for: %s' % self.post.title
 
 	def save(self, *args, **kwargs):
-		if self.image:
+		"""
+		Hash image name and update parent post modified
+		"""
+
+		if self.image and not self.id: # New Comment
 			md5 = hashlib.md5()
 			while True:
 				data = self.image.read(128)
@@ -83,28 +69,51 @@ class Comment(models.Model):
 			image_name = image_hash + '.' + image_extension
 			self.image.name = image_name
 
-		if not self.created: # New Comment
 			self.post.modified = now()
 			self.post.save()
 
 		super(Comment, self).save(*args, **kwargs)
 
 	def delete(self, *args, **kwargs):
-		# Change modified on parent Post
-		p = self.post
-		if p.comment_set: # Post has comments
-			c = p.comment_set.exclude(id=self.id).last()
+		"""
+		Change modified on parent Post before deleting Comment
+		"""
+
+		if self.post.comment_set: # Post has comments
+			c = self.post.comment_set.exclude(id=self.id).last()
 			if c: # Last comment
-				p.modified = c.created
-				p.save()
+				self.post.modified = c.created
+				self.post.save()
 			else: # No comments after deletion
-				p.modified = p.created
-				p.save()
+				self.post.modified = self.post.created
+				self.post.save()
 
 		super(Comment, self).delete(*args, **kwargs)
 
 
 class UserProfile(models.Model):
+	PAGINATION_CHOICES = (
+		(5, '5'),
+		(10, '10'),
+		(15, '15'),
+		(20, '20')
+	)
+	COMMENT_FILTER_CHOICES = (
+		(5, '5'),
+		(10, '10'),
+		(20, '20'),
+		(50, '50')
+	)
+	ACTIVITY_CHOICES = (
+		(0, 'Disabled'),
+		(10, '10'),
+		(20, '20')
+	)
+	NIGHTMODE_CHOICES = (
+		(False, 'Off'),
+		(True, 'On')
+	)
+
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	pagination = models.PositiveSmallIntegerField(default=10, blank=False, choices=PAGINATION_CHOICES)
 	comment_filter = models.PositiveSmallIntegerField(default=10, blank=False, choices=COMMENT_FILTER_CHOICES)
@@ -114,8 +123,11 @@ class UserProfile(models.Model):
 	def __str__(self):
 		return 'Profile of user: %s' % self.user.username
 
-	# Create a UserProfile for the new user upon account creation
 	@receiver(post_save, sender=User)
 	def create_user_profile(sender, instance, created, **kwargs):
+		"""
+		Create a UserProfile for the new user upon account creation
+		"""
+
 		if created:
 			UserProfile.objects.create(user=instance)

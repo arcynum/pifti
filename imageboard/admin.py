@@ -23,10 +23,10 @@ class PostAdmin(admin.ModelAdmin):
 		for p in obj:
 			if p.comment_set.count() > 0:  # Post has comments
 				p.modified = p.comment_set.last().created
-				p.save(update_fields=['modified'])
+				p.save()
 			else:  # Post has no comments
 				p.modified = p.created
-				p.save(update_fields=['modified'])
+				p.save()
 
 		if obj.count() == 1:
 			message = "1 post was"
