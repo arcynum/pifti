@@ -12,12 +12,22 @@
 	zoom: 1;
 }
 
+html {
+	background-color: #000000;
+	min-height: 100%;
+	height: 100%;
+}
 body {
 	font: 14px/18px 'RobotoRegular', Arial, sans-serif;
-	background: url('../fabric_of_squares_black.png') repeat 0 0;
     color: #AAAAAA;
+	background: -webkit-linear-gradient(-45deg, #000000 10%, #1E1E1E);
+    background: -moz-linear-gradient(-45deg, #000000 10%, #1E1E1E);
+    background: -o-linear-gradient(to bottom right, #000000 10%, #1E1E1E);
+    background: -ms-linear-gradient(to bottom right, #000000 10%, #1E1E1E);
+	background: linear-gradient(to bottom right, #000000 10%, #1E1E1E);
 	min-width: 320px;
-    text-rendering: optimizeLegibility;
+	min-height: 100%;
+	text-rendering: optimizeLegibility;
 }
 
 input, textarea {
@@ -31,7 +41,7 @@ input, textarea {
 	color: #BBBBBB;
 	font-weight: normal;
 	background-color: #2A2A2A;
-	border-bottom: 1px solid #000000;
+	border-bottom: 1px solid #111111;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 	text-decoration: none;
 	padding: 10px;
@@ -47,7 +57,7 @@ input, textarea {
 }
 #navigation a {
 	background-color: #1E1E1E;
-	border-bottom: 1px solid #000000;
+	border-bottom: 1px solid #111111;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 	color: #AAAAAA;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
@@ -99,13 +109,14 @@ input, textarea {
 }
 #content a.mobile-top {
 	display: block;
-	margin-bottom: 2em;
+	padding-bottom: 2em;
 	text-align: center;
 }
 
 #content h1 {
     font-family: 'RobotoThin', Arial, sans-serif;
 	margin: 0.67em;
+	letter-spacing: 1px;
 }
 
 #content form {
@@ -148,14 +159,14 @@ input, textarea {
 }
 
 #content div.comment {
-	border-top: 1px solid #000000;
+	border-top: 1px solid #111111;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 	position: relative;
 	padding: 0 0 30px 0;
 }
 
 #content div.comments-expand {
-	border-top: 1px solid #000000;
+	border-top: 1px solid #111111;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 	padding: 10px 0;
 	text-align: center;

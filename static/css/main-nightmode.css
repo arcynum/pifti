@@ -12,11 +12,21 @@
 	zoom: 1;
 }
 
+html {
+	background-color: #000000;
+	min-height: 100%;
+	height: 100%;
+}
 body {
 	font: 14px/18px 'RobotoRegular', Arial, sans-serif;
     color: #AAAAAA;
-	background: url('../fabric_of_squares_black.png') repeat 0 0;
+	background: -webkit-linear-gradient(-45deg, #000000 10%, #1E1E1E);
+    background: -moz-linear-gradient(-45deg, #000000 10%, #1E1E1E);
+    background: -o-linear-gradient(to bottom right, #000000 10%, #1E1E1E);
+    background: -ms-linear-gradient(to bottom right, #000000 10%, #1E1E1E);
+	background: linear-gradient(to bottom right, #000000 10%, #1E1E1E);
 	min-width: 960px;
+	min-height: 100%;
 	text-rendering: optimizeLegibility;
 }
 .fixed {
@@ -31,21 +41,6 @@ input, textarea {
 }
 
 
-#navigation h2 {
-	margin: 20px 0 0 0;
-	padding: 0 10px;
-	color: #BBBBBB;
-	font-size: 14px;
-	line-height: 20px;
-	height: 20px;
-	font-weight: normal;
-	background-color: #2A2A2A;
-	border-bottom: 1px solid #000000;
-	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-	overflow: hidden;
-	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-	text-decoration: none;
-}
 #navigation {
 	width: 245px;
 	top: 0;
@@ -55,36 +50,6 @@ input, textarea {
 	background: none repeat scroll 0 0 #1E1E1E;
 	box-shadow: 3px 0 6px -2px #000000;
 }
-#navigation a {
-	background-color: #1E1E1E;
-	border-bottom: 1px solid #000000;
-	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-	color: #AAAAAA;
-	cursor: pointer;
-	display: block;
-	line-height: 34px;
-	overflow: hidden;
-	position: relative;
-	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-	text-decoration: none;
-	width: 100%;
-}
-#navigation a.active {
-	background-color: #4183C4;
-	color: #FFFFFF;
-	text-decoration: none;
-}
-#navigation a:hover {
-	background-color: #232323;
-	color: #EEEEEE;
-	text-decoration: none;
-}
-#navigation a.active:hover {
-	background-color: #4183C4;
-	color: #FFFFFF;
-	text-decoration: none;
-}
-
 #navigation #user {
 	font-family: 'RobotoThin', Arial, sans-serif;
 	color: #BBBBBB;
@@ -95,6 +60,57 @@ input, textarea {
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
+	box-shadow: -1px 0 0 rgba(255, 255, 255, 0.04) inset;
+}
+#navigation #menu {
+	height: 100%;
+	box-shadow: -1px 0 0 rgba(255, 255, 255, 0.04) inset;
+}
+#navigation h2 {
+	margin: 20px 0 0 0;
+	padding: 0 10px;
+	color: #BBBBBB;
+	font-size: 14px;
+	line-height: 20px;
+	height: 20px;
+	font-weight: normal;
+	background-color: #2A2A2A;
+	border-bottom: 1px solid #111111;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+	overflow: hidden;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	text-decoration: none;
+}
+#navigation a {
+	background-color: #1E1E1E;
+	border-bottom: 1px solid #111111;
+	box-shadow: -1px 1px 0 rgba(255, 255, 255, 0.04) inset;
+	color: #AAAAAA;
+	cursor: pointer;
+	display: block;
+	line-height: 34px;
+	overflow: hidden;
+	position: relative;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	text-decoration: none;
+	width: 100%;
+}
+#navigation a:hover {
+	background-color: #232323;
+	color: #EEEEEE;
+	text-decoration: none;
+	transition: all 0.2s ease-in-out;
+}
+#navigation a.active {
+	background-color: #4183C4;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+#navigation a.active:hover {
+	background-color: #4183C4;
+	color: #FFFFFF;
+	text-decoration: none;
+	transition: all 0.2s ease-in-out;
 }
 
 
@@ -137,8 +153,8 @@ input, textarea {
 	width: 35px;
 }
 #menu ul.pagination a {
-	box-shadow: 1px 0 0 rgba(255, 255, 255, 0.04) inset;
-	border-right: 1px solid #000000;
+	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
+	border-right: 1px solid #111111;
 	width: 34px;
 }
 
@@ -149,7 +165,7 @@ input, textarea {
 }
 #menu ul.activity li {
 	background-color: #1E1E1E;
-	border-bottom: 1px solid #000000;
+	border-bottom: 1px solid #111111;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 	color: #AAAAAA;
 	display: block;
@@ -167,7 +183,7 @@ input, textarea {
 	white-space: nowrap;
 }
 #menu ul.activity li span.delta {
-	color: #888888;
+	color: #999999;
 	display: block;
 	padding: 10px 10px 14px 10px;
 	line-height: 0;
@@ -206,6 +222,7 @@ input, textarea {
     font-family: 'RobotoThin', Arial, sans-serif;
     color: #BBBBBB;
 	margin: 0 0 30px 0;
+	letter-spacing: 1px;
 }
 
 #content div.post {
@@ -217,21 +234,43 @@ input, textarea {
 #content div.post div.post_content {
 	background-color: #232323;
 	position: relative;
+	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
+	display: table;
 }
 #content div.post div.inline {
 	display: inline;
 }
+#content div.post div.post_number {
+	color: #999999;
+}
+#content div.post div.post_information {
+	color: #999999;
+}
 #content div.post div.image {
 	text-align: left;
-	width: 150px;
-	margin: 10px;
-	float: left;
+	min-width: 150px;
+	padding: 10px;
 	line-height: 0;
+	font-size: 0;
+	white-space: pre-line;
+	display: table-cell;
+	background: url(../black-hatch-texture.png), #1E1E1E;
+	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
 }
 #content div.post div.bump {
-	margin: 0 0 0 180px;
-	padding: 10px 10px 10px 0;
+	padding: 10px;
 	word-wrap: break-word;
+	background: -webkit-linear-gradient(right, #1E1E1E 20%, #232323 80%);
+    background: -moz-linear-gradient(right, #1E1E1E 20%, #232323 80%);
+    background: -o-linear-gradient(to right, #1E1E1E 20%, #232323 80%);
+    background: -ms-linear-gradient(to right, #1E1E1E 20%, #232323 80%);
+	background: linear-gradient(to right, #1E1E1E 20%, #232323 80%);
+	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
+	border-left: 1px solid #111111;
+	display: table-cell;
+	width: 100%;
+	height: 100%;
+	max-width: 1px;
 }
 #content div.post div.title {
     color: #BBBBBB;
@@ -240,13 +279,19 @@ input, textarea {
 }
 
 #content div.comment {
-	border-top: 1px solid #000000;
-	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+	border-top: 1px solid #111111;
+	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
 	position: relative;
+	display: table;
+}
+#content div.comment div.comment_information {
+	color: #999999;
 }
 #content div.comments-expand {
-	border-top: 1px solid #000000;
-	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+	color: #999999;
+	background: url(../black-diag-texture.png);
+	border-top: 1px solid #111111;
+	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
 	padding: 10px 0;
 	text-align: center;
 }
@@ -255,6 +300,7 @@ input, textarea {
 	color: #FFFFFF;
     cursor: pointer;
 	text-decoration: none;
+	transition: all 0.2s ease-in-out;
 }
 #content div.comments-hidden {
 	display: none;
@@ -296,7 +342,7 @@ input, textarea {
 
 
 #gallery div.gallery_item {
-	background-color: #1E1E1E;
+	background: url(../black-hatch-texture.png), #1E1E1E;
 	text-align: center;
 	line-height: 150px;
 	width: 150px;
