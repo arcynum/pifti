@@ -12,15 +12,9 @@
     <div class="gallery_item">
       <a target="_blank" href="{{ gallery_item.image.url }}"><img src="{{ gallery_item.image.avatar.url }}" /></a>
       <div class="imagetype">
-        <ul>
         {% if gallery_item.image|isgif %}
-          {% if user.userprofile.nightmode %}
-          <li><img src="{% static 'gif_nightmode_c.png' %}" /></li>
-          {% else %}
-          <li><img src="{% static 'gif_c.png' %}" /></li>
-          {% endif %}
+          <span>GIF</span>
         {% endif %}
-        </ul>
       </div>
     </div>
     {% endif %}
@@ -30,15 +24,9 @@
       <div class="gallery_item">
         <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
         <div class="imagetype">
-          <ul>
           {% if comment.image|isgif %}
-            {% if user.userprofile.nightmode %}
-            <li><img src="{% static 'gif_nightmode_c.png' %}" /></li>
-            {% else %}
-            <li><img src="{% static 'gif_c.png' %}" /></li>
-            {% endif %}
+            <span>GIF</span>
           {% endif %}
-          </ul>
         </div>
       </div>
       {% endif %}

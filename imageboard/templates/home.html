@@ -13,15 +13,9 @@
           {% if post.image %}
             <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
             <div class="imagetype">
-              <ul>
-                {% if post.image|isgif %}
-                  {% if user.userprofile.nightmode %}
-                  <li><img src="{% static 'gif_nightmode_p.png' %}" /></li>
-                  {% else %}
-                  <li><img src="{% static 'gif_p.png' %}" /></li>
-                  {% endif %}
-                {% endif %}
-              </ul>
+              {% if post.image|isgif %}
+                <span>GIF</span>
+              {% endif %}
             </div>
           {% endif %}
         </div>
@@ -62,15 +56,9 @@
             {% if comment.image %}
             <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
             <div class="imagetype">
-              <ul>
-                {% if comment.image|isgif %}
-                  {% if user.userprofile.nightmode %}
-                  <li><img src="{% static 'gif_nightmode_c.png' %}" /></li>
-                  {% else %}
-                  <li><img src="{% static 'gif_c.png' %}" /></li>
-                  {% endif %}
-                {% endif %}
-              </ul>
+              {% if comment.image|isgif %}
+                <span>GIF</span>
+              {% endif %}
             </div>
             {% endif %}
           </div>

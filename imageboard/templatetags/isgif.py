@@ -4,13 +4,13 @@ from os.path import exists
 
 register = template.Library()
 
-@register.filter
+@register.filter(name="isgif")
 def isgif(image):
     """
     Django template to check if image is an animated gif
 
     Returns:
-        True if the filename ends with .gif and has frames
+        True if the file type is GIF and has frames
         Otherwise returns False
     """
 
@@ -18,10 +18,14 @@ def isgif(image):
         return False
 
     image.open()
-    gif = Image.open(image)
-    try:
-        gif.seek(1)
-    except EOFError:
-        return False
+    image = Image.open(image)
+
+    if image.format == 'GIF':
+        try:
+            image.seek(1)
+        except EOFError:
+            return False
+        else:
+           return True
     else:
-        return True
+        return False

@@ -178,15 +178,13 @@ body {
 	left: 10px;
 	pointer-events: none;
 }
-#content div.imagetype ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-#content div.imagetype li {
-	float: right;
-	width: 30px;
-	height: 12px;
+#content div.imagetype span {
+	background: #FFFFFF;
+	padding: 0 2px 0 0;
+	line-height: normal;
+    font-size: small;
+	vertical-align: top;
+	border-bottom-right-radius: 5px;
 }
 
 
@@ -204,9 +202,6 @@ body {
 }
 #gallery div.gallery_item img {
 	vertical-align: middle;
-}
-#gallery div.gallery_item div.imagetype img {
-	vertical-align: top;
 }
 
 #messages {
