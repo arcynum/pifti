@@ -64,6 +64,7 @@ def emoji_replace(text, autoescape=True):
 
     text = Emoji.shortcode_to_image(text)
     text = Emoji.unicode_to_image(text)
+    text = Emoji.ascii_to_image(text)
 
     return mark_safe(text)
 
