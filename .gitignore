@@ -11,3 +11,4 @@ imageboard/migrations/
 post_comment_data.sql
 settings.py
 __pycache__
+/.idea

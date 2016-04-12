@@ -12,6 +12,30 @@
 	zoom: 1;
 }
 
+*::-webkit-scrollbar {
+	width: 0.8% !important;
+	height: 10px !important;
+	background: #1E1E1E !important;
+	border: 1px solid #232323 !important;
+}
+*::-webkit-scrollbar-button {
+	display: none !important;
+}
+*::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-track {
+	border: 0 !important;
+	box-shadow: none !important;
+}
+*::-webkit-scrollbar-thumb {
+	min-height: 30px; !important;
+	background: #333333;
+	border-radius: 5px;
+}
+*::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-track {
+	background: #1E1E1E !important;
+}
+
 html {
 	background-color: #000000;
 	min-height: 100%;
@@ -99,7 +123,10 @@ input, textarea {
 	background-color: #232323;
 	color: #EEEEEE;
 	text-decoration: none;
-	transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-webkit-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
 }
 #navigation a.active {
 	background-color: #4183C4;
@@ -110,6 +137,9 @@ input, textarea {
 	background-color: #4183C4;
 	color: #FFFFFF;
 	text-decoration: none;
+	-o-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-webkit-transition: all 0.2s ease-out;
 	transition: all 0.2s ease-in-out;
 }
 
@@ -209,6 +239,9 @@ input, textarea {
 	color: #4183C4;
 	text-decoration: none;
 }
+#content a:hover {
+	text-decoration: underline;
+}
 #content a.mobile-top {
 	display: none;
 }
@@ -227,7 +260,7 @@ input, textarea {
 
 #content div.post {
 	box-shadow: 0 0 6px 2px #000000;
-	margin: 0 0 30px 0;
+	margin-bottom: 30px;
 	background-color: #1E1E1E;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
@@ -254,17 +287,11 @@ input, textarea {
 	font-size: 0;
 	white-space: pre-line;
 	display: table-cell;
-	background: url(../black-hatch-texture.png), #1E1E1E;
 	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
 }
 #content div.post div.bump {
 	padding: 10px;
 	word-wrap: break-word;
-	background: -webkit-linear-gradient(right, #1E1E1E 20%, #232323 80%);
-    background: -moz-linear-gradient(right, #1E1E1E 20%, #232323 80%);
-    background: -o-linear-gradient(to right, #1E1E1E 20%, #232323 80%);
-    background: -ms-linear-gradient(to right, #1E1E1E 20%, #232323 80%);
-	background: linear-gradient(to right, #1E1E1E 20%, #232323 80%);
 	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
 	border-left: 1px solid #111111;
 	display: table-cell;
@@ -284,23 +311,42 @@ input, textarea {
 	position: relative;
 	display: table;
 }
+#content div.comment div.image {
+	text-align: left;
+	min-width: 150px;
+	padding: 10px;
+	line-height: 0;
+	font-size: 0;
+	white-space: pre-line;
+	display: table-cell;
+	background: url(../black-hatch-texture.png), #1E1E1E;
+	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
+}
+#content div.comment div.bump {
+	background: -webkit-linear-gradient(right, #1E1E1E 20%, #232323 80%);
+	background: -moz-linear-gradient(right, #1E1E1E 20%, #232323 80%);
+	background: -o-linear-gradient(to right, #1E1E1E 20%, #232323 80%);
+	background: linear-gradient(to right, #1E1E1E 20%, #232323 80%);
+}
 #content div.comment div.comment_information {
 	color: #999999;
 }
 #content div.comments-expand {
 	color: #999999;
-	background: url(../black-diag-texture.png);
+	background: url(../black-hatch-texture.png), #232323;
 	border-top: 1px solid #111111;
 	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
 	padding: 10px 0;
 	text-align: center;
 }
 #content div.comments-expand:hover {
-	background-color: #232323;
 	color: #FFFFFF;
     cursor: pointer;
 	text-decoration: none;
-	transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-webkit-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
 }
 #content div.comments-hidden {
 	display: none;
@@ -330,11 +376,11 @@ input, textarea {
 	pointer-events: none;
 }
 #content div.imagetype span {
-	background: url(../black-hatch-texture.png), #1E1E1E;
+	background: url(../black-diag-texture.png), #1E1E1E;
 	padding: 0 2px 0 0;
     color: #BBBBBB;
 	line-height: normal;
-    font-size: small;
+    font-size: medium;
 	vertical-align: top;
 	border-bottom-right-radius: 5px;
 }
@@ -374,4 +420,8 @@ input, textarea {
 
 div.media_embed {
 	margin-top: 10px;
+}
+.emojione {
+	width: 24px;
+	height: 24px;
 }

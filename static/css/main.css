@@ -184,6 +184,9 @@ body {
 	color: #28A6EB;
 	text-decoration: none;
 }
+#content a:hover {
+	text-decoration: underline;
+}
 #content a.mobile-top {
 	display: none;
 }
@@ -199,7 +202,7 @@ body {
 
 #content div.post {
 	box-shadow: 0 0 6px 2px #BBBBBB;
-	margin: 0 0 30px 0;
+	margin-bottom: 30px;
 	background-color: rgba(255, 255, 255, 0.6);
 }
 #content div.post div.post_content {
@@ -273,7 +276,7 @@ body {
 	background: #FFFFFF;
 	padding: 0 2px 0 0;
 	line-height: normal;
-    font-size: small;
+    font-size: medium;
 	vertical-align: top;
 	border-bottom-right-radius: 5px;
 }
@@ -313,4 +316,8 @@ body {
 
 div.media_embed {
 	margin-top: 10px;
+}
+.emojione {
+	width: 24px;
+	height: 24px;
 }

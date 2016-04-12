@@ -105,8 +105,8 @@ body {
 #content div.post {
 	display: block;
 	box-shadow: 0 0 6px 2px #BBBBBB;
-	margin: 0 0 30px 0;
 	padding: 0;
+	margin-bottom: 30px;
 	background-color: rgba(255, 255, 255, 0.6);
 }
 #content div.post div.post_content {
@@ -182,7 +182,7 @@ body {
 	background: #FFFFFF;
 	padding: 0 2px 0 0;
 	line-height: normal;
-    font-size: small;
+    font-size: medium;
 	vertical-align: top;
 	border-bottom-right-radius: 5px;
 }
@@ -222,4 +222,8 @@ div.media_embed {
 }
 div.media_embed iframe {
 	width: 100%;
+}
+.emojione {
+	width: 24px;
+	height: 24px;
 }

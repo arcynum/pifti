@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n thumbnail staticfiles isgif %}
+{% load i18n thumbnail staticfiles pifti %}
 {% block page_class %}Gallery{% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
     <div class="gallery_item">
       <a target="_blank" href="{{ gallery_item.image.url }}"><img src="{{ gallery_item.image.avatar.url }}" /></a>
       <div class="imagetype">
-        {% if gallery_item.image|isgif %}
+        {% if gallery_item.image|isanimated %}
           <span>GIF</span>
         {% endif %}
       </div>
@@ -24,7 +24,7 @@
       <div class="gallery_item">
         <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
         <div class="imagetype">
-          {% if comment.image|isgif %}
+          {% if comment.image|isanimated %}
             <span>GIF</span>
           {% endif %}
         </div>
@@ -34,6 +34,7 @@
 
   {% endfor %}
   </div>
+  <a class="mobile-top" href="#top">Back to Top</a>
   {% else %}
   <p>No images are available.</p>
   {% endif %}

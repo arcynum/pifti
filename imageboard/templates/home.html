@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n thumbnail staticfiles embed_video_tags isgif %}
+{% load i18n thumbnail staticfiles embed_video_tags pifti %}
 {% block page_class %}Home{% endblock %}
 
 {% block content %}
@@ -13,8 +13,8 @@
           {% if post.image %}
             <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
             <div class="imagetype">
-              {% if post.image|isgif %}
-                <span>GIF</span>
+              {% if post.image|isanimated %}
+                <span>{% imagetype post.image %}</span>
               {% endif %}
             </div>
           {% endif %}
@@ -26,7 +26,7 @@
             <div class="post_information inline">by {{ post.user.username }} on {{ post.created }}</div>
           </div>
           <div class="text">
-            <div>{{ post.body|linebreaksbr|urlize }}</div>
+            <div>{{ post.body|linebreaksbr|urlize|emojize }}</div>
             {% if post.media and post.media != "" %}
               <div class="media_embed">
               {% video post.media 'tiny' %}
@@ -56,8 +56,8 @@
             {% if comment.image %}
             <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
             <div class="imagetype">
-              {% if comment.image|isgif %}
-                <span>GIF</span>
+              {% if comment.image|isanimated %}
+                <span>{% imagetype comment.image %}</span>
               {% endif %}
             </div>
             {% endif %}
