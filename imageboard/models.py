@@ -57,22 +57,24 @@ class Comment(models.Model):
 		Hash image name and update parent post modified
 		"""
 
-		if self.image and not self.id: # New Comment
-			md5 = hashlib.md5()
-			while True:
-				data = self.image.read(128)
-				if not data:
-					break
-				md5.update(data)
-			image_hash = md5.hexdigest()
-			image_extension = self.image.name.split('.')[-1]
-			image_name = image_hash + '.' + image_extension
-			self.image.name = image_name
-
+		if not self.id: # New comment
 			self.post.modified = now()
 			self.post.save()
 
+			if self.image: # Has image
+				md5 = hashlib.md5()
+				while True:
+					data = self.image.read(128)
+					if not data:
+						break
+					md5.update(data)
+				image_hash = md5.hexdigest()
+				image_extension = self.image.name.split('.')[-1]
+				image_name = image_hash + '.' + image_extension
+				self.image.name = image_name
+
 		super(Comment, self).save(*args, **kwargs)
+
 
 	def delete(self, *args, **kwargs):
 		"""

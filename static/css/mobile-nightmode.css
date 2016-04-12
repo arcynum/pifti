@@ -251,6 +251,8 @@ div.media_embed iframe {
 	width: 100%;
 }
 .emojione {
-	width: 24px;
-	height: 24px;
+	width: 1.5em;
+    height: 1.5em;
+    display: inline-block;
+    margin-bottom: -0.25em;
 }
