@@ -5,6 +5,9 @@ class PostForm(forms.ModelForm):
 	class Meta:
 		model = Post
 		fields = ['title', 'media', 'image', 'body']
+		help_texts = {
+			'media': 'Youtube, Vimeo, and Soundcloud.'
+		}
 
 class PostEditForm(forms.ModelForm):
 	class Meta:
@@ -15,6 +18,9 @@ class CommentForm(forms.ModelForm):
 	class Meta:
 		model = Comment
 		fields = ['image', 'media', 'body']
+		help_texts = {
+			'media': 'Youtube, Vimeo, and Soundcloud.'
+		}
 
 class CommentEditForm(forms.ModelForm):
 	class Meta:

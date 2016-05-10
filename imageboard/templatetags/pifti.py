@@ -53,6 +53,7 @@ def emoji_replace(text, autoescape=True):
 
     Args:
         text: A string to be matched for shortcode and unicode emojis
+        autoescape: Optional argument for autoescaping of input string before processing
 
     Returns:
         Safe text
@@ -62,9 +63,8 @@ def emoji_replace(text, autoescape=True):
     if autoescape:
         text = escape(text)
 
-    text = Emoji.shortcode_to_image(text)
     text = Emoji.unicode_to_image(text)
-    #text = Emoji.ascii_to_image(text)
+    text = Emoji.shortcode_to_image(text)
 
     return mark_safe(text)
 

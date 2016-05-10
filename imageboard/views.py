@@ -2,11 +2,14 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render, redirect
 from imageboard.forms import PostForm, PostEditForm, CommentForm, CommentEditForm, ProfileEditForm
 from imageboard.models import Post, Comment, UserProfile
+
 from math import ceil
 from itertools import chain
 from operator import attrgetter
@@ -28,7 +31,6 @@ def index(request):
 		post_list_paginated = paginator.page(paginator.num_pages)
 
 	extras = _generateExtraPagination(paginator, post_list_paginated)
-	activity = _getActivity(request)
 
 	return render(request, 'home.html', {
 		'pagination_list': post_list_paginated,
@@ -36,7 +38,7 @@ def index(request):
 		'previous_previous_page_number': extras['previous_previous_page_number'],
 		'next_next_page_number_exists': extras['next_next_page_number_exists'],
 		'next_next_page_number': extras['next_next_page_number'],
-		'latest_activity': activity
+		'latest_activity': _getActivity(request)
 	})
 
 @login_required
@@ -47,7 +49,11 @@ def add_post(request):
 			post = form.save(commit=False)
 			post.user = request.user
 			post.save()
+
+			_deleteActivity()  # Clear latest activity cache
+
 			messages.success(request, 'Post Successful.')
+
 			return redirect('imageboard:index')
 	else:
 		form = PostForm()
@@ -61,16 +67,17 @@ def edit_post(request, post_id):
 	if request.user.is_superuser is False:
 		if request.user != p.user:
 			messages.info(request, 'You do not own this object.')
-			return redirect('imageboard:index')
+			return redirect('imageboard:index', page=1)
 
 	if request.method == 'POST':
 		form = PostEditForm(request.POST, instance = p)
 		form.save()
 		messages.success(request, 'Post Successfully Edited.')
 
-		return redirect(reverse('imageboard:index')
-						+ '?page=' + str(_getPostPage(post_id, request.user.id))
-						+ '#' + post_id)
+		return redirect(reverse('imageboard:index') +
+						'?page=' +
+						str(_getPostPage(post_id, request.user.userprofile.pagination)) +
+						'#' + post_id)
 
 	else:
 		form = PostEditForm(instance = p)
@@ -87,6 +94,11 @@ def delete_post(request, post_id):
 			return redirect('imageboard:index')
 
 	p.delete()
+
+	# Delete media template cache fragment and clear latest activity cache
+	cache.delete(make_template_fragment_key('post_media', [post_id]))
+	_deleteActivity()
+
 	messages.success(request, 'Post Successfully Deleted.')
 
 	return redirect('imageboard:index')
@@ -101,11 +113,15 @@ def add_comment(request, post_id):
 			comment.post = post
 			comment.user = request.user
 			comment.save()
+
+			_deleteActivity()  # Clear latest activity cache
+
 			messages.success(request, 'Comment Successful.')
 
-			return redirect(reverse('imageboard:index')
-						+ '?page=' + str(_getPostPage(post_id, request.user.id))
-						+ '#' + post_id)
+			return redirect(reverse('imageboard:index') +
+							'?page=' +
+							str(_getPostPage(post_id, request.user.userprofile.pagination)) +
+							'#' + post_id)
 	else:
 		form = CommentForm()
 
@@ -125,9 +141,10 @@ def edit_comment(request, post_id, comment_id):
 		form.save()
 		messages.success(request, 'Comment Successfully Edited.')
 
-		return redirect(reverse('imageboard:index')
-						+ '?page=' + str(_getPostPage(post_id, request.user.id))
-						+ '#' + post_id)
+		return redirect(reverse('imageboard:index') +
+						'?page=' +
+						str(_getPostPage(post_id, request.user.userprofile.pagination)) +
+						'#' + post_id)
 
 	else:
 		form = PostEditForm(instance = c)
@@ -142,13 +159,19 @@ def delete_comment(request, post_id, comment_id):
 		if request.user != c.user:
 			messages.info(request, 'You do not own this object.')
 			return redirect('imageboard:index')
-	
+
 	c.delete()
+
+	# Delete media template cache fragment and clear latest activity cache
+	cache.delete(make_template_fragment_key('comment_media', [comment_id]))
+	_deleteActivity()
+
 	messages.success(request, 'Comment Successfully Deleted.')
 
-	return redirect(reverse('imageboard:index')
-						+ '?page=' + str(_getPostPage(post_id, request.user.id))
-						+ '#' + post_id)
+	return redirect(reverse('imageboard:index') +
+					'?page=' +
+					str(_getPostPage(post_id, request.user.userprofile.pagination)) +
+					'#' + post_id)
 
 @login_required
 def gallery(request):
@@ -210,6 +233,7 @@ def logout_view(request):
 	logout(request)
 	return redirect('imageboard:index')
 
+
 def _generateExtraPagination(paginator, page_list):
 	# Adjusting the paginator rendering results for quicker paging.
 	extras = {}
@@ -229,10 +253,55 @@ def _generateExtraPagination(paginator, page_list):
 
 	return extras
 
-def _getActivity(request):
-	""" Retrieve the activity list
+def _generateActivity():
+	"""	Generates and caches the lastest activity lists
 
-	List length is defined by the users activity_count
+	For a list of pagination options defined in the UserProfile model class
+	the latest activity is generated and cached.
+
+	Returns:
+	    None
+	"""
+
+	# Find maximum activity list length
+	ACTIVITY_MAX = max(UserProfile.ACTIVITY_CHOICES)[0] # [int, str]
+
+	# Retrieve the latest posts and comments
+	latest_posts = Post.objects.all().order_by('-id')[:ACTIVITY_MAX]
+	latest_comments = Comment.objects.all().order_by('-id')[:ACTIVITY_MAX]
+
+	# Sort both lists together, via latest date
+	activity = sorted(chain(latest_posts, latest_comments),
+					  key=attrgetter('created'), reverse=True)[:ACTIVITY_MAX]
+
+	# For each pagination option create a latest activity list
+	for p in UserProfile.PAGINATION_CHOICES: # [int, str]
+		activity_key = 'activity_' + p[1]
+
+		# Find and set the post page for each activity item
+		for a in activity:
+			if hasattr(a, 'post_id'):  # Use parent post_id for comments
+				post = a.post_id
+			else:  # Otherwise use the posts id
+				post = a.id
+
+			# Set post page number for activity item
+			a.post_page = _getPostPage(post, p[0])
+
+		cache.set(activity_key, activity)  # Cache latest activity
+
+def _deleteActivity():
+	"""	Clear the latest activity lists from cache
+
+	Returns:
+	    None
+	"""
+
+	for p in UserProfile.PAGINATION_CHOICES:
+		cache.delete('activity_' + p[1])
+
+def _getActivity(request):
+	""" Retrieve the latest activity list
 
 	Args:
 	    request: sender request
@@ -241,37 +310,26 @@ def _getActivity(request):
 	    A list of the latest posts and comments
 	"""
 
-	activity_count = UserProfile.objects.get(id=request.user.id).activity
+	# Find appropriate cached activity list
+	activity_key = 'activity_' + str(request.user.userprofile.pagination)
+	activity = cache.get(activity_key)
 
-	# Retrieve the latest posts and comments
-	latest_posts = Post.objects.all().order_by('-id')[:activity_count]
-	latest_comments = Comment.objects.all().order_by('-id')[:activity_count]
+	if activity is None:
+		_generateActivity()
+	activity = cache.get(activity_key)
 
-	# Sort both lists together, via latest date
-	activity = sorted(chain(latest_posts, latest_comments), key=attrgetter('created'), reverse=True)[:activity_count]
+	return activity[:request.user.userprofile.activity]
 
-	# Find the post page for each activity item
-	for a in activity:
-		if hasattr(a, 'post_id'): # Use parent post_id for comment
-			post = a.post_id
-		else: # Else use posts id
-			post = a.id
-
-		# Add post page number to activity item
-		a.post_page = _getPostPage(post, request.user.id)
-
-	return activity
-
-def _getPostPage(post_id, user_id):
-	""" Retrieve the page number for a post
+def _getPostPage(post_id, pagination):
+	""" Find the page number for a specific post
 
 	Args:
-	    post_id: integer number of the post ID
-	    user_id: integer number of the user ID
+	    post_id: integer representing the internal post ID
+	    pagination: integer representing the user's post count profile option
 
 	Returns:
-	    An integer representing the page number for a given post
+	    An integer representing the page number for a given post and pagination
 	"""
 
 	post_list = Post.objects.filter(modified__gte=Post.objects.get(id=post_id).modified)
-	return ceil(post_list.count() / UserProfile.objects.get(id=user_id).pagination)
+	return ceil(post_list.count() / pagination)

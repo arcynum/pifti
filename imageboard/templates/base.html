@@ -98,7 +98,7 @@
                     </ul>
                 {% endif %}
 
-                {% if latest_activity %}
+                {% if latest_activity and user.userprofile.activity > 0 %}
                     <h2>Latest Activity</h2>
                     <ul class="activity clearfix">
                     {% for i in latest_activity %}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43 43">
+	<defs>
+		<linearGradient id="sc_play_gradient" x1="0%" y1="0%" x2="0%" y2="100%" spreadMethod="pad">
+			<stop offset="0%" stop-color=" #ff5500 " stop-opacity="1"></stop>
+			<stop offset="100%" stop-color=" #ff2200 " stop-opacity="1"></stop>
+		</linearGradient>
+	</defs>
+	<circle fill="url(#sc_play_gradient)" stroke=" #cc4400 " cx="21.5" cy="21.5" r="21"></circle>
+	<path class="sc_play_arrow" fill="#fff" d="M31,21.5L17,33l2.5-11.5L17,10L31,21.5z"></path>
+</svg>

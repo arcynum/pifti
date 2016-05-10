@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n thumbnail staticfiles embed_video_tags pifti %}
 {% block page_class %}Home{% endblock %}
+{% load cache %}
 
 {% block content %}
 <h1>i'm from the internet.</h1>
@@ -28,9 +29,19 @@
           <div class="text">
             <div>{{ post.body|linebreaksbr|urlize|emojize }}</div>
             {% if post.media and post.media != "" %}
-              <div class="media_embed">
-              {% video post.media 'tiny' %}
-              </div>
+            {% cache 604800 post_media post.id %}
+              {% video post.media 'tiny' is_secure=True as v %}
+                <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" style="height: {{ v.height }}px;">
+                  <div class="media_cover" style="background-image: url({{ v.thumbnail }})">
+                    <div class="media_meta">
+                      <div class="play_button {{ v.backend }}"></div>
+                      <span class="media_author">{{ v.username }}</span><br/>
+                      <span class="media_title">{{ v.title }}</span>
+                    </div>
+                  </div>
+                </div>
+              {% endvideo %}
+            {% endcache %}
             {% endif %}
           </div>
         </div>
@@ -69,9 +80,19 @@
             <div class="text">
               <div>{{ comment.body|linebreaksbr|urlize|emojize }}</div>
               {% if comment.media and comment.media != "" %}
-                <div class="media_embed">
-                {% video comment.media 'tiny' %}
-                </div>
+              {% cache 604800 comment_media comment.id %}
+                {% video comment.media 'tiny' is_secure=True as v %}
+                  <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" style="height: {{ v.height }}px;">
+                    <div class="media_cover" style="background-image: url({{ v.thumbnail }})">
+                      <div class="media_meta">
+                        <div class="play_button {{ v.backend }}"></div>
+                        <span class="media_author">{{ v.username }}</span><br/>
+                        <span class="media_title">{{ v.title }}</span>
+                      </div>
+                    </div>
+                  </div>
+                {% endvideo %}
+              {% endcache %}
               {% endif %}
             </div>
           </div>

@@ -123,9 +123,9 @@ input, textarea {
 	background-color: #232323;
 	color: #EEEEEE;
 	text-decoration: none;
-	-o-transition: all 0.2s ease-out;
-	-moz-transition: all 0.2s ease-out;
 	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-o-transition: all 0.2s ease-out;
 	transition: all 0.2s ease-out;
 }
 #navigation a.active {
@@ -137,9 +137,9 @@ input, textarea {
 	background-color: #4183C4;
 	color: #FFFFFF;
 	text-decoration: none;
-	-o-transition: all 0.2s ease-out;
-	-moz-transition: all 0.2s ease-out;
 	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-o-transition: all 0.2s ease-out;
 	transition: all 0.2s ease-in-out;
 }
 
@@ -207,16 +207,17 @@ input, textarea {
 }
 #menu ul.activity li span.history {
 	display: block;
-	padding: 14px 10px 10px 10px;
+	padding: 4px 10px 2px 10px;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
+	line-height: normal;
 }
 #menu ul.activity li span.delta {
-	color: #999999;
+	color: #888888;
 	display: block;
-	padding: 10px 10px 14px 10px;
-	line-height: 0;
+	padding: 2px 10px 4px 10px;
+	line-height: normal;
 	font-size: small;
 	text-transform: capitalize;
 	text-overflow: ellipsis;
@@ -343,9 +344,9 @@ input, textarea {
 	color: #FFFFFF;
     cursor: pointer;
 	text-decoration: none;
-	-o-transition: all 0.2s ease-out;
-	-moz-transition: all 0.2s ease-out;
 	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-o-transition: all 0.2s ease-out;
 	transition: all 0.2s ease-out;
 }
 #content div.comments-hidden {
@@ -354,8 +355,11 @@ input, textarea {
 
 #content div.actions {
 	position: absolute;
-	bottom: 10px;
-	right: 10px;
+	bottom: 5px;
+	right: 5px;
+	background: #232323;
+	padding: 5px;
+	border-radius: 5px;
 }
 #content div.actions ul {
 	margin: 0;
@@ -368,6 +372,9 @@ input, textarea {
 	width: 16px;
 	height: 16px;
 }
+#content div.actions li:first-of-type {
+	margin: 0;
+}
 
 #content div.imagetype {
 	position: absolute;
@@ -376,13 +383,16 @@ input, textarea {
 	pointer-events: none;
 }
 #content div.imagetype span {
-	background: url(../black-diag-texture.png), #1E1E1E;
-	padding: 0 2px 0 0;
+	background: #232323;
+	padding: 0 4px 0 0;
     color: #BBBBBB;
 	line-height: normal;
-    font-size: medium;
 	vertical-align: top;
 	border-bottom-right-radius: 5px;
+	font: 16px 'RobotoBold', Arial, sans-serif;
+}
+#content div.comment div.imagetype span {
+	background: url(../black-hatch-texture.png), #1E1E1E;
 }
 
 
@@ -400,6 +410,9 @@ input, textarea {
 }
 #gallery div.gallery_item img {
 	vertical-align: middle;
+}
+#content div.gallery_item div.imagetype span {
+	background: url(../black-hatch-texture.png), #1E1E1E;
 }
 
 
@@ -420,7 +433,131 @@ input, textarea {
 
 div.media_embed {
 	margin-top: 10px;
+	width: 420px;
+	max-width: 420px;
+	max-height: 315px;
+	position: relative;
+	background-color: #000000;
+	-webkit-transition: all 0.5s ease-in;
+    -moz-transition: all 0.5s ease-in;
+    -o-transition: all 0.5s ease-in;
+    transition: all 0.5s ease-in;
 }
+div.media_embed iframe {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+div.twentyone_nine:after {
+  padding-top: 42.85%; /* 21:9 ratio */
+  display: block;
+  content: '';
+}
+div.sixteen_nine:after {
+  padding-top: 56.25%; /* 16:9 ratio */
+  display: block;
+  content: '';
+}
+div.four_three:after {
+  padding-top: 75%; /* 4:3 ratio */
+  display: block;
+  content: '';
+}
+
+div.media_cover {
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: 50% 50%;
+	cursor: pointer;
+}
+div.media_meta {
+	padding: 10px;
+}
+span.media_author,
+span.media_title {
+	color: #CCCCCC;
+	font-size: 12px;
+	font-weight: 100;
+	line-height: 16px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-shadow: none;
+	word-break: normal;
+	background: rgba(0, 0, 0, 0.8);
+	padding: 3px 6px;
+	display: inline-block;
+	max-width: calc(100% - 10px);
+}
+
+div.play_button {
+	position: absolute;
+	top: 50%;
+	right: 50%;
+	cursor: pointer;
+}
+div.play_button.YoutubeBackend {
+	top: calc(50% - 15px);
+	right: calc(50% - 21px);
+	width: 42px;
+	height: 30px;
+	background: url("../youtube_play.svg") center no-repeat;
+	background-size: 42px;
+}
+div.media_cover:hover div.play_button.YoutubeBackend {
+	background: url("../youtube_play_hover.svg") center no-repeat;
+	background-size: 42px;
+}
+div.play_button.VimeoBackend {
+	top: calc(50% - 20px);
+	right: calc(50% - 32px);
+	width: 65px;
+	height: 40px;
+	border-radius: 5px;
+	background: url("../vimeo_play.svg") center no-repeat, rgba(23, 35, 34, 0.75);
+	background-size: 20px;
+}
+div.media_cover:hover div.play_button.VimeoBackend {
+	background: url("../vimeo_play.svg") center no-repeat, rgba(0, 173, 239, 1);
+	background-size: 20px;
+}
+div.play_button.SoundCloudBackend {
+	position: static;
+	margin: 4px 10px 0 0;
+	float: left;
+	width: 43px;
+	height: 43px;
+	background: url("../soundcloud_play.svg") center no-repeat;
+	background-size: 43px;
+}
+div.media_cover:hover div.play_button.SoundCloudBackend {
+	background: url("../soundcloud_play_hover.svg") center no-repeat;
+	background-size: 43px;
+}
+
+div.media_expand {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: -31px;
+    background: #232323;
+    top: -5px;
+    padding: 5px;
+    border-radius: 5px;
+	cursor: pointer;
+}
+div.expand {
+	background: url("../fullscreen.svg") center no-repeat, #232323;
+	background-size: 16px;
+}
+div.shrink {
+	background: url("../fullscreen_exit.svg") center no-repeat, #232323;
+	background-size: 16px;
+}
+
 .emojione {
 	width: 1.5em;
     height: 1.5em;
