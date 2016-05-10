@@ -143,3 +143,9 @@ THUMBNAIL_ALIASES = {
     },
 }
 
+# Embed Video Settings
+EMBED_VIDEO_BACKENDS = (
+    'imageboard.backends.YoutubeBackend',
+    'imageboard.backends.VimeoBackend',
+    'imageboard.backends.SoundCloudBackend'
+)
