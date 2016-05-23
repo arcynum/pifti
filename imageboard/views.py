@@ -95,8 +95,9 @@ def delete_post(request, post_id):
 
 	p.delete()
 
-	# Delete media template cache fragment and clear latest activity cache
+	# Delete template cache fragments and clear latest activity cache
 	cache.delete(make_template_fragment_key('post_media', [post_id]))
+	cache.delete(make_template_fragment_key('post_imagetype', [post_id]))
 	_deleteActivity()
 
 	messages.success(request, 'Post Successfully Deleted.')
@@ -162,8 +163,9 @@ def delete_comment(request, post_id, comment_id):
 
 	c.delete()
 
-	# Delete media template cache fragment and clear latest activity cache
+	# Delete template cache fragments and clear latest activity cache
 	cache.delete(make_template_fragment_key('comment_media', [comment_id]))
+	cache.delete(make_template_fragment_key('comment_imagetype', [comment_id]))
 	_deleteActivity()
 
 	messages.success(request, 'Comment Successfully Deleted.')
@@ -274,7 +276,7 @@ def _generateActivity():
 	activity = sorted(chain(latest_posts, latest_comments),
 					  key=attrgetter('created'), reverse=True)[:ACTIVITY_MAX]
 
-	# For each pagination option create a latest activity list
+	# For each pagination option annotate the latest activity list
 	for p in UserProfile.PAGINATION_CHOICES: # [int, str]
 		activity_key = 'activity_' + p[1]
 
@@ -314,10 +316,11 @@ def _getActivity(request):
 	activity_key = 'activity_' + str(request.user.userprofile.pagination)
 	activity = cache.get(activity_key)
 
+	# Generate cache if not set or expired
 	if activity is None:
 		_generateActivity()
-	activity = cache.get(activity_key)
 
+	activity = cache.get(activity_key)
 	return activity[:request.user.userprofile.activity]
 
 def _getPostPage(post_id, pagination):

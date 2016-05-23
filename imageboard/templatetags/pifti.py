@@ -2,9 +2,9 @@ from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe, SafeData
 from django.utils.html import escape
-from PIL import Image
 from emojipy import Emoji
 from os.path import exists
+import imageio
 
 register = template.Library()
 
@@ -27,21 +27,34 @@ def is_animated(image):
 
         {% if model.image|isanimated %}
     """
-
+    # Ensure file exists
     if not exists(image.path):
         return False
 
+    # Open ThumbnailerExtField for reading
     image.open()
-    image = Image.open(image)
 
-    if image.format == 'GIF':
-        try:
-            image.seek(1)
-        except EOFError:
-            return False
+    # Formats for animated images/videos
+    animated_formats = {
+        'GIF': 'GIF',
+        'FFMPEG': 'VIDEO',
+    }
+
+    try:
+        image = imageio.get_reader(image.path)
+        if image.format.name in animated_formats.keys():
+            # Check if GIF has multiple frames
+            if image.format.name == 'GIF':
+                try:
+                    image.get_data(1)
+                except ValueError:
+                    # GIF only has one frame
+                    return False
+            return True
         else:
-           return True
-    else:
+            return False
+    except ValueError:
+        # No reader or format, fail silently
         return False
 
 @register.filter(name='emojize', is_safe=True, needs_autoescape=True)
@@ -58,7 +71,7 @@ def emoji_replace(text, autoescape=True):
     Returns:
         Safe text
     """
-
+    # Escape text if it is not safe
     autoescape = autoescape and not isinstance(text, SafeData)
     if autoescape:
         text = escape(text)
@@ -87,11 +100,25 @@ def image_type_tag(image):
 
         {% imagetype model.image %}
     """
-
+    # Ensure file exists
     if not exists(image.path):
         return ''
 
+    # Open ThumbnailerExtField for reading
     image.open()
-    image = Image.open(image)
 
-    return image.format
+    formats = {
+        'JPEG': 'JPG',
+        'PNG': 'PNG',
+        'GIF': 'GIF',
+        'ICO': 'ICO',
+        'FFMPEG': 'VIDEO',
+    }
+
+    try:
+        image = imageio.get_reader(image.path)
+        if image.format.name in formats.keys():
+            return formats[image.format.name]
+    except ValueError:
+        # No reader or format, fail silently
+        return ''

@@ -19,11 +19,11 @@ jQuery(document).ready(function($) {
         })
     });
     
-    // Attach on events to each media embed
+    // Attach events to each thumbnail cover
     $("div.media_embed").each(function () {
         var $embed = $(this).data("embed");
         var $id = $(this).data("id");
-        var $width = $(this).width();
+        var $width = $(this).css("width");
         var $height = $(this).height();
         var $expand = true;
         var $url = "";
@@ -60,7 +60,7 @@ jQuery(document).ready(function($) {
 
 // Build video embed DOM
 function generateEmbed(width, height, url, expand) {
-    var $aspect_ratio = height / width;
+    var $aspect_ratio = height / 420;
     var $max_width = 1280;
     var $max_height = 720;
     var $container = $(document.createElement("div"));
@@ -70,7 +70,7 @@ function generateEmbed(width, height, url, expand) {
     if ($aspect_ratio >= 0.74) {
         $max_width = 960;
         $container.addClass("four_three"); // 4:3
-    } else if ($aspect_ratio >= 0.56) {
+    } else if ($aspect_ratio >= 0.55) {
         $container.addClass("sixteen_nine"); // 16:9
     } else {
         $max_width = 1680;
@@ -106,7 +106,7 @@ function generateEmbed(width, height, url, expand) {
                 $toggle = true;
             } else {
                 $(this).addClass("expand").removeClass("shrink");
-                $(this).parent().css("width", width + "px");
+                $(this).parent().css("width", width);
                 $(this).parent().css("max-width", width + "px");
                 $(this).parent().css("max-height", height + "px");
                 $toggle = false;

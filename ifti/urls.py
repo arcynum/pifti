@@ -18,6 +18,9 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from imageio import formats
+from imageio.plugins.ffmpeg import FfmpegFormat
+from imageio.plugins.avbin import AvBinFormat
 
 urlpatterns = [
     url(r'', include('imageboard.urls')),
@@ -26,6 +29,14 @@ urlpatterns = [
 
 if settings.DEBUG:
 	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# TODO: Clean up
+# Register imageio formats
+avbin = AvBinFormat('avbin', 'Many video formats (via avbin)', '', 'I')
+formats.add_format(avbin, overwrite=True)
+ffmpeg = FfmpegFormat('ffmpeg', 'Many video formats and cameras (via ffmpeg)',
+                      'mp4 webm', 'I')
+formats.add_format(ffmpeg, overwrite=True)
 
 
 # The additional section with the static method needs to be removed in production.

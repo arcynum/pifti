@@ -238,7 +238,7 @@ div.media_embed iframe {
 	left: 0;
 }
 div.twentyone_nine:after {
-  padding-top: 42.85%; /* 21:9 ratio */
+  padding-top: 41.87%; /* 21:9 ratio */
   display: block;
   content: '';
 }

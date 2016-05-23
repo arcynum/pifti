@@ -10,6 +10,9 @@ class YoutubeBackend(backends.YoutubeBackend):
     """
     Extends YoutubeBackend functionality for external embed_video library
     """
+    EMBED_WIDTH_MAX = 420
+    EMBED_HEIGHT_MAX = 315
+
     base_url = '{protocol}://www.youtube.com/oembed'
 
     @cached_property
@@ -54,7 +57,8 @@ class YoutubeBackend(backends.YoutubeBackend):
     def get_info(self):
         params = {
             'url': self._url,
-            'maxwidth': 420, # DO NOT SHIP
+            'maxwidth': self.EMBED_WIDTH_MAX,
+            'maxheight': self.EMBED_HEIGHT_MAX,
             'format': 'json'
         }
         r = requests.get(self.base_url.format(protocol=self.protocol),
@@ -73,6 +77,9 @@ class VimeoBackend(backends.VimeoBackend):
     """
     Extends VimeoBackend functionality for external embed_video library
     """
+    EMBED_WIDTH_MAX = 420
+    EMBED_HEIGHT_MAX = 315
+
     re_thumbnail_code = re.compile(
         r'/(?P<code>[0-9]+)_',
         re.I | re.X
@@ -130,7 +137,8 @@ class VimeoBackend(backends.VimeoBackend):
     def get_info(self):
         params = {
             'url': self._url,
-            'maxwidth': 420 # DO NOT SHIP
+            'maxwidth': self.EMBED_WIDTH_MAX,
+            'maxheight': self.EMBED_WIDTH_MAX
         }
         r = requests.get(self.base_url.format(protocol=self.protocol),
                          params=params,
@@ -169,6 +177,10 @@ class SoundCloudBackend(backends.SoundCloudBackend):
     """
     Extends SoundCloudBackend functionality for external embed_video library
     """
+    EMBED_WIDTH_MAX = 420
+    EMBED_HEIGHT_MAX = 176
+
+    base_url = '{protocol}://soundcloud.com/oembed'
 
     @cached_property
     def info(self):
@@ -198,11 +210,12 @@ class SoundCloudBackend(backends.SoundCloudBackend):
     def get_info(self):
         params = {
             'url': self._url,
-            'maxwidth': 420, # DO NOT SHIP
-            'maxheight': 180, # DO NOT SHIP
+            'maxwidth': self.EMBED_WIDTH_MAX,
+            'maxheight': self.EMBED_HEIGHT_MAX,
             'format': 'json'
         }
-        r = requests.get(self.base_url, params=params,
+        r = requests.get(self.base_url.format(protocol=self.protocol),
+                         params=params,
                          timeout=backends.EMBED_VIDEO_TIMEOUT)
 
         if r.status_code != 200:

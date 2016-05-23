@@ -3,8 +3,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-from easy_thumbnails.fields import ThumbnailerImageField
 from embed_video.fields import EmbedVideoField
+from imageboard.fields import ThumbnailerExtField
 from imageboard.storage import MediaFileStorage
 import hashlib
 
@@ -12,7 +12,7 @@ import hashlib
 class Post(models.Model):
 	user = models.ForeignKey(User)
 	title = models.CharField(max_length=200)
-	image = ThumbnailerImageField(storage=MediaFileStorage(), blank=False)
+	image = ThumbnailerExtField(storage=MediaFileStorage(), blank=False)
 	media = EmbedVideoField(blank=True, null=True)
 	body = models.TextField()
 	created = models.DateTimeField(auto_now_add=True)
@@ -44,7 +44,7 @@ class Post(models.Model):
 class Comment(models.Model):
 	user = models.ForeignKey(User)
 	post = models.ForeignKey(Post, on_delete=models.CASCADE)
-	image = ThumbnailerImageField(storage=MediaFileStorage(), blank=True)
+	image = ThumbnailerExtField(storage=MediaFileStorage(), blank=True)
 	media = EmbedVideoField(blank=True, null=True)
 	body = models.TextField()
 	created = models.DateTimeField(auto_now_add=True)

@@ -4,3 +4,5 @@ django-embed-video==1.1.0
 easy-thumbnails==2.3
 six==1.10.0
 emojipy==0.1.1
+numpy==1.11.0
+imageio==1.5

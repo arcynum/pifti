@@ -1,37 +1,39 @@
 {% extends "base.html" %}
 {% load i18n thumbnail staticfiles pifti %}
 {% block page_class %}Gallery{% endblock %}
+{% load cache %}
 
 {% block content %}
 <h1>i'm from the internet.</h1>
   {% if pagination_list %}
   <div id="gallery" class="clearfix">
-  {% for gallery_item in pagination_list %}
-
-    {% if gallery_item.image %}
+  {% for post in pagination_list %}
+    {% if post.image %}
     <div class="gallery_item">
-      <a target="_blank" href="{{ gallery_item.image.url }}"><img src="{{ gallery_item.image.avatar.url }}" /></a>
+      <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
+      {% cache 86400 post_imagetype post.id %}
+      {% if post.image|isanimated %}
       <div class="imagetype">
-        {% if gallery_item.image|isanimated %}
-          <span>GIF</span>
-        {% endif %}
+          <span>{% imagetype post.image %}</span>
       </div>
+      {% endif %}
+      {% endcache %}
     </div>
     {% endif %}
-
-    {% for comment in gallery_item.comment_set.all %}
+    {% for comment in post.comment_set.all %}
       {% if comment.image %}
       <div class="gallery_item">
         <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
+        {% cache 86400 comment_imagetype comment.id %}
+        {% if comment.image|isanimated %}
         <div class="imagetype">
-          {% if comment.image|isanimated %}
-            <span>GIF</span>
-          {% endif %}
+            <span>{% imagetype comment.image %}</span>
         </div>
+        {% endif %}
+        {% endcache %}
       </div>
       {% endif %}
     {% endfor %}
-
   {% endfor %}
   </div>
   <a class="mobile-top" href="#top">Back to Top</a>

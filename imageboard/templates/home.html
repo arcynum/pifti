@@ -13,11 +13,13 @@
         <div class="image">
           {% if post.image %}
             <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
+            {% cache 86400 post_imagetype post.id %}
+            {% if post.image|isanimated %}
             <div class="imagetype">
-              {% if post.image|isanimated %}
                 <span>{% imagetype post.image %}</span>
-              {% endif %}
             </div>
+            {% endif %}
+            {% endcache %}
           {% endif %}
         </div>
         <div class="bump">
@@ -30,7 +32,7 @@
             <div>{{ post.body|linebreaksbr|urlize|emojize }}</div>
             {% if post.media and post.media != "" %}
             {% cache 604800 post_media post.id %}
-              {% video post.media 'tiny' is_secure=True as v %}
+              {% video post.media 'tiny' is_secure="{{ request.is_secure }}" as v %}
                 <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" style="height: {{ v.height }}px;">
                   <div class="media_cover" style="background-image: url({{ v.thumbnail }})">
                     <div class="media_meta">
@@ -65,12 +67,14 @@
         <div class="comment clearfix">
           <div class="image">
             {% if comment.image %}
-            <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
-            <div class="imagetype">
+              <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
+              {% cache 86400 comment_imagetype comment.id %}
               {% if comment.image|isanimated %}
-                <span>{% imagetype comment.image %}</span>
+              <div class="imagetype">
+                  <span>{% imagetype comment.image %}</span>
+              </div>
               {% endif %}
-            </div>
+              {% endcache %}
             {% endif %}
           </div>
           <div class="bump">
@@ -81,7 +85,7 @@
               <div>{{ comment.body|linebreaksbr|urlize|emojize }}</div>
               {% if comment.media and comment.media != "" %}
               {% cache 604800 comment_media comment.id %}
-                {% video comment.media 'tiny' is_secure=True as v %}
+                {% video comment.media 'tiny' is_secure="{{ request.is_secure }}" as v %}
                   <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" style="height: {{ v.height }}px;">
                     <div class="media_cover" style="background-image: url({{ v.thumbnail }})">
                       <div class="media_meta">
