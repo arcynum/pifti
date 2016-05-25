@@ -450,18 +450,13 @@ div.media_embed iframe {
 	right: 0;
 	left: 0;
 }
-div.twentyone_nine:after {
-  padding-top: 41.87%; /* 21:9 ratio */
-  display: block;
-  content: '';
-}
-div.sixteen_nine:after {
-  padding-top: 56.25%; /* 16:9 ratio */
-  display: block;
-  content: '';
-}
 div.four_three:after {
   padding-top: 75%; /* 4:3 ratio */
+  display: block;
+  content: '';
+}
+div.twentyone_nine:after {
+  padding-top: 41.87%; /* 21:9 ratio */
   display: block;
   content: '';
 }
@@ -496,46 +491,76 @@ span.media_title {
 div.play_button {
 	position: absolute;
 	top: 50%;
-	right: 50%;
+	left: 50%;
 	cursor: pointer;
 }
 div.play_button.YoutubeBackend {
-	top: calc(50% - 15px);
-	right: calc(50% - 21px);
-	width: 42px;
-	height: 30px;
 	background: url("../youtube_play.svg") center no-repeat;
 	background-size: 42px;
+	top: calc(50% - 15px);
+	left: calc(50% - 21px);
+	width: 42px;
+	height: 30px;
 }
 div.media_cover:hover div.play_button.YoutubeBackend {
 	background: url("../youtube_play_hover.svg") center no-repeat;
 	background-size: 42px;
 }
 div.play_button.VimeoBackend {
+	background: url("../vimeo_play.svg") center no-repeat, rgba(23, 35, 34, 0.75);
+	background-size: 20px;
 	top: calc(50% - 20px);
-	right: calc(50% - 32px);
+	left: calc(50% - 32px);
 	width: 65px;
 	height: 40px;
 	border-radius: 5px;
-	background: url("../vimeo_play.svg") center no-repeat, rgba(23, 35, 34, 0.75);
-	background-size: 20px;
 }
 div.media_cover:hover div.play_button.VimeoBackend {
 	background: url("../vimeo_play.svg") center no-repeat, rgba(0, 173, 239, 1);
 	background-size: 20px;
 }
 div.play_button.SoundCloudBackend {
+	background: url("../soundcloud_play.svg") center no-repeat;
+	background-size: 43px;
 	position: static;
-	margin: 4px 10px 0 0;
 	float: left;
 	width: 43px;
 	height: 43px;
-	background: url("../soundcloud_play.svg") center no-repeat;
-	background-size: 43px;
+	margin: 4px 10px 0 0;
 }
 div.media_cover:hover div.play_button.SoundCloudBackend {
 	background: url("../soundcloud_play_hover.svg") center no-repeat;
 	background-size: 43px;
+}
+div.play_button.StreamableBackend {
+	background: url("../streamable_play.png") center no-repeat;
+	top: calc(50% - 24px);
+	left: calc(50% - 38px);
+    width: 76px;
+	height: 48px;
+	opacity: 0.8;
+	-webkit-transition: opacity 40ms ease-in;
+    -moz-transition: opacity 40ms ease-in;
+    -o-transition: opacity 40ms ease-in;
+    transition: opacity 40ms ease-in;
+}
+div.media_cover:hover div.play_button.StreamableBackend {
+	opacity: 1.0;
+}
+div.play_button.GfycatBackend {
+	background: url("../gfycat_play.svg") center no-repeat;
+	top: calc(50% - 25px);
+	left: calc(50% - 25px);
+    width: 50px;
+	height: 50px;
+    opacity: 0.8;
+	-webkit-transition: opacity 40ms ease-in;
+    -moz-transition: opacity 40ms ease-in;
+    -o-transition: opacity 40ms ease-in;
+    transition: opacity 40ms ease-in;
+}
+div.media_cover:hover div.play_button.GfycatBackend{
+	opacity: 1.0;
 }
 
 div.media_expand {

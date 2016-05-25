@@ -1,0 +1,7 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <g id="ic_iframe_play" transform="matrix(0.882353,9.85783e-18,9.85783e-18,0.842105,2.5,2)">
+        <path d="M0.195,18.955C0.325,19.021 0.499,19.021 0.672,18.911L16.718,9.877C16.913,9.768 17,9.658 17,9.505C17,9.351 16.913,9.22 16.718,9.132L0.672,0.098C0.499,-0.012 0.325,-0.033 0.195,0.054C0.066,0.142 0,0.273 0,0.493L0,18.517C0,18.714 0.066,18.867 0.195,18.955Z" style="fill:rgb(13,107,255);"/>
+    </g>
+</svg>

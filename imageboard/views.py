@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.cache import cache
-from django.core.cache.utils import make_template_fragment_key
+from django.core.cache.utils import make_template_fragment_key as tf
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -50,7 +50,8 @@ def add_post(request):
 			post.user = request.user
 			post.save()
 
-			_deleteActivity()  # Clear latest activity cache
+			# Update latest activity cache
+			_generateActivity()
 
 			messages.success(request, 'Post Successful.')
 
@@ -96,9 +97,11 @@ def delete_post(request, post_id):
 	p.delete()
 
 	# Delete template cache fragments and clear latest activity cache
-	cache.delete(make_template_fragment_key('post_media', [post_id]))
-	cache.delete(make_template_fragment_key('post_imagetype', [post_id]))
-	_deleteActivity()
+	cache.delete_many([tf('post_media', [post_id]),
+					   tf('post_imagetype', [post_id])])
+
+	# Update latest activity cache
+	_generateActivity()
 
 	messages.success(request, 'Post Successfully Deleted.')
 
@@ -115,7 +118,8 @@ def add_comment(request, post_id):
 			comment.user = request.user
 			comment.save()
 
-			_deleteActivity()  # Clear latest activity cache
+			# Update latest activity cache
+			_generateActivity()
 
 			messages.success(request, 'Comment Successful.')
 
@@ -164,9 +168,11 @@ def delete_comment(request, post_id, comment_id):
 	c.delete()
 
 	# Delete template cache fragments and clear latest activity cache
-	cache.delete(make_template_fragment_key('comment_media', [comment_id]))
-	cache.delete(make_template_fragment_key('comment_imagetype', [comment_id]))
-	_deleteActivity()
+	cache.delete_many([tf('comment_media', [comment_id]),
+					   tf('comment_imagetype', [comment_id])])
+
+	# Update latest activity cache
+	_generateActivity()
 
 	messages.success(request, 'Comment Successfully Deleted.')
 
@@ -264,7 +270,6 @@ def _generateActivity():
 	Returns:
 	    None
 	"""
-
 	# Find maximum activity list length
 	ACTIVITY_MAX = max(UserProfile.ACTIVITY_CHOICES)[0] # [int, str]
 
@@ -290,7 +295,8 @@ def _generateActivity():
 			# Set post page number for activity item
 			a.post_page = _getPostPage(post, p[0])
 
-		cache.set(activity_key, activity)  # Cache latest activity
+		# Add or update latest activity cache
+		cache.set(activity_key, activity)
 
 def _deleteActivity():
 	"""	Clear the latest activity lists from cache
@@ -318,7 +324,7 @@ def _getActivity(request):
 
 	# Generate cache if not set or expired
 	if activity is None:
-		_generateActivity()
+		_generateActivity()  # Update latest activity cache
 
 	activity = cache.get(activity_key)
 	return activity[:request.user.userprofile.activity]

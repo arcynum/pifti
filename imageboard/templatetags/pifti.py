@@ -14,17 +14,16 @@ register = template.Library()
 @register.filter(name='isanimated')
 def is_animated(image):
     """
-    Checks if the supplied image is an animated gif
+    Checks if the supplied image is an animated gif or video
 
     Args:
-        image: A ThumbnailerImageField instance
+        image: ThumbnailerExtField instance, with a locally hosted image
 
     Returns:
-        True if the file type is GIF and has multiple frames
+        True if the file type is GIF with multiple frames, or is a video
         False otherwise
 
     Sample Usage::
-
         {% if model.image|isanimated %}
     """
     # Ensure file exists
@@ -52,6 +51,7 @@ def is_animated(image):
                     return False
             return True
         else:
+            # Static image format
             return False
     except ValueError:
         # No reader or format, fail silently
@@ -87,17 +87,16 @@ def emoji_replace(text, autoescape=True):
 @register.simple_tag(name='imagetype')
 def image_type_tag(image):
     """
-    Prints the image format extension
+    Prints the image/video format extension
 
     Args:
-        image: A ThumbnailerImageField instance
+        image: ThumbnailerExtField instance, with a locally hosted image
 
     Returns:
-         A string representation of the image file type
-         e.g. PNG, JPEG, GIF
+         A string representation of the image/video file type
+         e.g. PNG, JPEG, GIF, VIDEO
 
     Sample Usage::
-
         {% imagetype model.image %}
     """
     # Ensure file exists
