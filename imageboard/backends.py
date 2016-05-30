@@ -280,7 +280,7 @@ class StreamableBackend(backends.VideoBackend):
     EMBED_HEIGHT_MAX = 315
 
     re_detect = re.compile(
-        r'^((http(s)?:)?//)?(www\.)?streamable\.com/([0-9a-zA-Z]*)$', re.I
+        r'^((http(s)?:)?//)?(www\.)?streamable\.com/([0-9a-zA-Z]*).*', re.I
     )
     re_code = re.compile(r'''streamable\.com/(?P<code>[0-9a-zA-Z]+)''', re.I)
 
@@ -361,7 +361,7 @@ class GfycatBackend(backends.VideoBackend):
     EMBED_HEIGHT_MAX = 315
 
     re_detect = re.compile(
-        r'^((http(s)?:)?//)?(www\.)?gfycat\.com/([a-zA-Z]*)$', re.I
+        r'^((http(s)?:)?//)?(www\.)?gfycat\.com/([a-zA-Z]*).*', re.I
     )
     re_code = re.compile(r'''gfycat\.com/(detail/)?(?P<code>[a-zA-Z]+)''', re.I)
 

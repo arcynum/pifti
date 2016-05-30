@@ -33,6 +33,7 @@ jQuery(document).ready(function($) {
         var $id = $(this).data("id");
         var $width = $(this).css("width");
         var $height = $(this).height();
+        var $player = "iframe";
         var $expand = true;
         var $url = "";
 
@@ -58,7 +59,14 @@ jQuery(document).ready(function($) {
                 break;
             
             case "GfycatBackend":
-                $url = 'https://www.gfycat.com/ifr/' + $id;
+                $player = "video";
+                $url = [
+                    'https://giant.gfycat.com/' + $id + '.webm',
+                    'https://giant.gfycat.com/' + $id + '.mp4',
+                    'https://zippy.gfycat.com/' + $id + '.webm',
+                    'https://zippy.gfycat.com/' + $id + '.mp4'
+                ];
+                //$url = 'https://www.gfycat.com/ifr/' + $id;
                 break;
 
             default:
@@ -69,15 +77,16 @@ jQuery(document).ready(function($) {
 
         // Replace thumbnail cover with IFrame embed
         $(this).click(function () {
-            $(this).replaceWith(generateEmbed($width, $height, $url, $expand));
+            $(this).replaceWith(generateEmbed($width, $height, $url, $expand, $player));
         });
     });
 
     // Build video embed DOM
-    function generateEmbed(width, height, url, expand) {
+    function generateEmbed(width, height, url, expand, player) {
         var $aspect_ratio = height / 420 * 100;
         var $max_width = 1280;
         var $max_height = 720;
+        var $re_webm = /(\.webm)$/;
         var $container = $(document.createElement("div"));
             $container.addClass("media_embed");
 
@@ -97,18 +106,38 @@ jQuery(document).ready(function($) {
             $max_width = Math.ceil($max_height * (100 / $aspect_ratio));
         }
 
-        // Build IFrame
-        var $iframe = $(document.createElement("iframe"));
-            $iframe.attr("height", "100%");
-            $iframe.attr("width", "100%");
-            $iframe.attr("src", url);
-            $iframe.attr("frameborder", "no");
-            $iframe.attr("scrolling", "no");
-            $iframe.attr("webkitallowfullscreen", "");
-            $iframe.attr("mozallowfullscreen", "");
-            $iframe.attr("allowfullscreen", "");
-
-        $container.append($iframe);
+        // Build player
+        if (player === "video") {
+            var $video = $(document.createElement("video"));
+                $video.attr("height", "100%");
+                $video.attr("width", "100%");
+                $video.attr("preload", "none");
+                $video.attr("autoplay", "");
+                $video.attr("controls", "");
+                $video.attr("loop", "");
+            url.forEach(function generateSource(source) {
+                var $source = $(document.createElement("source"));
+                    $source.attr("src", source);
+                if ($re_webm.test(source)) {
+                    $source.attr("type", "video/webm");
+                } else {
+                    $source.attr("type", "video/mp4");
+                }
+                $video.append($source);
+            });
+            $container.append($video);
+        } else {
+            var $iframe = $(document.createElement("iframe"));
+                $iframe.attr("height", "100%");
+                $iframe.attr("width", "100%");
+                $iframe.attr("src", url);
+                $iframe.attr("frameborder", "no");
+                $iframe.attr("scrolling", "no");
+                $iframe.attr("webkitallowfullscreen", "");
+                $iframe.attr("mozallowfullscreen", "");
+                $iframe.attr("allowfullscreen", "");
+            $container.append($iframe);
+        }
 
         // Attach expand button
         if (expand) {
@@ -127,7 +156,7 @@ jQuery(document).ready(function($) {
                 } else {
                     $(this).addClass("expand").removeClass("shrink");
                     $(this).parent().css("width", width);
-                    $(this).parent().css("max-width", width + "px");
+                    $(this).parent().css("max-width", 420 + "px");
                     $(this).parent().css("max-height", height + "px");
                     $toggle = false;
                 }

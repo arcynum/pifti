@@ -443,7 +443,8 @@ div.media_embed {
     -o-transition: all 0.5s ease-in;
     transition: all 0.5s ease-in;
 }
-div.media_embed iframe {
+div.media_embed iframe,
+div.media_embed video {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -584,8 +585,8 @@ div.shrink {
 }
 
 .emojione {
-	width: 1.5em;
-    height: 1.5em;
+	width: 2em;
+    height: 2em;
     display: inline-block;
-    margin-bottom: -0.25em;
+    margin-bottom: -0.5em;
 }
