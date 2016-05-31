@@ -98,7 +98,8 @@ def delete_post(request, post_id):
 
 	# Delete template cache fragments and clear latest activity cache
 	cache.delete_many([tf('post_media', [post_id]),
-					   tf('post_imagetype', [post_id])])
+					   tf('post_imagetype', [post_id]),
+					   tf('post_link', [post_id, request.user.userprofile.pagination])])
 
 	# Update latest activity cache
 	_generateActivity()
@@ -340,5 +341,5 @@ def _getPostPage(post_id, pagination):
 	    An integer representing the page number for a given post and pagination
 	"""
 
-	post_list = Post.objects.filter(modified__gte=Post.objects.get(id=post_id).modified)
-	return ceil(post_list.count() / pagination)
+	post_count = Post.objects.filter(modified__gte=Post.objects.get(id=post_id).modified).count()
+	return ceil(post_count / pagination)

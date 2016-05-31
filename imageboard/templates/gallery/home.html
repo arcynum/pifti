@@ -14,9 +14,14 @@
       {% cache 86400 post_imagetype post.id %}
       {% if post.image|isanimated %}
       <div class="imagetype">
-          <span>{% imagetype post.image %}</span>
+        <span>{% imagetype post.image %}</span>
       </div>
       {% endif %}
+      {% endcache %}
+      {% cache 86400 post_link post.id user.userprofile.pagination %}
+      <div class="post_link">
+        <a href="{% posturl post.id user.userprofile.pagination %}"><img title="Go to post" src="{% static 'chat_alt_fill.svg' %}" /></a>
+      </div>
       {% endcache %}
     </div>
     {% endif %}
@@ -27,7 +32,7 @@
         {% cache 86400 comment_imagetype comment.id %}
         {% if comment.image|isanimated %}
         <div class="imagetype">
-            <span>{% imagetype comment.image %}</span>
+          <span>{% imagetype comment.image %}</span>
         </div>
         {% endif %}
         {% endcache %}

@@ -1,7 +1,10 @@
 from django import template
+from django.core.urlresolvers import reverse
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe, SafeData
 from django.utils.html import escape
+from imageboard.models import Post
+from math import ceil
 from emojipy import Emoji
 from os.path import exists
 import imageio
@@ -121,3 +124,21 @@ def image_type_tag(image):
     except ValueError:
         # No reader or format, fail silently
         return ''
+
+@register.simple_tag(name='posturl')
+def post_link(post_id, pagination):
+    """ Get the url link to a post
+
+    Args:
+        post_id: integer representing the internal post ID
+        pagination: integer representing a pagination option
+
+    Returns:
+        Url to post page with anchor
+    """
+
+    post_count = Post.objects.filter(modified__gte=Post.objects.get(id=post_id).modified).count()
+    post_page = ceil(post_count / pagination)
+    index = reverse('imageboard:index')
+
+    return index + '?page=' + str(post_page) + '#' + str(post_id)

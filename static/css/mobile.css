@@ -180,7 +180,7 @@ body {
 }
 #content div.imagetype span {
 	background: #FFFFFF;
-	padding: 0 2px 0 0;
+	padding: 0 3px 0 0;
 	line-height: normal;
     font-size: medium;
 	vertical-align: top;
@@ -202,6 +202,19 @@ body {
 }
 #gallery div.gallery_item img {
 	vertical-align: middle;
+}
+#content div.post_link {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	line-height: 0;
+}
+#content div.post_link img {
+	width: 20px;
+	height: 20px;
+	background: #FFFFFF;
+	padding: 5px;
+	border-top-left-radius: 5px;
 }
 
 #messages {

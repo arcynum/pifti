@@ -206,7 +206,7 @@ input, textarea {
 }
 #content div.imagetype span {
 	background: url(../black-hatch-texture.png), #1E1E1E;
-	padding: 0 2px 0 0;
+	padding: 0 3px 0 0;
     color: #BBBBBB;
 	line-height: normal;
     font-size: medium;
@@ -229,6 +229,19 @@ input, textarea {
 }
 #gallery div.gallery_item img {
 	vertical-align: middle;
+}
+#content div.post_link {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	line-height: 0;
+}
+#content div.post_link img {
+	width: 20px;
+	height: 20px;
+	background: #1E1E1E;
+	padding: 5px;
+	border-top-left-radius: 5px;
 }
 
 #messages {
