@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.fields import ThumbnailerField
+from imageboard.util import force_close_reader
 from io import BytesIO
 from tempfile import NamedTemporaryFile
 
@@ -60,6 +61,8 @@ class ThumbnailerExtField(ThumbnailerField):
             file = imageio.get_reader(file)
             # Send data to PIL
             f.image = Image.fromarray(file.get_data(0))
+            # Close the reader
+            force_close_reader(file)
         except ValueError:
             with NamedTemporaryFile(suffix=ext) as n:
                 for chunk in data.chunks():
@@ -82,8 +85,8 @@ class ThumbnailerExtField(ThumbnailerField):
                                           code='invalid_file',
                                           params=params)
                 finally:
-                    # Clean up temporary file
-                    n.close()
+                    # Close the reader
+                    force_close_reader(file)
 
         # Specific formats for: JPEG, PNG, GIF, ICO, and WEBM/MP4
         formats = {

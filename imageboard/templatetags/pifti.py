@@ -4,6 +4,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe, SafeData
 from django.utils.html import escape
 from imageboard.models import Post
+from imageboard.util import force_close_reader
 from math import ceil
 from emojipy import Emoji
 from os.path import exists
@@ -60,8 +61,11 @@ def is_animated(image):
         # No reader or format, fail silently
         return False
     except OSError:
-        # [Errno 12] Cannot allocate memory
+        # Github issue #48
         return False
+    finally:
+        # Close the reader
+        force_close_reader(image)
 
 @register.filter(name='emojize', is_safe=True, needs_autoescape=True)
 @stringfilter
@@ -128,8 +132,11 @@ def image_type_tag(image):
         # No reader or format, fail silently
         return ''
     except OSError:
-        # [Errno 12] Cannot allocate memory
+        # Github issue #48
         return ''
+    finally:
+        # Close the reader
+        force_close_reader(image)
 
 @register.simple_tag(name='posturl')
 def post_link(post_id, pagination):
