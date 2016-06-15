@@ -94,12 +94,15 @@ def delete_post(request, post_id):
 			messages.info(request, 'You do not own this object.')
 			return redirect('imageboard:index')
 
-	p.delete()
-
-	# Delete template cache fragments and clear latest activity cache
+	# Delete template cache fragments for post and children
 	cache.delete_many([tf('post_media', [post_id]),
 					   tf('post_imagetype', [post_id]),
 					   tf('post_link', [post_id, request.user.userprofile.pagination])])
+	for c in Comment.objects.all().filter(post_id=post_id):
+		cache.delete_many([tf('comment_media', [c.id]),
+						   tf('comment_imagetype', [c.id])])
+
+	p.delete()
 
 	# Update latest activity cache
 	_generateActivity()

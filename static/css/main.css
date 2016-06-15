@@ -374,23 +374,24 @@ div.media_cover {
 	cursor: pointer;
 }
 div.media_meta {
-	padding: 10px;
+	margin: 0 10px;
+	max-width: 95%;
+	overflow: hidden;
+	padding: 10px 5px 0 0;
+	text-overflow: ellipsis;
+	text-shadow: none;
+	white-space: nowrap;
+	word-break: normal;
 }
 span.media_author,
 span.media_title {
+	background: rgba(0, 0, 0, 0.8);
 	color: #CCCCCC;
+	display: inline;
 	font-size: 12px;
 	font-weight: 100;
-	line-height: 16px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	text-shadow: none;
-	word-break: normal;
-	background: rgba(0, 0, 0, 0.8);
+	line-height: 22px;
 	padding: 3px 6px;
-	display: inline-block;
-	max-width: calc(100% - 10px);
 }
 
 div.play_button {
@@ -400,12 +401,17 @@ div.play_button {
 	cursor: pointer;
 }
 div.play_button.YoutubeBackend {
-	background: url("../youtube_play.svg") center no-repeat;
-	background-size: 42px;
+	background: url("../youtube_play.svg") center no-repeat,
+				url("../youtube_play_hover.svg") center no-repeat;
+	background-size: 42px, 0;
 	top: calc(50% - 15px);
 	left: calc(50% - 21px);
 	width: 42px;
 	height: 30px;
+	-webkit-transition: background 250ms cubic-bezier(0.0, 0.0, 0.2, 1);
+	-moz-transition: background 250ms cubic-bezier(0.0, 0.0, 0.2, 1);
+	-o-transition: background 250ms cubic-bezier(0.0, 0.0, 0.2, 1);
+	transition: background 250ms cubic-bezier(0.0, 0.0, 0.2, 1);
 }
 div.media_cover:hover div.play_button.YoutubeBackend {
 	background: url("../youtube_play_hover.svg") center no-repeat;
@@ -425,13 +431,14 @@ div.media_cover:hover div.play_button.VimeoBackend {
 	background-size: 20px;
 }
 div.play_button.SoundCloudBackend {
-	background: url("../soundcloud_play.svg") center no-repeat;
-	background-size: 43px;
+	background: url("../soundcloud_play.svg") center no-repeat,
+				url("../soundcloud_play_hover.svg") center no-repeat;
+	background-size: 43px, 0;
 	position: static;
 	float: left;
 	width: 43px;
 	height: 43px;
-	margin: 4px 10px 0 0;
+	margin-right: 10px;
 }
 div.media_cover:hover div.play_button.SoundCloudBackend {
 	background: url("../soundcloud_play_hover.svg") center no-repeat;
@@ -451,6 +458,22 @@ div.play_button.StreamableBackend {
 }
 div.media_cover:hover div.play_button.StreamableBackend {
 	opacity: 1.0;
+}
+div.play_button.DailymotionBackend {
+	background: url("../dailymotion_play.png") 85% 50% no-repeat rgba(21,21,21,0.7);
+	background-size: 70%;
+	border-radius: 3px;
+	top: calc(50% - 24px);
+	left: calc(50% - 24px);
+    width: 48px;
+	height: 48px;
+	-webkit-transition: background-color 300ms ease-in;
+    -moz-transition: background-color 300ms ease-in;
+    -o-transition: background-color 300ms ease-in;
+    transition: background-color 300ms ease-in;
+}
+div.media_cover:hover div.play_button.DailymotionBackend {
+	background-color: #3389ff;
 }
 div.play_button.GfycatBackend {
 	background: url("../gfycat_play.svg") center no-repeat;

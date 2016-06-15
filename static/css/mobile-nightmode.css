@@ -297,23 +297,24 @@ div.media_cover {
 	cursor: pointer;
 }
 div.media_meta {
-	padding: 10px;
+	margin: 0 10px;
+	max-width: 95%;
+	overflow: hidden;
+	padding: 10px 5px 0 0;
+	text-overflow: ellipsis;
+	text-shadow: none;
+	white-space: nowrap;
+	word-break: normal;
 }
 span.media_author,
 span.media_title {
+	background: rgba(0, 0, 0, 0.8);
 	color: #CCCCCC;
+	display: inline;
 	font-size: 12px;
 	font-weight: 100;
-	line-height: 16px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	text-shadow: none;
-	word-break: normal;
-	background: rgba(0, 0, 0, 0.8);
+	line-height: 22px;
 	padding: 3px 6px;
-	display: inline-block;
-	max-width: calc(100% - 10px);
 }
 
 div.play_button {
@@ -345,7 +346,7 @@ div.play_button.SoundCloudBackend {
 	float: left;
 	width: 43px;
 	height: 43px;
-	margin: 4px 10px 0 0;
+	margin-right: 10px;
 }
 div.play_button.StreamableBackend {
 	background: url("../streamable_play.png") center no-repeat;
@@ -354,6 +355,15 @@ div.play_button.StreamableBackend {
     width: 76px;
 	height: 48px;
 	opacity: 1.0;
+}
+div.play_button.DailymotionBackend {
+	background: url("../dailymotion_play.png") 85% 50% no-repeat rgba(21,21,21,0.7);
+	background-size: 70%;
+	border-radius: 3px;
+	top: calc(50% - 24px);
+	left: calc(50% - 24px);
+    width: 48px;
+	height: 48px;
 }
 div.play_button.GfycatBackend {
 	background: url("../gfycat_play.svg") center no-repeat;

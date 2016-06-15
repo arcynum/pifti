@@ -31,6 +31,7 @@ jQuery(document).ready(function($) {
     $("div.media_embed").each(function () {
         var $embed = $(this).data("embed");
         var $id = $(this).data("id");
+        var $start = $(this).data("start");
         var $width = $(this).css("width");
         var $height = $(this).height();
         var $player = "iframe";
@@ -40,22 +41,33 @@ jQuery(document).ready(function($) {
         // Generate sources
         switch ($embed) {
             case "YoutubeBackend":
-                $url = "https://www.youtube.com/embed/" + $id + "?rel=0&autoplay=1";
+                $url = 'https://www.youtube.com/embed/' + $id
+                    + '?rel=0&autoplay=1&start=' + $start;
                 break;
 
             case "VimeoBackend":
-                $url = 'https://player.vimeo.com/video/' + $id + '?autoplay=1';
+                $url = 'https://player.vimeo.com/video/' + $id
+                    + '?autoplay=1';
                 break;
 
             case "SoundCloudBackend":
                 $expand = false;
-                $url = "https://w.soundcloud.com/player/" +
-                    "?url=https://api.soundcloud.com/tracks/" + $id +
-                    "&auto_play=true&hide_related=true&show_user=true&show_reposts=false&visual=true";
+                $url = 'https://w.soundcloud.com/player/'
+                    + '?url=https://api.soundcloud.com/tracks/' + $id
+                    + '&auto_play=true'
+                    + '&hide_related=true&show_user=true'
+                    + '&show_reposts=false&visual=true';
                 break;
 
             case "StreamableBackend":
-                $url = 'https://streamable.com/e/' + $id + '?autoplay=1';
+                $url = 'https://streamable.com/e/' + $id
+                    + '?autoplay=1&hd=1&t=' + $start;
+                break;
+            
+            case "DailymotionBackend":
+                $url = 'https://www.dailymotion.com/embed/video/' + $id
+                    + '?autoplay=true&endscreen-enable=false&quality=380'
+                    + '&sharing-enable=false&start=' + $start;
                 break;
             
             case "GfycatBackend":

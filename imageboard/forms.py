@@ -11,7 +11,7 @@ class PostForm(forms.ModelForm):
 		}
 		help_texts = {
 			'image': 'Images and WEBM/MP4. Limit: 5MB.',
-			'media': 'Youtube, Vimeo, Soundcloud, Streamable, and Gfycat.',
+			'media': 'Youtube, Vimeo, Soundcloud, Streamable, Dailymotion, and Gfycat.',
 		}
 
 
@@ -30,7 +30,7 @@ class CommentForm(forms.ModelForm):
 		}
 		help_texts = {
 			'image': 'Images and WEBM/MP4. Limit: 5MB.',
-			'media': 'Youtube, Vimeo, Soundcloud, Streamable, and Gfycat.',
+			'media': 'Youtube, Vimeo, Soundcloud, Streamable, Dailymotion, and Gfycat.',
 		}
 
 
