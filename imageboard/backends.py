@@ -206,7 +206,9 @@ class VimeoBackend(backends.VimeoBackend):
         Returns:
              String representing the channel name
         """
-        if self.info.get('author_name') is None or '':
+        author = self.info.get('author_name')
+
+        if author is None or author == '':
             return "Vimeo"
         else:
             return self.info.get('author_name')

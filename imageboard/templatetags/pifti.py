@@ -59,6 +59,9 @@ def is_animated(image):
     except ValueError:
         # No reader or format, fail silently
         return False
+    except OSError:
+        # [Errno 12] Cannot allocate memory
+        return False
 
 @register.filter(name='emojize', is_safe=True, needs_autoescape=True)
 @stringfilter
@@ -123,6 +126,9 @@ def image_type_tag(image):
             return formats[image.format.name]
     except ValueError:
         # No reader or format, fail silently
+        return ''
+    except OSError:
+        # [Errno 12] Cannot allocate memory
         return ''
 
 @register.simple_tag(name='posturl')

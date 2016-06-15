@@ -30,3 +30,6 @@ def video_image(source, exif_orientation=True, **options):
     except ValueError:
         # Fail silently
         raise Exception
+    except OSError:
+        # Fail loudly
+        raise Exception
