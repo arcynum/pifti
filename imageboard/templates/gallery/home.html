@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-{% load i18n thumbnail staticfiles pifti %}
+{% load i18n thumbnail staticfiles pifti cache %}
 {% block page_class %}Gallery{% endblock %}
-{% load cache %}
 
 {% block content %}
 <h1>i'm from the internet.</h1>
@@ -12,9 +11,9 @@
     <div class="gallery_item">
       <a target="_blank" href="{{ post.image.url }}"><img src="{{ post.image.avatar.url }}" /></a>
       {% cache 86400 post_imagetype post.id %}
-      {% if post.image|isanimated %}
+      {% if post.image.animated %}
       <div class="imagetype">
-        <span>{% imagetype post.image %}</span>
+        <span>{{ post.image.format }}</span>
       </div>
       {% endif %}
       {% endcache %}
@@ -30,9 +29,9 @@
       <div class="gallery_item">
         <a target="_blank" href="{{ comment.image.url }}"><img src="{{ comment.image.avatar.url }}" /></a>
         {% cache 86400 comment_imagetype comment.id %}
-        {% if comment.image|isanimated %}
+        {% if comment.image.animated %}
         <div class="imagetype">
-          <span>{% imagetype comment.image %}</span>
+          <span>{{ comment.image.format }}</span>
         </div>
         {% endif %}
         {% endcache %}

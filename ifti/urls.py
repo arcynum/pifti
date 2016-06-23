@@ -22,6 +22,7 @@ from imageio import formats
 from imageio.plugins.ffmpeg import FfmpegFormat
 from imageio.plugins.avbin import AvBinFormat
 
+
 urlpatterns = [
     url(r'', include('imageboard.urls')),
     url(r'^admin/', admin.site.urls)
@@ -30,12 +31,14 @@ urlpatterns = [
 if settings.DEBUG:
 	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+
 # TODO: Clean up
-# Register imageio formats
-avbin = AvBinFormat('avbin', 'Many video formats (via avbin)', '', 'I')
-formats.add_format(avbin, overwrite=True)
+avbin = AvBinFormat('avbin', 'Many video formats (via avbin)',
+                    '', 'I')
 ffmpeg = FfmpegFormat('ffmpeg', 'Many video formats and cameras (via ffmpeg)',
                       'mp4 webm', 'I')
+# Register imageio formats
+formats.add_format(avbin, overwrite=True)
 formats.add_format(ffmpeg, overwrite=True)
 
 

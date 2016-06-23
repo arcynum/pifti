@@ -1,15 +1,16 @@
-from imageio.core.format import Format
+"""
+Various utilities for Pifti
+"""
 
 
 def force_close_reader(reader):
     """ Close Imageio Reader
 
-    Terminates a reader internally otherwise the subprocess is
-    forcefully killed to prevent zombies
+    Terminates a reader otherwise the subprocess is forcefully killed
 
-    Returns:
-        Dead process
+    Note: A zombie processes may remain
     """
+    from imageio.core.format import Format
 
     # Ensure object is Imageio Reader
     if isinstance(reader, Format.Reader):
@@ -21,7 +22,10 @@ def force_close_reader(reader):
                 proc = reader._proc
                 # Try gently first
                 reader.close()
-                # Check for zombie
+                # Check for unresponsive running process after SIGTERM
                 if proc.poll() is None:
-                    # Force the issue, look away
-                    proc.kill()
+                    # SIGKILL
+                    proc.kill() # NOQA
+        elif not reader.closed:
+            # Terminate normally
+            reader.close()

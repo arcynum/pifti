@@ -23,10 +23,9 @@ class Post(models.Model):
 
 	def save(self, *args, **kwargs):
 		"""
-		Hash image name
+		Generate image name hash.
 		"""
-
-		if self.image and not self.id: # New Post
+		if self.image and not self.id: # New Post with image
 			md5 = hashlib.md5()
 			while True:
 				data = self.image.read(128)
@@ -39,6 +38,27 @@ class Post(models.Model):
 			self.image.name = image_name
 
 		super(Post, self).save(*args, **kwargs)
+
+	def delete(self, *args, **kwargs):
+		"""
+        Delete post and comments, including the post image source, attributes,
+        and thumbnail.
+        """
+		# Iterate over and delete comments
+		comments = self.comment_set.all()
+		for c in comments:
+			c.delete(post_delete=True)
+
+		# Delete and cleanup post image references
+		if self.image:
+			name = self.image.name.lstrip('./') # Ensure naming standard
+			duplicates = Post.objects.filter(image__icontains=name).count()
+			duplicates += Comment.objects.filter(image__icontains=name).count()
+			# Do not delete if there are multiple references to this source
+			if duplicates <= 1:
+				self.image.delete()
+
+		super(Post, self).delete(*args, **kwargs)
 
 
 class Comment(models.Model):
@@ -54,9 +74,8 @@ class Comment(models.Model):
 
 	def save(self, *args, **kwargs):
 		"""
-		Hash image name and update parent post modified
+		Generate image name hash and update parent post modified.
 		"""
-
 		if not self.id: # New comment
 			self.post.modified = now()
 			self.post.save()
@@ -76,19 +95,31 @@ class Comment(models.Model):
 		super(Comment, self).save(*args, **kwargs)
 
 
-	def delete(self, *args, **kwargs):
+	def delete(self, post_delete=False, *args, **kwargs):
 		"""
-		Change modified on parent Post before deleting Comment
+		Delete Comment including the comment image source, attributes, and
+		thumbnail. Updates the parent post modified date when `post_delete`
+		is False (default), indicating the parent post is not facing deletion.
 		"""
-
-		if self.post.comment_set: # Post has comments
+		# Post has comments and post is not being deleted
+		if self.post.comment_set and not post_delete:
 			c = self.post.comment_set.exclude(id=self.id).last()
+			# Update the parent post modified date
 			if c: # Last comment
 				self.post.modified = c.created
 				self.post.save()
 			else: # No comments after deletion
 				self.post.modified = self.post.created
 				self.post.save()
+
+		# Delete and cleanup comment image references
+		if self.image:
+			name = self.image.name.lstrip('./') # Ensure naming standard
+			duplicates = Post.objects.filter(image__icontains=name).count()
+			duplicates += Comment.objects.filter(image__icontains=name).count()
+			# Do not delete if there are multiple references to this source
+			if duplicates <= 1:
+				self.image.delete()
 
 		super(Comment, self).delete(*args, **kwargs)
 
@@ -130,6 +161,17 @@ class UserProfile(models.Model):
 		"""
 		Create a UserProfile for the new user upon account creation
 		"""
-
 		if created:
 			UserProfile.objects.create(user=instance)
+
+
+class SourceAttributes(models.Model):
+	name = models.CharField(max_length=255, db_index=True)
+	format = models.CharField(max_length=16, blank=True, null=True)
+	animated = models.BooleanField(default=False, blank=False)
+
+	def __str__(self):
+		if self.animated:
+			return "Animated " + self.format
+		else:
+			return self.format

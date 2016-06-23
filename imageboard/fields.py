@@ -1,12 +1,15 @@
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.fields import ThumbnailerField
-from imageboard.util import force_close_reader
+from imageboard.files import ThumbnailerImageExtFieldFile, ImageExtField
+from imageboard.conf import IMAGEBOARD_FORMATS as formats
+from imageboard.utils import force_close_reader
+
 from io import BytesIO
 from tempfile import NamedTemporaryFile
 
 
-class ThumbnailerExtField(ThumbnailerField):
+class ThumbnailerExtField(ThumbnailerField, ImageExtField):
     """
     Extends the easy-thumbnail ThumbnailerField to add restricted support
     for images/video provided by the FreeImage and FFmpeg imageio plugins.
@@ -20,6 +23,8 @@ class ThumbnailerExtField(ThumbnailerField):
                          " supported formats are: %(types)s."),
         'corrupt_file': _("%(file)s is corrupt."),
     }
+
+    attr_class = ThumbnailerImageExtFieldFile
 
     def to_python(self, data):
         """
@@ -54,50 +59,46 @@ class ThumbnailerExtField(ThumbnailerField):
                 file = BytesIO(data['content'])
 
         from PIL import Image
-        import imageio
+        from imageio import get_reader
 
         try:
             # Firstly try and recognise BytesIO
-            file = imageio.get_reader(file)
+            file = get_reader(file)
             # Send data to PIL
             f.image = Image.fromarray(file.get_data(0))
             # Close the reader
             force_close_reader(file)
         except ValueError:
+            # Create a local file
             with NamedTemporaryFile(suffix=ext) as n:
                 for chunk in data.chunks():
                     n.write(chunk)
                 try:
                     # Try and read from temporary file
-                    file = imageio.get_reader(n.name)
+                    file = get_reader(n.name)
                     # Send data to PIL
                     f.image = Image.fromarray(file.get_data(0))
                 except OSError:
                     # FFmpeg cannot read video meta
+                    # May be out of memory for a new reader (bug #48)
                     params = { 'file': f.name }
                     raise ValidationError(self.error_messages['corrupt_file'],
                                           code='corrupt_file',
                                           params=params)
                 except Exception:
-                    # Imageio doesn't recognize it as an image.
+                    # imageio doesn't recognize it as an image.
                     params = { 'types': self.types }
                     raise ValidationError(self.error_messages['invalid_file'],
                                           code='invalid_file',
                                           params=params)
                 finally:
-                    # Close the reader
+                    # Close Named Tempoary File
+                    n.close()
+                    # Make sure any open reader is closed
                     force_close_reader(file)
 
-        # Specific formats for: JPEG, PNG, GIF, ICO, and WEBM/MP4
-        formats = {
-            'JPEG': 'JPG',
-            'PNG': 'PNG',
-            'GIF': 'GIF',
-            'ICO': 'ICO',
-            'FFMPEG': 'VIDEO',
-        }
-
-        # Check format
+        # Check if this format is enabled
+        # See ``imageboard.settings`` for more information
         if file.format.name in formats.keys():
             # MIME type is not supported with imageio
             # Thus if the content type is not detected, it will remain as None
