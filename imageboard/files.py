@@ -1,10 +1,11 @@
+from django.apps import apps
 from django.core import checks
 from django.core.files import File
 from django.db.models import signals
 from django.db.models.fields.files import FieldFile, FileField, FileDescriptor
 from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.files import ThumbnailerFieldFile
-from imageboard import models
+
 
 
 def database_get_image_attributes(file, close=False):
@@ -15,10 +16,12 @@ def database_get_image_attributes(file, close=False):
 
     Adds attributes to the database from file if they do not already exist.
     """
+    SourceAttributes = apps.get_model('imageboard', 'SourceAttributes')
+
     try:
-        attributes_cache = models.SourceAttributes.objects.get(
+        attributes_cache = SourceAttributes.objects.get(
             name=file.name.lstrip('./'))
-    except models.SourceAttributes.DoesNotExist:
+    except SourceAttributes.DoesNotExist:
         attributes_cache = None
 
     if attributes_cache:
@@ -28,7 +31,7 @@ def database_get_image_attributes(file, close=False):
 
     if attributes_cache is None:
         # Return or create a new entry
-        models.SourceAttributes.objects.get_or_create(
+        SourceAttributes.objects.get_or_create(
             name=file.name.lstrip('./'),
             defaults={'animated': attributes[0], 'format': attributes[1]})
 
@@ -43,7 +46,9 @@ def database_update_image_attributes(file, close=False):
     Adds attributes to the database from file if they do not already exist.
     """
     attributes = get_image_attributes(file, close=close)
-    models.SourceAttributes.objects.update_or_create(
+
+    SourceAttributes = apps.get_model('imageboard', 'SourceAttributes')
+    SourceAttributes.objects.update_or_create(
         name=file.name.lstrip('./'),
         defaults={'animated': attributes[0], 'format': attributes[1]})
 
@@ -51,7 +56,8 @@ def database_delete_image_attributes(file):
     """
     Deletes the animated and format attributes for an ImageExtFile.
     """
-    models.SourceAttributes.objects.filter(name=file.name.lstrip('./')).delete()
+    SourceAttributes = apps.get_model('imageboard', 'SourceAttributes')
+    SourceAttributes.objects.filter(name=file.name.lstrip('./')).delete()
 
 def get_image_attributes(file_or_path, close=False):
     """

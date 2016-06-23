@@ -13,7 +13,7 @@ IMAGEBOARD_FORMATS = getattr(settings, 'IMAGEBOARD_FORMATS',
 """
 The default formats which Pifti will handle. All replacements must be supplied
 with `code` and `animated` fields, and must be supported by the imageio library.
+Imageio formats: https://imageio.readthedocs.io/en/latest/formats.html
 
 Overwrite this in your application settings to alter format support.
-Imageio formats: https://imageio.readthedocs.io/en/latest/formats.html
 """
