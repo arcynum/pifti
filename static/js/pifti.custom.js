@@ -3,9 +3,9 @@
  */
 
 jQuery(document).ready(function($) {
-    var p = 'https';
+    var p = 'https:';
     // Check for secure connection
-    if (location.protocol != 'https') { p = 'http' }
+    if (location.protocol != 'https:') { p = 'http:' }
 
     // Setup min/max environment variables for responsive embeds
     var minwidth = 420, minheight = 176, maxwidth = 420, maxheight = 315;
@@ -70,30 +70,30 @@ jQuery(document).ready(function($) {
             case "YoutubeBackend":
                 $author = "Youtube";
                 $api = 'https://www.youtube.com/oembed';
-                $base_url += '://youtube.com/watch?v=' + $id;
-                $embed_url += '://www.youtube.com/embed/' + $id
+                $base_url += '//youtube.com/watch?v=' + $id;
+                $embed_url += '//www.youtube.com/embed/' + $id
                     + '?rel=0&autoplay=1&start=' + $start;
                 break;
 
             case "VimeoBackend":
                 $author = "Vimeo";
-                $api += '://vimeo.com/api/oembed.json';
-                $base_url += '://vimeo.com/' + $id;
-                $embed_url += '://player.vimeo.com/video/' + $id
+                $api += '//vimeo.com/api/oembed.json';
+                $base_url += '//vimeo.com/' + $id;
+                $embed_url += '//player.vimeo.com/video/' + $id
                     + '?autoplay=1';
                 break;
 
             case "SoundCloudBackend":
                 $author = "Soundcloud";
-                $api += '://soundcloud.com/oembed';
+                $api += '//soundcloud.com/oembed';
                 // Check if we have the soundcloud track ID or author/track format
                 if (/^\d+$/.test($id)) {
-                    $base_url += '://api.soundcloud.com/tracks/' + $id;
+                    $base_url += '//api.soundcloud.com/tracks/' + $id;
                 } else {
-                    $base_url += "://soundcloud.com/" + $id;
+                    $base_url += "//soundcloud.com/" + $id;
                 }
                 $expand = false;
-                $embed_url += '://w.soundcloud.com/player/'
+                $embed_url += '//w.soundcloud.com/player/'
                     + '?url=' + $base_url
                     + '&auto_play=true'
                     + '&hide_related=true&show_user=true'
@@ -102,33 +102,33 @@ jQuery(document).ready(function($) {
 
             case "StreamableBackend":
                 $author = "Streamable";
-                $api += '://api.streamable.com/oembed.json';
-                $base_url += '://streamable.com/' + $id;
-                $thumb = protocol + '://cdn.streamable.com/image/' + $id + '.jpg';
-                $embed_url += '://streamable.com/e/' + $id
+                $api += '//api.streamable.com/oembed.json';
+                $base_url += '//streamable.com/' + $id;
+                $thumb = protocol + '//cdn.streamable.com/image/' + $id + '.jpg';
+                $embed_url += '//streamable.com/e/' + $id
                     + '?autoplay=1&hd=1&t=' + $start;
                 break;
 
             case "DailymotionBackend":
                 $author = "Dailymotion";
-                $api += '://www.dailymotion.com/services/oembed';
-                $base_url += '://dailymotion.com/video/' + $id;
-                $embed_url += '://www.dailymotion.com/embed/video/' + $id
+                $api += '//www.dailymotion.com/services/oembed';
+                $base_url += '//dailymotion.com/video/' + $id;
+                $embed_url += '//www.dailymotion.com/embed/video/' + $id
                     + '?autoplay=true&endscreen-enable=false&quality=380'
                     + '&sharing-enable=false&start=' + $start;
                 break;
 
             case "GfycatBackend":
                 $author = "Gfycat";
-                $api += '://api.gfycat.com/v1/oembed';
-                $base_url += '://gfycat.com/' + $id;
-                $thumb = protocol + '://thumbs.gfycat.com/' + $id + '-poster.jpg';
+                $api += '//api.gfycat.com/v1/oembed';
+                $base_url += '//gfycat.com/' + $id;
+                $thumb = protocol + '//thumbs.gfycat.com/' + $id + '-poster.jpg';
                 $player = "video";
                 $embed_url = [
-                    protocol + '://giant.gfycat.com/' + $id + '.webm',
-                    protocol + '://giant.gfycat.com/' + $id + '.mp4',
-                    protocol + '://zippy.gfycat.com/' + $id + '.webm',
-                    protocol + '://zippy.gfycat.com/' + $id + '.mp4'
+                    protocol + '//giant.gfycat.com/' + $id + '.webm',
+                    protocol + '//giant.gfycat.com/' + $id + '.mp4',
+                    protocol + '//zippy.gfycat.com/' + $id + '.webm',
+                    protocol + '//zippy.gfycat.com/' + $id + '.mp4'
                 ];
                 break;
 
@@ -185,7 +185,7 @@ jQuery(document).ready(function($) {
 
                                 code = /\/\d+_/.exec($thumb);
                                 if (code != null) {
-                                    $thumb = protocol + "://i.vimeocdn.com/video"
+                                    $thumb = protocol + "//i.vimeocdn.com/video"
                                         + code + $width + "x" + $height + ".jpg";
                                 }
                                 break;
@@ -207,10 +207,10 @@ jQuery(document).ready(function($) {
                                 if (code != null) {
                                     // Different server for secure connection
                                     if (protocol === 'http') {
-                                        $thumb = protocol + "://s1.dmcdn.net/"
+                                        $thumb = protocol + "//s1.dmcdn.net/"
                                             + code[1] + ".jpg";
                                     } else {
-                                        $thumb = protocol + "://s1-ssl.dmcdn.net/"
+                                        $thumb = protocol + "//s1-ssl.dmcdn.net/"
                                             + code[1] + ".jpg";
                                     }
                                 }
