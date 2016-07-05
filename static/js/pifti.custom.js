@@ -141,9 +141,17 @@ jQuery(document).ready(function($) {
         $(obj).find("span.media_author").html($author);
         $(obj).find("span.media_title").html($title);
 
+        // TODO: Fix preflight OPTIONS request for cross domains
         $.ajax({
             method: "GET",
             url: $api,
+            crossDomain: true,
+            headers: {
+                //'Access-Control-Allow-Origin': '*',
+                //'Access-Control-Max-Age': '30',
+                //'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS',
+                //'Access-Control-Allow-Headers': 'x-requested-with,content-type,origin
+            },
             data: {
                 url: $base_url,
                 maxwidth: maxwidth, // Maximum embed width
@@ -155,12 +163,12 @@ jQuery(document).ready(function($) {
                 if (data['errorMessage'] != undefined) {
                     // Gfycat returns errorMessage upon failure
                     var error = jQuery.parseJSON(data['errorMessage']);
-                    ajaxError(obj, $id, error['code']);
+                    ajaxError(obj, $id, $base_url, error['code']);
                 } else if (data['type'] === undefined) {
                     // Dailymotion does not always return data upon failure.
                     // `Type` is a required property for oEmbed compliance,
                     // thus it must exist within valid responses.
-                    ajaxError(obj, $id, "Invalid Video Url");
+                    ajaxError(obj, $id, $base_url, "Invalid Video Url");
                 } else {
                     if ($expand) {
                         $height = Math.max(data['height'], minheight);
@@ -206,7 +214,7 @@ jQuery(document).ready(function($) {
                                 code = /\/(\w+)\//.exec($thumb);
                                 if (code != null) {
                                     // Different server for secure connection
-                                    if (protocol === 'http') {
+                                    if (protocol === 'http:') {
                                         $thumb = protocol + "//s1.dmcdn.net/"
                                             + code[1] + ".jpg";
                                     } else {
@@ -235,9 +243,8 @@ jQuery(document).ready(function($) {
                 }
             },
             error: function (e) {
-                // Data return failure or CORS error
-                // Ensure CORS is properly configured on your server
-                ajaxError(obj, $id, e.statusText)
+                // Data return failure
+                ajaxError(obj, $id, $base_url, e.statusText)
             }
         });
     }
@@ -329,10 +336,10 @@ jQuery(document).ready(function($) {
         return $container;
     }
 
-    function ajaxError(obj, id, error) {
+    function ajaxError(obj, id, base_url, error) {
         // Print error and minimize embed
         $(obj).find("span.media_title").html("Failed to load "
-            + " ID " + id + ": " + error);
+            + " ID <a href=" + base_url + ">" + id + "</a>: " + error);
         $(obj).find("div.play_button").remove();
         $(obj).css("height", 60 + "px");
     }
