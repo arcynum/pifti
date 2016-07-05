@@ -194,7 +194,7 @@ jQuery(document).ready(function($) {
                                 $thumb = data['thumbnail_url'];
 
                                 // Ensure thumbnail url matches request protocol
-                                $thumb = $thumb.replace(/^http/i, protocol);
+                                $thumb = $thumb.replace(/^http:/i, protocol);
                                 break;
 
                             case "DailymotionBackend":
