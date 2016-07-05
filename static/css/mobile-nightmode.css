@@ -259,12 +259,12 @@ input, textarea {
 
 
 div.media_embed {
+	background: url(../black-diag-texture.png);
 	margin-top: 10px;
 	width: 420px;
 	max-width: 100%;
 	max-height: 315px;
 	position: relative;
-	background-color: #000000;
 	-webkit-transition: all 0.5s ease-in;
     -moz-transition: all 0.5s ease-in;
     -o-transition: all 0.5s ease-in;
@@ -311,10 +311,15 @@ span.media_title {
 	background: rgba(0, 0, 0, 0.8);
 	color: #CCCCCC;
 	display: inline;
-	font-size: 12px;
 	font-weight: 100;
 	line-height: 22px;
 	padding: 3px 6px;
+}
+span.media_title {
+	font-size: 14px;
+}
+span.media_author {
+	font-size: 12px;
 }
 
 div.play_button {
@@ -357,7 +362,7 @@ div.play_button.StreamableBackend {
 	opacity: 1.0;
 }
 div.play_button.DailymotionBackend {
-	background: url("../dailymotion_play.png") 85% 50% no-repeat rgba(21,21,21,0.7);
+	background: url("../dailymotion_play.png") 85% 50% no-repeat #3389ff;
 	background-size: 70%;
 	border-radius: 3px;
 	top: calc(50% - 24px);

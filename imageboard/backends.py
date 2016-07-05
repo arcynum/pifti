@@ -40,8 +40,7 @@ class YoutubeBackend(backends.YoutubeBackend):
         r'''youtu((\.be)|(be\.com))/
             ([a-z0-9;:@?&%=+/\$_.-]+[&?])
             ((t|start)[=])
-            ((?P<hours>\d+[h])?(?P<minutes>\d+[m])?(?P<seconds>\d+[s]?)?)
-        ''',
+            ((?P<hours>\d+[h])?(?P<minutes>\d+[m])?(?P<seconds>\d+[s]?)?)''',
         re.I | re.X
     )
 
@@ -162,6 +161,7 @@ class VimeoBackend(backends.VimeoBackend):
     base_url = '{protocol}://vimeo.com/api/oembed.json'
     pattern_thumbnail_url = '{protocol}://i.vimeocdn.com/video/{thumbnail_code}_{resolution}'
     resolutions = [
+        '420x315.jpg', # Vimeo handles custom thumbnail sizes
         '640.jpg',
         '960.jpg',
         '1280.jpg',
@@ -275,6 +275,8 @@ class VimeoBackend(backends.VimeoBackend):
         return '0' # Not implemented by Vimeo
 
 
+# TODO: Replace get_code and get_url to avoid making API call
+# TODO: Fix broken playlist handling
 class SoundCloudBackend(backends.SoundCloudBackend):
     """
     Extends SoundCloudBackend functionality for external embed_video library
@@ -364,7 +366,7 @@ class SoundCloudBackend(backends.SoundCloudBackend):
         Returns:
             String representing track start in seconds
         """
-        return '0' # Not implemented by SoundCloud
+        return '0' # Not handled by the SoundCloud embed player
 
 
 class StreamableBackend(backends.VideoBackend):

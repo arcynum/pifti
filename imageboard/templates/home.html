@@ -29,15 +29,15 @@
           </div>
           <div class="text">
             <div>{{ post.body|linebreaksbr|urlize|emojize }}</div>
-            {% cache 604800 post_media post.id %}
+            {% cache 86400 post_media post.id %}
             {% if post.media and post.media != "" %}
               {% video post.media 'tiny' is_secure="{{ request.is_secure }}" as v %}
-                <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" data-start="{{ v.start }}" style="height: {{ v.height }}px;">
-                  <div class="media_cover" style="background-image: url({{ v.thumbnail }})">
+                <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" data-start="{{ v.start }}" style="height: 176px">
+                  <div class="media_cover">
                     <div class="media_meta">
                       <div class="play_button {{ v.backend }}"></div>
-                      <span class="media_title">{{ v.title }}</span><br/>
-                      <span class="media_author">{{ v.username }}</span>
+                      <span class="media_title"></span><br/>
+                      <span class="media_author"></span>
                     </div>
                   </div>
                 </div>
@@ -82,15 +82,15 @@
             </div>
             <div class="text">
               <div>{{ comment.body|linebreaksbr|urlize|emojize }}</div>
-              {% cache 604800 comment_media comment.id %}
+              {% cache 86400 comment_media comment.id %}
               {% if comment.media and comment.media != "" %}
                 {% video comment.media 'tiny' is_secure="{{ request.is_secure }}" as v %}
-                  <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" data-start="{{ v.start }}" style="height: {{ v.height }}px;">
-                    <div class="media_cover" style="background-image: url({{ v.thumbnail }})">
+                  <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" data-start="{{ v.start }}" style="height: 176px">
+                    <div class="media_cover">
                       <div class="media_meta">
                         <div class="play_button {{ v.backend }}"></div>
-                        <span class="media_title">{{ v.title }}</span><br/>
-                        <span class="media_author">{{ v.username }}</span>
+                        <span class="media_title"></span><br/>
+                        <span class="media_author"></span>
                       </div>
                     </div>
                   </div>
