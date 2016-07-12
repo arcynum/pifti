@@ -47,6 +47,7 @@ jQuery(document).ready(function($) {
         var $embed = $(obj).data("embed"); // Backend name
         var $id = $(obj).data("id"); // Media code
         var $start = $(obj).data("start"); // Media start time in seconds
+        var $excluded = $(obj).data("excluded"); // Excluded backend
         var $width = minwidth; // Smallest responsive cover width in pixels
         var $height = minheight; // Smallest responsive cover height in pixels
         var $api = protocol; // Hosts oEmbed API, append to this variable
@@ -59,7 +60,7 @@ jQuery(document).ready(function($) {
         var $expand = true; // Expandable player
 
         if ($embed === undefined || $id === undefined) {
-            console.log("Detected responsive embed has invalid embed and/or id data.");
+            console.log("Detected responsive embed with invalid embed and/or id data.");
             return false;
         } else if ($start === undefined) {
             $start = 0;
@@ -77,7 +78,7 @@ jQuery(document).ready(function($) {
 
             case "VimeoBackend":
                 $author = "Vimeo";
-                $api += '//vimeo.com/api/oembed.json';
+                $api = 'https://vimeo.com/api/oembed.json';
                 $base_url += '//vimeo.com/' + $id;
                 $embed_url += '//player.vimeo.com/video/' + $id
                     + '?autoplay=1';
@@ -85,7 +86,7 @@ jQuery(document).ready(function($) {
 
             case "SoundCloudBackend":
                 $author = "Soundcloud";
-                $api += '//soundcloud.com/oembed';
+                $api = 'https://soundcloud.com/oembed';
                 // Check if we have the soundcloud track ID or author/track format
                 if (/^\d+$/.test($id)) {
                     $base_url += '//api.soundcloud.com/tracks/' + $id;
@@ -102,7 +103,7 @@ jQuery(document).ready(function($) {
 
             case "StreamableBackend":
                 $author = "Streamable";
-                $api += '//api.streamable.com/oembed.json';
+                $api = 'https://api.streamable.com/oembed.json';
                 $base_url += '//streamable.com/' + $id;
                 $thumb = protocol + '//cdn.streamable.com/image/' + $id + '.jpg';
                 $embed_url += '//streamable.com/e/' + $id
@@ -111,7 +112,7 @@ jQuery(document).ready(function($) {
 
             case "DailymotionBackend":
                 $author = "Dailymotion";
-                $api += '//www.dailymotion.com/services/oembed';
+                $api = 'https://www.dailymotion.com/services/oembed';
                 $base_url += '//dailymotion.com/video/' + $id;
                 $embed_url += '//www.dailymotion.com/embed/video/' + $id
                     + '?autoplay=true&endscreen-enable=false&quality=380'
@@ -120,7 +121,7 @@ jQuery(document).ready(function($) {
 
             case "GfycatBackend":
                 $author = "Gfycat";
-                $api += '//api.gfycat.com/v1/oembed';
+                $api = 'https://api.gfycat.com/v1/oembed';
                 $base_url += '//gfycat.com/' + $id;
                 $thumb = protocol + '//thumbs.gfycat.com/' + $id + '-poster.jpg';
                 $player = "video";
@@ -138,115 +139,126 @@ jQuery(document).ready(function($) {
                 return false;
         }
 
-        $(obj).find("span.media_author").html($author);
-        $(obj).find("span.media_title").html($title);
+        // Do not make requests for excluded backends
+        if ($excluded === "True") {
+            $width = $(obj).width();
+            $height = $(obj).height();
 
-        // TODO: Fix preflight OPTIONS request for cross domains
-        $.ajax({
-            method: "GET",
-            url: $api,
-            crossDomain: true,
-            headers: {
-                //'Access-Control-Allow-Origin': '*',
-                //'Access-Control-Max-Age': '30',
-                //'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS',
-                //'Access-Control-Allow-Headers': 'x-requested-with,content-type,origin
-            },
-            data: {
-                url: $base_url,
-                maxwidth: maxwidth, // Maximum embed width
-                maxheight: maxheight, // Maximum embed height
-                format: 'json'
-            },
-            success: function (data) {
-                // Check for successful responses containing errors
-                if (data['errorMessage'] != undefined) {
-                    // Gfycat returns errorMessage upon failure
-                    var error = jQuery.parseJSON(data['errorMessage']);
-                    ajaxError(obj, $id, $base_url, error['code']);
-                } else if (data['type'] === undefined) {
-                    // Dailymotion does not always return data upon failure.
-                    // `Type` is a required property for oEmbed compliance,
-                    // thus it must exist within valid responses.
-                    ajaxError(obj, $id, $base_url, "Invalid Video Url");
-                } else {
-                    if ($expand) {
-                        $height = Math.max(data['height'], minheight);
-                    }
-                    if (data['width'] != undefined) {
-                        $width = Math.max(data['width'], minwidth);
-                    }
-                    if (data['title'] != undefined) $title = data['title'];
-                    if (data['author_name'] != undefined) $author = data['author_name'];
-
-                    // Find better quality thumbnails for these backends
-                    if ($thumb === undefined) {
-                        var code = null;
-
-                        switch ($embed) {
-                            case "YoutubeBackend":
-                                $thumb = data['thumbnail_url'];
-                                break;
-
-                            case "VimeoBackend":
-                                $thumb = data['thumbnail_url'];
-
-                                code = /\/\d+_/.exec($thumb);
-                                if (code != null) {
-                                    $thumb = protocol + "//i.vimeocdn.com/video"
-                                        + code + $width + "x" + $height + ".jpg";
-                                }
-                                break;
-
-                            case "SoundCloudBackend":
-                                $thumb = data['thumbnail_url'];
-
-                                // Ensure thumbnail url matches request protocol
-                                $thumb = $thumb.replace(/^http:/i, protocol);
-                                break;
-
-                            case "DailymotionBackend":
-                                $thumb = data['thumbnail_url'];
-
-                                // Do not try and find larger PNG thumbnail
-                                if (/\.png$/i.test($thumb)) { break }
-
-                                code = /\/(\w+)\//.exec($thumb);
-                                if (code != null) {
-                                    // Different server for secure connection
-                                    if (protocol === 'http:') {
-                                        $thumb = protocol + "//s1.dmcdn.net/"
-                                            + code[1] + ".jpg";
-                                    } else {
-                                        $thumb = protocol + "//s1-ssl.dmcdn.net/"
-                                            + code[1] + ".jpg";
-                                    }
-                                }
-                                break;
-
-                            default:
-                                $thumb = data['thumbnail_url'];
-                                break;
+            // When clicked replace thumbnail cover with IFrame embed
+            $(obj).click(function () {
+                $(this).replaceWith(generateEmbed($width, $height, $embed_url, $expand, $player));
+            });
+        } else {
+            $(obj).find("span.media_author").html($author);
+            $(obj).find("span.media_title").html($title);
+            
+            $.ajax({
+                method: "GET",
+                url: $api,
+                data: {
+                    url: $base_url,
+                    maxwidth: maxwidth, // Maximum embed width
+                    maxheight: maxheight, // Maximum embed height
+                    format: 'json'
+                },
+                success: function (data) {
+                    // Check for successful responses containing errors
+                    if (data['errorMessage'] != undefined) {
+                        // Gfycat returns errorMessage upon failure
+                        var error = jQuery.parseJSON(data['errorMessage']);
+                        ajaxError(obj, $id, $base_url, error['code']);
+                    } else if (data['type'] === undefined) {
+                        // Dailymotion does not always return data upon failure.
+                        // `Type` is a required property for oEmbed compliance,
+                        // thus it must exist within valid responses.
+                        ajaxError(obj, $id, $base_url, "Invalid Video Url");
+                    } else {
+                        if ($expand && data['height'] != undefined) {
+                            $height = Math.max(data['height'], minheight);
                         }
+                        if (data['width'] != undefined) {
+                            $width = Math.max(data['width'], minwidth);
+                        }
+                        if (data['title'] != undefined && data['title'] != '') {
+                            $title = data['title'];
+                        } else {
+                            $title = "Untitled";
+                        }
+                        if (data['author_name'] != undefined && data['author_name'] != '') {
+                            $author = data['author_name'];
+                        }
+
+                        // Find better quality thumbnails for these backends
+                        if ($thumb === undefined) {
+                            var code = null;
+
+                            switch ($embed) {
+                                case "YoutubeBackend":
+                                    $thumb = data['thumbnail_url'];
+                                    break;
+
+                                case "VimeoBackend":
+                                    $thumb = data['thumbnail_url'];
+
+                                    code = /\/\d+_/.exec($thumb);
+                                    if (code != null) {
+                                        $thumb = protocol + "//i.vimeocdn.com/video"
+                                            + code + $width + "x" + $height + ".jpg";
+                                    }
+                                    break;
+
+                                case "SoundCloudBackend":
+                                    $thumb = data['thumbnail_url'];
+
+                                    // Ensure thumbnail url matches request protocol
+                                    $thumb = $thumb.replace(/^http:/i, protocol);
+                                    break;
+
+                                case "DailymotionBackend":
+                                    $thumb = data['thumbnail_url'];
+
+                                    // Do not try and find larger PNG thumbnail
+                                    if (/\.png$/i.test($thumb)) {
+                                        break
+                                    }
+
+                                    code = /\/(\w+)\//.exec($thumb);
+                                    if (code != null) {
+                                        // Different server for secure connection
+                                        if (protocol === 'http:') {
+                                            $thumb = protocol + "//s1.dmcdn.net/"
+                                                + code[1] + ".jpg";
+                                        } else {
+                                            $thumb = protocol + "//s1-ssl.dmcdn.net/"
+                                                + code[1] + ".jpg";
+                                        }
+                                    }
+                                    break;
+
+                                default:
+                                    $thumb = data['thumbnail_url'];
+                                    break;
+                            }
+                        }
+
+                        $(obj).css("height", $height + "px");
+                        $(obj).find("span.media_title").html($title);
+                        $(obj).find("span.media_author").html($author);
+                        $(obj).find("div.media_cover").css("background-image",
+                            "url(" + $thumb + ")");
+
+                        // When clicked replace thumbnail cover with IFrame embed
+                        $(obj).click(function () {
+                            $(this).replaceWith(generateEmbed($width, $height, $embed_url, $expand, $player));
+                        });
                     }
-
-                    $(obj).css("height", $height + "px");
-                    $(obj).find("span.media_title").html($title);
-                    $(obj).find("span.media_author").html($author);
-                    $(obj).find("div.media_cover").css("background-image",
-                        "url(" + $thumb + ")");
-
-                    // When clicked replace thumbnail cover with IFrame embed
-                    $(obj).click(function () {
-                        $(this).replaceWith(generateEmbed($width, $height, $embed_url, $expand, $player));
-                    });
+                },
+                error: function (e) {
+                    // Data return failure
+                    ajaxError(obj, $id, $base_url, e.statusText)
                 }
-            },
-            error: function (e) {
-                // Data return failure
-                ajaxError(obj, $id, $base_url, e.statusText)
-            }
-        });
+            });
+        }
     }
 
     // Build video embed DOM

@@ -36,6 +36,26 @@ def emoji_replace(text, autoescape=True):
 
     return mark_safe(text)
 
+@register.filter(name='excludedbackend')
+def is_excluded_backend(backend):
+    """
+    Checks if a given backend is in the list of excluded backends.
+
+    Args:
+        backend: String representing the backend name, e.g. 'YoutubeBackend'
+    Returns:
+        True if the backend is excluded
+        False otherwise
+    Sample Usage::
+        {% if model.backend|excludedbackend %}
+    """
+    from imageboard.conf import IMAGEBOARD_SERVER_EMBEDS as excluded
+
+    if backend in excluded:
+        return True
+    else:
+        return False
+
 
 # Template Tags
 
