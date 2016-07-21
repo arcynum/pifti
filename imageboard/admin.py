@@ -1,14 +1,19 @@
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import ugettext_lazy as _
 from imageboard.models import Post, Comment, UserProfile
 import time
 
 
 class PostAdmin(admin.ModelAdmin):
-	fields = ['title', 'body', 'media']
+	fieldsets = (
+		(None, {
+			'fields': ('title', 'image', 'media', 'body'),
+		}),
+	)
 	actions = ['delete_selected', 'update_modified', 'update_image_attributes']
-
 	list_display = ('id', 'user', '__str__', 'created', 'modified')
+	search_fields = ['=user__username', '^id']
 
 	def save_model(self, request, obj, form, change): 
 		try:
@@ -84,10 +89,24 @@ class PostAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-	fields = ['post', 'body', 'media']
+	fieldsets = (
+		(None, {
+			'fields': ('image', 'media', 'body'),
+		}),
+	)
+	add_fieldsets = (
+		(None, {
+			'fields': ('post', 'image', 'media', 'body'),
+		}),
+	)
 	actions = ['delete_selected', 'update_image_attributes']
-
 	list_display = ('id', 'user', 'post', 'body', 'created')
+	search_fields = ['=user__username', '^post__id']
+
+	def get_fieldsets(self, request, obj=None):
+		if obj is None:
+			return self.add_fieldsets
+		return super(CommentAdmin, self).get_fieldsets(request, obj)
 
 	def save_model(self, request, obj, form, change):
 		try:
@@ -142,9 +161,14 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-	fields = ['pagination', 'comment_filter', 'activity', 'nightmode']
-
+	fieldsets = (
+		(_('Website Display'), {
+			'fields': ('pagination', 'comment_filter', 'activity', 'nightmode'),
+		}),
+	)
 	list_display = ('user', 'pagination', 'comment_filter', 'activity', 'nightmode')
+	list_filter = ('pagination', 'comment_filter', 'nightmode')
+	search_fields = ['=user__username', '=user__email']
 
 	def save_model(self, request, obj, form, change):
 		try:

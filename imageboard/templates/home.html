@@ -25,7 +25,10 @@
           <div class="title">
             <div class="post_number inline">#{{ post.id }}</div>
             <div class="post_title inline">{{ post.title }}</div>
-            <div class="post_information inline">by {{ post.user.username }} on {{ post.created }}</div>
+            <div class="post_information inline">
+                by <a href="{% url 'imageboard:profile' post.user.username %}">{{ post.user.username }}</a>
+                on {{ post.created }}
+            </div>
           </div>
           <div class="text">
             <div>{{ post.body|linebreaksbr|urlize|emojize }}</div>
@@ -34,7 +37,7 @@
               {% video post.media 'tiny' is_secure="{{ request.is_secure }}" as v %}
               {% with e=v.backend|excludedbackend %}
                 <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" data-start="{{ v.start }}"
-                     data-excluded="{{ e }}" style="height: {% if e %}{{ v.height }}{% else %}176{% endif %}px">
+                     data-excluded="{{ e }}" style="height: {% if e %}{{ v.height }}px{% else %}176px{% endif %}">
                   <div class="media_cover" {% if e %}style="background-image: url({{ v.thumbnail }})"{% endif %}>
                     <div class="media_meta">
                       <div class="play_button {{ v.backend }}"></div>
@@ -81,7 +84,10 @@
           </div>
           <div class="bump">
             <div class="title">
-              <div class="comment_information inline">{{ comment.user.username }} on {{ comment.created }}</div>
+              <div class="comment_information inline">
+                  <a href="{% url 'imageboard:profile' comment.user.username %}">{{ comment.user.username }}</a>
+                  on {{ comment.created }}
+              </div>
             </div>
             <div class="text">
               <div>{{ comment.body|linebreaksbr|urlize|emojize }}</div>
@@ -90,7 +96,7 @@
                 {% video comment.media 'tiny' is_secure="{{ request.is_secure }}" as v %}
                 {% with e=v.backend|excludedbackend %}
                   <div class="media_embed" data-embed="{{ v.backend }}" data-id="{{ v.code }}" data-start="{{ v.start }}"
-                       data-excluded="{{ e }}" style="height: {% if e %}{{ v.height }}{% else %}176{% endif %}px">
+                       data-excluded="{{ e }}" style="height: {% if e %}{{ v.height }}px{% else %}176px{% endif %}">
                     <div class="media_cover" {% if e %}style="background-image: url({{ v.thumbnail }})"{% endif %}>
                       <div class="media_meta">
                         <div class="play_button {{ v.backend }}"></div>

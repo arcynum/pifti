@@ -30,7 +30,7 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
-input, textarea {
+input, textarea, select, button {
     background-color: #1E1E1E;
     border: 1px solid #333333;
     color: #AAAAAA;
@@ -118,6 +118,10 @@ input, textarea {
 	margin: 0.67em;
 	letter-spacing: 1px;
 }
+#content h3 {
+	margin: 0 0 0.67em 0;
+	letter-spacing: 1px;
+}
 
 #content form {
 	margin: 0.67em;
@@ -157,12 +161,18 @@ input, textarea {
 	font-size: 16px;
 	margin-bottom: 10px;
 }
+#content div.post div.post_information a {
+	color: #FFFFFF;
+}
 
 #content div.comment {
 	border-top: 1px solid #111111;
 	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 	position: relative;
 	padding: 0 0 30px 0;
+}
+#content div.comment div.comment_information a {
+	color: #FFFFFF;
 }
 
 #content div.comments-expand {
@@ -242,6 +252,29 @@ input, textarea {
 	background: #1E1E1E;
 	padding: 5px;
 	border-top-left-radius: 5px;
+}
+
+#content div.profile {
+	box-shadow: 0 0 6px 2px #000000;
+	margin-bottom: 30px;
+	background-color: #1E1E1E;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	word-wrap: break-word;
+}
+#content div.profile p {
+	margin-bottom: 0;
+}
+#content div.profile form {
+	margin: 0;
+}
+#content div.profile div.profile_content {
+	position: relative;
+	padding: 10px;
+}
+
+span.helptext {
+	color: #999999;
+	font-size: 0.8em;
 }
 
 #messages {

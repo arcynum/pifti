@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key as tf
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -209,8 +210,12 @@ def gallery(request):
 	})
 
 @login_required
-def profile(request):
-	u = get_object_or_404(UserProfile, id=request.user.id)
+def profile(request, username):
+	try:
+		u = UserProfile.objects.get(user__username__iexact=username)
+	except ObjectDoesNotExist:
+		messages.error(request, 'User does not exist.')
+		return render(request, 'profile/home.html')
 
 	if request.method == 'POST':
 		form = ProfileEditForm(request.POST, instance = u)
@@ -222,7 +227,27 @@ def profile(request):
 	else:
 		form = ProfileEditForm(instance = u)
 
-	return render(request, 'profile/home.html', { 'form': form })
+	# Get post and comment counts for active users
+	# Exclude banned/disabled users
+	if u.user.is_active:
+		u.post_count = str(Post.objects.filter(user_id=u.user_id).count())
+		u.comment_count = str(Comment.objects.filter(user_id=u.user_id).count())
+
+	# Clean personal data before being shown to other users
+	# Performing this action in the view
+	if username != request.user.username:
+		if u.user.email is not '' and u.user.email is not None:
+			u.user.email = '...@' + u.user.email.split('@')[-1]
+			#u.user.email.split = i.pop()
+		if u.user.first_name is not '':
+			u.user.first_name = u.user.first_name[0] + '...'
+		if u.user.last_name is not '':
+			u.user.last_name = u.user.last_name[0] + '...'
+
+	return render(request, 'profile/home.html', {
+		'form': form,
+		'profile': u
+	})
 
 def login_view(request):
 	if request.method == 'POST':

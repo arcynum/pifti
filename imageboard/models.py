@@ -3,20 +3,44 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
 from embed_video.fields import EmbedVideoField
 from imageboard.fields import ThumbnailerExtField
 from imageboard.storage import MediaFileStorage
 import hashlib
 
+IMAGES_HELP_TEXT = _('Images and WEBM/MP4. Limit: 5MB.')
+EMBED_VIDEO_HELP_TEXT = _('Youtube, Vimeo, Soundcloud, '
+						  'Streamable, Dailymotion, and Gfycat.')
+
 
 class Post(models.Model):
-	user = models.ForeignKey(User)
-	title = models.CharField(max_length=200)
-	image = ThumbnailerExtField(storage=MediaFileStorage(), blank=False)
-	media = EmbedVideoField(blank=True, null=True)
+	user = models.ForeignKey(
+		User
+	)
+	title = models.CharField(
+		max_length=200
+	)
+	image = ThumbnailerExtField(
+		storage=MediaFileStorage(),
+		blank=False,
+		help_text=IMAGES_HELP_TEXT
+	)
+	media = EmbedVideoField(
+		_('media url'),
+		blank=True,
+		null=True,
+		help_text=EMBED_VIDEO_HELP_TEXT
+	)
 	body = models.TextField()
-	created = models.DateTimeField(auto_now_add=True)
-	modified = models.DateTimeField(editable=False, db_index=True, default=now)
+	created = models.DateTimeField(
+		auto_now_add=True
+	)
+	modified = models.DateTimeField(
+		editable=False,
+		db_index=True,
+		default=now
+	)
 
 	def __str__(self):
 		return self.title
@@ -62,12 +86,28 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-	user = models.ForeignKey(User)
-	post = models.ForeignKey(Post, on_delete=models.CASCADE)
-	image = ThumbnailerExtField(storage=MediaFileStorage(), blank=True)
-	media = EmbedVideoField(blank=True, null=True)
+	user = models.ForeignKey(
+		User
+	)
+	post = models.ForeignKey(
+		Post,
+		verbose_name=_('parent post'),
+		on_delete=models.CASCADE
+	)
+	image = ThumbnailerExtField(
+		storage=MediaFileStorage(),
+		blank=True,
+		help_text=IMAGES_HELP_TEXT
+	)
+	media = EmbedVideoField(
+		blank=True,
+		null=True,
+		help_text=EMBED_VIDEO_HELP_TEXT
+	)
 	body = models.TextField()
-	created = models.DateTimeField(auto_now_add=True)
+	created = models.DateTimeField(
+		auto_now_add=True
+	)
 
 	def __str__(self):
 		return 'Comment for: %s' % self.post.title
@@ -138,20 +178,38 @@ class UserProfile(models.Model):
 		(50, '50')
 	)
 	ACTIVITY_CHOICES = (
-		(0, 'Disabled'),
+		(0, 'None'),
 		(10, '10'),
 		(20, '20')
 	)
-	NIGHTMODE_CHOICES = (
-		(False, 'Off'),
-		(True, 'On')
-	)
 
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	pagination = models.PositiveSmallIntegerField(default=10, blank=False, choices=PAGINATION_CHOICES)
-	comment_filter = models.PositiveSmallIntegerField(default=10, blank=False, choices=COMMENT_FILTER_CHOICES)
-	activity = models.PositiveSmallIntegerField(default=10, blank=False, choices=ACTIVITY_CHOICES)
-	nightmode = models.BooleanField(default=False, blank=False, choices=NIGHTMODE_CHOICES)
+	user = models.OneToOneField(
+		User,
+		on_delete=models.CASCADE
+	)
+	pagination = models.PositiveSmallIntegerField(
+		default=10,
+		blank=False,
+		choices=PAGINATION_CHOICES,
+		help_text=_('Number of posts per page.')
+	)
+	comment_filter = models.PositiveSmallIntegerField(
+		default=10,
+		blank=False,
+		choices=COMMENT_FILTER_CHOICES,
+		help_text=_('Number of revealed comments beneath posts.')
+	)
+	activity = models.PositiveSmallIntegerField(
+		default=10,
+		blank=False,
+		choices=ACTIVITY_CHOICES,
+		help_text=_('Items in the Latest Activity list.')
+	)
+	nightmode = models.BooleanField(
+		default=False,
+		blank=False,
+		help_text=_('Toggle the dark website theme.')
+	)
 
 	def __str__(self):
 		return 'Profile of user: %s' % self.user.username

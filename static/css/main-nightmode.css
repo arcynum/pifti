@@ -57,7 +57,7 @@ body {
 	position: fixed;
 }
 
-input, textarea {
+input, textarea, select, button {
     background-color: #1E1E1E;
     border: 1px solid #333333;
     color: #AAAAAA;
@@ -258,6 +258,11 @@ input, textarea {
 	margin: 0 0 30px 0;
 	letter-spacing: 1px;
 }
+#content h3 {
+    color: #BBBBBB;
+	margin: 0 0 20px 0;
+	letter-spacing: 1px;
+}
 
 #content div.post {
 	box-shadow: 0 0 6px 2px #000000;
@@ -279,6 +284,9 @@ input, textarea {
 }
 #content div.post div.post_information {
 	color: #999999;
+}
+#content div.post div.post_information a {
+	color: #FFFFFF;
 }
 #content div.post div.image {
 	text-align: left;
@@ -331,6 +339,9 @@ input, textarea {
 }
 #content div.comment div.comment_information {
 	color: #999999;
+}
+#content div.comment div.comment_information a {
+	color: #FFFFFF;
 }
 #content div.comments-expand {
 	color: #999999;
@@ -426,6 +437,28 @@ input, textarea {
 	background: url(../black-hatch-texture.png), #1E1E1E;
 	padding: 5px;
 	border-top-left-radius: 5px;
+}
+
+#content div.profile {
+	box-shadow: 0 0 6px 2px #000000;
+	margin-bottom: 30px;
+	background-color: #1E1E1E;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+	word-wrap: break-word;
+}
+#content div.profile p {
+	margin-bottom: 0;
+}
+#content div.profile_content {
+	background-color: #232323;
+	position: relative;
+	padding: 10px;
+	box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.04) inset;
+}
+
+span.helptext {
+	color: #999999;
+	font-size: 0.8em;
 }
 
 

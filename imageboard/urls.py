@@ -14,5 +14,5 @@ urlpatterns = [
     url(r'^post/(?P<post_id>\d+)/comment/edit/(?P<comment_id>\d+)/$', views.edit_comment, name='edit_comment'),
     url(r'^post/(?P<post_id>\d+)/comment/delete/(?P<comment_id>\d+)/$', views.delete_comment, name='delete_comment'),
     url(r'^gallery/$', views.gallery, name='gallery'),
-    url(r'^profile/$', views.profile, name='profile'),
+    url(r'^profile/(?P<username>[\w@+.-]+)/$', views.profile, name='profile'),
 ]

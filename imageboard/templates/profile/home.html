@@ -3,16 +3,64 @@
 {% block page_class %}Edit Profile{% endblock %}
 
 {% block content %}
-    <h1>User Profile.</h1>
-    <form action="" method="post" enctype="multipart/form-data">
+    {% if profile %}
+    <h1>Profile of {{ profile.user.username }}.</h1>
+    <div class="profile">
+      <div class="profile_content clearfix">
+      <h3>Personal Information.</h3>
+      <p>Account Status: <b>
+        {% if profile.user.is_active %}
+          {% if profile.user.is_staff %}
+            Administrator
+          {% else %}
+            Active
+          {% endif %}
+        {% else %}
+          Inactive
+        {% endif %}
+      </b></p>
+      {% if profile.user.email %}
+        <p>Email Address: <b>{{ profile.user.email }}</b></p>
+      {% endif %}
+      {% if profile.user.first_name and profile.user.last_name %}
+        <p>Full Name:
+          <b>
+            {{ profile.user.first_name }}
+            {{ profile.user.last_name }}
+          </b>
+        </p>
+      {% endif %}
+      {% if profile.post_count and profile.comment_count %}
+      <p>Posts: {{ profile.post_count }}</p>
+      <p>Comments: {{ profile.comment_count }}</p>
+      {% endif %}
+      <p>Joined on <b>{{ profile.user.date_joined|date:"F j, Y" }}.</b></p>
+      </div>
+    </div>
+    {% if profile.user == request.user %}
+    <div class="profile">
+      <div class="profile_content clearfix">
+      <h3>Website Display Settings.</h3>
+      <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <p>{{ form.non_field_errors }}</p>
         <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
         <p>
-            {{ form.docfile.errors }}
-            {{ form.docfile }}
+          {{ form.docfile.errors }}
+          {{ form.docfile }}
         </p>
         {{ form.as_p }}
         <p><input type="submit" value="Save" /></p>
-    </form>
+      </form>
+      </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <h1>Invalid User.</h1>
+    <div class="profile">
+      <div class="profile_content clearfix">
+      This user does not exist, has been deleted, or hidden from view.
+      </div>
+    </div>
+    {% endif %}
 {% endblock %}

@@ -200,6 +200,9 @@ body {
 #content h1 {
 	margin: 0 0 30px 0;
 }
+#content h3 {
+	margin: 0 0 20px 0;
+}
 
 #content div.post {
 	box-shadow: 0 0 6px 2px #BBBBBB;
@@ -225,15 +228,20 @@ body {
 	padding: 10px 10px 10px 0;
 	word-wrap: break-word;
 }
-
 #content div.post div.title {
 	font-size: 16px;
 	margin-bottom: 10px;
+}
+#content div.post div.post_information a {
+	color: #4E4E4E;
 }
 
 #content div.comment {
 	border-top: 1px solid #DDDDDD;
 	position: relative;
+}
+#content div.comment div.comment_information a {
+	color: #4E4E4E;
 }
 
 #content div.comments-expand {
@@ -317,6 +325,25 @@ body {
 	background: #FFFFFF;
 	padding: 5px;
 	border-top-left-radius: 5px;
+}
+
+
+#content div.profile {
+	box-shadow: 0 0 6px 2px #BBBBBB;
+	margin-bottom: 30px;
+	background-color: rgba(255, 255, 255, 0.6);
+	word-wrap: break-word;
+}
+#content div.profile p {
+	margin-bottom: 0;
+}
+#content div.profile div.profile_content {
+	position: relative;
+	padding: 10px;
+}
+
+span.helptext {
+	font-size: 0.8em;
 }
 
 

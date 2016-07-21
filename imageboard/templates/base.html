@@ -39,7 +39,7 @@
                     <li><a href="{% url 'imageboard:index' %}"><span class="menu_link">Posts</span></a></li>
                     <li><a href="{% url 'imageboard:add_post' %}"><span class="menu_link">New Post</span></a></li>
                     <li><a href="{% url 'imageboard:gallery' %}"><span class="menu_link">Gallery</span></a></li>
-                    <li><a href="{% url 'imageboard:profile' %}"><span class="menu_link">Profile</span></a></li>
+                    <li><a href="{% url 'imageboard:profile' user.username %}"><span class="menu_link">Profile</span></a></li>
                     {% if user.is_staff %}
                     <li><a href="{% url 'admin:index' %}"><span class="menu_link">Admin</span></a></li>
                     {% endif %}
