@@ -57,7 +57,7 @@ body {
 	position: fixed;
 }
 
-input, textarea, select, button {
+input, textarea {
     background-color: #1E1E1E;
     border: 1px solid #333333;
     color: #AAAAAA;

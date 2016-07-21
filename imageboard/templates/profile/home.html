@@ -31,8 +31,8 @@
         </p>
       {% endif %}
       {% if profile.post_count and profile.comment_count %}
-      <p>Posts: {{ profile.post_count }}</p>
-      <p>Comments: {{ profile.comment_count }}</p>
+      <p>Posts: <b>{{ profile.post_count }}</b></p>
+      <p>Comments: <b>{{ profile.comment_count }}</b></p>
       {% endif %}
       <p>Joined on <b>{{ profile.user.date_joined|date:"F j, Y" }}.</b></p>
       </div>
